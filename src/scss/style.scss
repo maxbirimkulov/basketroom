@@ -7,8 +7,26 @@
   text-decoration: none;
   list-style-type: none;
   resize: none;
+  color: inherit;
+  transition: all .2s;
 }
+input:focus{
+  outline: 2px solid lightskyblue ;
+}
+
+.container{
+  max-width: 1330px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+
+
+
+
 
 
 @import "header";
 @import "footer";
+@import "home";

@@ -3,7 +3,10 @@ import React from 'react';
 const Footer = () => {
     return (
         <footer>
-             Footer
+            Footer
+            Покупателю
+            сервис
+            Каталог
         </footer>
     );
 };

@@ -1,0 +1,121 @@
+.header{
+  padding: 30px 0;
+}
+.header{
+  display: flex;
+  align-items: center;
+
+  &__{
+
+    &contacts {
+      margin:  0 50px 0 90px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    &number {
+      color: $black;
+      font-family: "Open Sans", sans-serif;
+      font-weight: 700;
+      margin: 10px 0 5px;
+    }
+    &mail {
+      font-family: "Open Sans", sans-serif;
+      color: $grey;
+    }
+
+    &label{
+      display: flex;
+      margin-right: auto;
+      width: 30%;
+      position: relative;
+      &-input{
+        padding: 0.45rem 0.85rem;
+        border-radius: 0.37rem;
+        border: 1px solid #ced4da;
+        flex: 1 1 auto;
+      }
+      &-btn{
+        background-color: $black;
+        position: absolute;
+        right: 0;
+        height: 100%;
+        cursor: pointer;
+        padding: 0.45rem 0.85rem;
+        border-radius:0 0.37rem  0.37rem 0;
+
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+
+
+
+    &btn{
+      display: flex;
+      gap: 10px;
+    }
+
+
+    &menu{
+      background-color: #f7f7f7 !important;
+      margin-bottom: 30px;
+      &-nav{
+        display: flex;
+        gap: 30px;
+        justify-content: center;
+        color: $black;
+      }
+      &-link{
+        font-family: "Open Sans", sans-serif;
+        padding: 15px 0;
+        font-weight: 600;
+        cursor: pointer;
+        &:hover{
+          opacity: .7;
+        }
+      }
+    }
+
+
+  }
+}
+
+@media (max-width: 1120px) {
+  .header{
+    &__contacts{
+      margin:  0 30px 0 50px;
+
+    }
+  }
+}
+@media (max-width: 860px) {
+  .header{
+    justify-content: center;
+    row-gap: 10px;
+    flex-wrap: wrap;
+    &__contacts{
+      margin-right: 0;
+      width: 40%;
+    }
+
+  }
+}
+//@media (max-width: 716px) {
+//  .header{
+//    &__{
+//
+//      &menu{
+//
+//      }
+//
+//    }
+//  }
+//}
+
+
+
+
+
