@@ -1,0 +1,61 @@
+.productCard{
+  width: 25%;
+  border-radius: 0.37rem;
+  padding: 15px;
+  position: relative;
+  &:hover{
+    box-shadow: 2px 2px 2px 2px grey;
+  }
+  &__{
+
+    &like{
+      position: absolute;
+      display: flex;
+      justify-content: flex-end;
+      width: 90%;
+      opacity: .4;
+      &:hover{
+        opacity: 1;
+      }
+    }
+    &img{
+      width: 100%;
+    }
+    &title{
+      padding-top: 8px;
+      height: 51px;
+      font-size: 15px;
+      font-family: $Open;
+      line-height: 1.5;
+      color: $black;
+    }
+    &bot{
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      font-family: $Open;
+      font-size: 1rem;
+      color: $black;
+      font-weight: 600;
+    }
+    &price{
+      font-family: $Open;
+      font-size: 1rem;
+      color: $black;
+      font-weight: 600;
+    }
+    &btn{
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: transparent;
+      padding: 0.35rem 0.5rem;
+      font-size: 0.82rem;
+      border-radius: 0.37rem;
+
+    }
+
+
+
+  }
+}

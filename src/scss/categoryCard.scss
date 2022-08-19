@@ -1,0 +1,28 @@
+.categoryCard{
+  position: relative;
+  height: 250px;
+  width: calc(33% - 20px);
+  border-radius: 0.37rem;
+  overflow: hidden;
+  &:hover{
+  }
+ &__{
+
+   &bg{
+     height: 100%;
+     &:hover{
+       transform: scale(1.1);
+     }
+   }
+   &bottom{
+     position: absolute;
+     bottom: 0;
+     left: 0;
+     right: -10px;
+     padding: 30px 20px 7px ;
+     border-radius: 0 0 0.37rem 0.37rem;
+     background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.5) 100%);
+   }
+
+ }
+}
