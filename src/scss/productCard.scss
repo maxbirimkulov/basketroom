@@ -1,18 +1,33 @@
 .productCard{
-  width: 25%;
+  width: calc(25% - 15px);
   border-radius: 0.37rem;
   padding: 15px;
   position: relative;
+  &.slide{
+    width: 100%;
+    margin: 1px 0 60px;
+    &:hover{
+      box-shadow: none;
+    }
+  }
+  &.favorites{
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
   &:hover{
-    box-shadow: 2px 2px 2px 2px grey;
+    box-shadow: 0 4px 25px rgba(153, 153, 153, .4);
+    transition: all .6s;
   }
   &__{
 
     &like{
       position: absolute;
       display: flex;
+      width: fit-content;
       justify-content: flex-end;
-      width: 90%;
+      //width: 90%;
+      right: 15px;
+      transition: all .2s;
+      cursor: pointer;
       opacity: .4;
       &:hover{
         opacity: 1;
@@ -52,7 +67,12 @@
       padding: 0.35rem 0.5rem;
       font-size: 0.82rem;
       border-radius: 0.37rem;
-
+      cursor: pointer;
+      &:hover{
+        background-color: $black;
+        color: white;
+        transition: all .1s;
+      }
     }
 
 

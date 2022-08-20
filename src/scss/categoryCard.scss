@@ -1,9 +1,10 @@
 .categoryCard{
   position: relative;
   height: 250px;
-  width: calc(33% - 20px);
+  width: calc(33% - 12px);
   border-radius: 0.37rem;
   overflow: hidden;
+  cursor: pointer;
   &:hover{
   }
  &__{
@@ -12,6 +13,7 @@
      height: 100%;
      &:hover{
        transform: scale(1.1);
+       transition: all .4s;
      }
    }
    &bottom{

@@ -27,13 +27,15 @@
     &label{
       display: flex;
       margin-right: auto;
-      width: 30%;
+      width: 35%;
       position: relative;
       &-input{
         padding: 0.45rem 0.85rem;
         border-radius: 0.37rem;
         border: 1px solid #ced4da;
         flex: 1 1 auto;
+        max-width: 84%;
+        margin: 0 auto;
       }
       &-btn{
         background-color: $black;
@@ -56,12 +58,40 @@
     &btn{
       display: flex;
       gap: 10px;
+      align-items: center;
+      padding-left: 25px;
+      &-text{
+
+      }
+      &-title{
+        font-size: 80%;
+        font-family: $Open;
+        color: #969696 !important;
+        line-height: 1.2;
+      }
+      &-num{
+        font-family: $Open;
+        line-height: 1.2;
+        color: $black;
+      }
+      & svg{
+        opacity: .4;
+        height: 25px;
+        width: 25px;
+      }
+      &:hover.header__btn svg{
+        background-color: #fff;
+        opacity: 1!important;
+      }
     }
 
 
     &menu{
       background-color: #f7f7f7 !important;
       margin-bottom: 30px;
+      position: sticky;
+      top: 0;
+      z-index: 9;
       &-nav{
         display: flex;
         gap: 30px;
@@ -78,6 +108,7 @@
         }
       }
     }
+
 
 
   }

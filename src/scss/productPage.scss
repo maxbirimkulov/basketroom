@@ -1,0 +1,113 @@
+.product{
+  font-family: $Open;
+
+  &__{
+
+    &top{
+      display: flex;
+      margin-bottom: 60px;
+      &-image{
+        width: 100%;
+      }
+      &-images{
+        width: 40%;
+      }
+      &-gallery{
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        &-block{
+          width: 70px;
+          border-radius: 4px;
+          border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+      }
+
+      &-variables{
+        padding: 0 35px 30px;
+      }
+      &-link{
+        font-size: 15px;
+        font-weight: 400;
+        line-height: 1.5;
+        color: $grey;
+        &-back{
+          color: $black;
+          &:hover{
+            color: #ff9017;
+          }
+        }
+      }
+      &-title{
+        font-size: 30px;
+        line-height: 1.3;
+        font-weight: bold;
+        margin-bottom: 8px;
+      }
+      &-price{
+        font-size: 22px;
+        line-height: 1.3;
+        font-weight: 600;
+        margin-bottom: 7px;
+      }
+      &-comment{
+        font-size: 12px;
+        color: $grey;
+        margin-bottom: 7px;
+        line-height: 1.5;
+      }
+      &-text{
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #343a40;
+        font-weight: 400;
+        margin-bottom: 30px;
+      }
+      &-sizes{
+        &Text{
+          font-size: 13px;
+          line-height: 1.3;
+          font-weight: bold;
+          color: $black;
+          margin-bottom: 4px;
+        }
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-bottom: 20px;
+      }
+      &-size{
+        background-color: transparent;
+        font-size: 12px;
+        min-width: 80px;
+        font-weight: 400;
+        padding: 0.35rem 0.5rem;
+        border-radius: 0.37rem;
+        line-height: 1.2;
+        &:hover{
+          background-color: $black;
+          color: white;
+        }
+        &.active{
+          background-color: $black;
+          color: white;
+        }
+
+      }
+      &-return{
+        background-color: #f7f7f7;
+        width: fit-content;
+        font-size: 15px;
+        padding: 3px 4px;
+        border-radius: 7px;
+        font-weight: 600;
+        line-height: 1.5;
+        color: #343a40;
+
+      }
+    }
+
+
+
+  }
+}

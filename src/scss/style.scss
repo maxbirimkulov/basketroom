@@ -8,12 +8,17 @@
   list-style-type: none;
   resize: none;
   color: inherit;
-  transition: all .2s;
+  //transition: all .1s;
+}
+body{
+  position: relative;
 }
 input:focus{
   outline: 2px solid lightskyblue ;
 }
-
+.logo{
+  cursor: pointer;
+}
 .container{
   max-width: 1330px;
   width: 100%;
@@ -32,3 +37,4 @@ input:focus{
 @import "home";
 @import "categoryCard";
 @import "productCard";
+@import "productPage";
