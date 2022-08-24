@@ -1,0 +1,119 @@
+
+
+.catalog{
+  padding: 50px 0 100px;
+  display: flex;
+  gap: 20px;
+  &__{
+
+
+
+    &title{
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    &main{
+      display: flex;
+    }
+    &sidebar{
+      border: 1px solid black;
+      width: 30%;
+      height: fit-content;
+      padding: 15px;
+      max-width: 298px;
+      &-navigate{
+        margin-bottom: 45px;
+      }
+      &-text{
+        cursor: pointer;
+        &:focus{
+          //outline: none;
+
+        }
+      }
+      &-text.active{
+        color: lightslategray;
+        text-shadow: 1px 2px 2px lightskyblue;
+      }
+      &-types{
+        margin-bottom: 40px;
+        display: flex;
+        text-transform: uppercase;
+        flex-direction: column;
+        gap: 10px;
+      }
+      &-categories{
+        margin-bottom: 50px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      &-category{
+        cursor: pointer;
+        width: fit-content;
+        display: flex;
+        gap: 8px;
+        & label{
+          cursor: pointer;
+        }
+        &_box{
+          width: 20px;
+          height: 20px;
+        }
+      }
+
+    }
+    &productCard{
+      width: calc(32% - 5px);
+    }
+    &list{
+      width: 80%;
+      gap: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      &-top{
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 40px;
+        gap: 30px;
+      }
+    }
+
+
+  }
+
+
+}
+
+@media (max-width: 950px) {
+  .catalog{
+    &__{
+      &sidebar{
+        position: absolute;
+        z-index: 1;
+        transform: translateX(-100%);
+        opacity: 0;
+        //width: 0;
+        transition: all .5s;
+        &.active{
+          padding: 20px;
+          background: #ffffff;
+          transform: translateX(0%);
+          opacity: .87;
+          width: 35%;
+        }
+      }
+      &list{
+        width: 100%;
+      }
+
+    }
+  }
+}
+@media (max-width: 700px) {
+  .catalogs{
+    &__card{
+      width: 45%;
+    }
+  }
+}

@@ -10,12 +10,24 @@ const Favorites = () => {
 
                 <div className='home__cardBlock-row'>
 
-                <Card page='fav'/>
-                <Card page='fav'/>
-                <Card page='fav'/>
-                <Card page='fav'/>
-                <Card page='fav'/>
-                <Card page='fav'/>
+                    <div className="home__productCard">
+                        <Card page='fav'/>
+                    </div>
+                    <div className="home__productCard">
+                        <Card page='fav'/>
+                    </div>
+                    <div className="home__productCard">
+                        <Card page='fav'/>
+                    </div>
+                    <div className="home__productCard">
+                        <Card page='fav'/>
+                    </div>
+                    <div className="home__productCard">
+                        <Card page='fav'/>
+                    </div>
+                    <div className="home__productCard">
+                        <Card page='fav'/>
+                    </div>
                 </div>
 
             </div>

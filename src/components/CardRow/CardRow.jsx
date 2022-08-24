@@ -7,14 +7,38 @@ const CardRow = ({category = 'Новинки'}) => {
             <h2 className='home__cardBlock-title'>{category} <span className='home__cardBlock-subtitle'>/ все товары</span></h2>
 
             <div className='home__cardBlock-row'>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
-                <Card/>
+                <div className='home__productCard'>
+                    <Card/>
+                </div>
+                <div className='home__productCard'>
+                    <Card/>
+                </div>
+                <div className='home__productCard'>
+                    <Card/>
+                </div>
+                 <div className='home__productCard'>
+                    <Card/>
+                </div>
+                 <div className='home__productCard'>
+                    <Card/>
+                </div>
+                 <div className='home__productCard'>
+                    <Card/>
+                </div>
+                 <div className='home__productCard'>
+                    <Card/>
+                </div>
+                 <div className='home__productCard'>
+                    <Card/>
+                </div>
+
+                {/*<Card/>*/}
+                {/*<Card/>*/}
+                {/*<Card/>*/}
+                {/*<Card/>*/}
+                {/*<Card/>*/}
+                {/*<Card/>*/}
+                {/*<Card/>*/}
             </div>
         </section>
 

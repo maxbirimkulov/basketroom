@@ -59,13 +59,13 @@ const Header = () => {
             <div className="header__menu">
                 <div className="container">
                     <nav className="header__menu-nav">
-                        <Link className='header__menu-link' to='/'>Бренды</Link>
-                        <Link className='header__menu-link' to='/'>Новинки</Link>
-                        <Link className='header__menu-link' to='/'>Мужские</Link>
-                        <Link className='header__menu-link' to='/'>Женские</Link>
-                        <Link className='header__menu-link' to='/'>Одежда</Link>
-                        <Link className='header__menu-link' to='/'>Premium</Link>
-                        <Link className='header__menu-link' to='/'>SALE</Link>
+                        <Link className='header__menu-link' to='/catalog'>Бренды</Link>
+                        <Link className='header__menu-link' to='/catalog'>Новинки</Link>
+                        <Link className='header__menu-link' to='/catalog'>Мужские</Link>
+                        <Link className='header__menu-link' to='/catalog'>Женские</Link>
+                        <Link className='header__menu-link' to='/catalog'>Одежда</Link>
+                        <Link className='header__menu-link' to='/catalog'>Premium</Link>
+                        <Link className='header__menu-link' to='/catalog'>SALE</Link>
                     </nav>
                 </div>
             </div>
