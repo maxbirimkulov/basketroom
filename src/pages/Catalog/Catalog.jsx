@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useForm} from "react-hook-form";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import SalesInfo from "../../components/SalesInfo/SalesInfo";
@@ -6,6 +6,7 @@ import CardRow from "../../components/CardRow/CardRow";
 import Card from "../../components/Card/Card";
 import {Swiper, SwiperSlide} from "swiper/react";
 import {Navigation} from "swiper";
+import {useSelector} from "react-redux";
 
 const Catalog = ({side}) => {
     const navigate = useNavigate();
@@ -16,6 +17,10 @@ const Catalog = ({side}) => {
         window.scrollTo(0, 0);
 
     };
+
+
+    const {status, products, error} = useSelector(s => s.clothes);
+    // console.log(products)
 
     return (
         <div className=''>
@@ -194,41 +199,17 @@ const Catalog = ({side}) => {
                     </form>
 
                     <div className={'catalog__list'}>
+                        {
+                            products?.map(pare => (
+                                <div key={pare?.id} className="catalog__productCard">
+                                    <Card product={pare}/>
+                                </div>
+                            ))
+                        }
 
                         <div className="catalog__productCard">
-                            <Card/>
+                            <Card video={true}/>
                         </div>
-                         <div className="catalog__productCard">
-                            <Card/>
-                        </div>
-                         <div className="catalog__productCard">
-                            <Card/>
-                        </div>
-                         <div className="catalog__productCard">
-                            <Card/>
-                        </div>
-                         <div className="catalog__productCard">
-                            <Card/>
-                        </div>
-                         <div className="catalog__productCard">
-                            <Card/>
-                        </div>
-                         <div className="catalog__productCard">
-                            <Card/>
-                        </div>
-                         <div className="catalog__productCard">
-                            <Card/>
-                        </div>
-                         <div className="catalog__productCard">
-                            <Card/>
-                        </div>
-                         <div className="catalog__productCard">
-                            <Card/>
-                        </div>
-                         <div className="catalog__productCard">
-                            <Card/>
-                        </div>
-                        Catalog
 
                     </div>
 

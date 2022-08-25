@@ -1,11 +1,16 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Slider from "./Slider/Slider";
 import Category from "../../components/CategoryCard/Category";
 import Card from "../../components/Card/Card";
 import CardRow from "../../components/CardRow/CardRow";
 import SalesInfo from "../../components/SalesInfo/SalesInfo";
+import {getProducts} from "../../redux/clothes";
+import {useDispatch, useSelector} from "react-redux";
 
-const Home = () => {
+
+const Home = ({error, status}) => {
+
+
     return (
         <div>
             <Slider/>
@@ -25,6 +30,16 @@ const Home = () => {
 
 
             <div className="container">
+
+                {
+                    status === 'loading' && <h2>Loading...</h2>
+                }
+                {
+                    error && <h2>An error occerd: {error}</h2>
+                }
+
+
+
                 <CardRow/>
                 <CardRow category={'SALE'}/>
                 <CardRow category={'Выбор покупателей'}/>

@@ -9,8 +9,23 @@
       &-image{
         width: 100%;
       }
+      &-loading{
+        width: 100%;
+        height: 350px;
+        background-color: #999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 55px;
+        font-weight: bold;
+      }
+      &-imgPlace{
+        width: 100%;
+        min-height: 350px;
+      }
       &-images{
-        width: 40%;
+        min-width: 40%;
       }
       &-gallery{
         display: flex;

@@ -19,6 +19,22 @@
   }
   &__{
 
+    &hover1, &hover2, &hover3{
+      //background-color: #ff000020;
+      width: 100%;
+      height: 20%;
+      position: absolute;
+      right: 0;
+      bottom: 30%;
+      //pointer-events: none;
+      cursor: pointer;
+    }
+    &hover2{
+      bottom: 50%;
+    }
+    &hover3{
+      bottom: 70%;
+    }
     &like{
       position: absolute;
       display: flex;
@@ -35,6 +51,8 @@
     }
     &img{
       width: 100%;
+      height: 260px;
+
     }
     &title{
       padding-top: 8px;

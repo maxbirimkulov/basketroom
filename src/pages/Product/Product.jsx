@@ -1,3 +1,4 @@
+import React from "react";
 import {Link} from "react-router-dom";
 import Fancybox from "../../components/Fancybox/Fancybox";
 import Card from "../../components/Card/Card";
@@ -9,9 +10,15 @@ import "swiper/css/navigation";
 // import required modules
 import {Navigation} from "swiper";
 import SalesInfo from "../../components/SalesInfo/SalesInfo";
+import {useSelector} from "react-redux";
 
 
 const Product = () => {
+    const {oneProduct, status, error} = useSelector(state => state.clothes);
+    const al = () => {
+        console.log(oneProduct);
+    };
+    // console.log(oneProduct.images)
 
 
     return (
@@ -21,84 +28,49 @@ const Product = () => {
 
                     <div className="product__top">
                         <div className="product__top-images">
-                            <Swiper navigation={true} loop={true} modules={[Navigation]} className="mySwiper">
-                                <SwiperSlide>
-                                    <img className='product__top-image'
-                                         src="https://static.insales-cdn.com/images/products/1/2825/575752969/large_Air_Jordan_1___Black_Toe__-.jpeg"
-                                         alt=''/>
-                                </SwiperSlide>
-                                <SwiperSlide>
-                                    <img className='product__top-image'
-                                         src="https://static.insales-cdn.com/images/products/1/2863/575753007/large_Air_Jordan_1___Black_Toe__-10.jpeg"
-                                         alt=''/>
-                                </SwiperSlide>
-                                <SwiperSlide>
-                                    <img className='product__top-image'
-                                         src="https://static.insales-cdn.com/images/products/1/2848/575752992/large_Air_Jordan_1___Black_Toe__-01.jpeg"
-                                         alt=''/>
-                                </SwiperSlide>
+                            <Swiper navigation={true} loop={true} modules={[Navigation]} className="mySwiper product__top-imgPlace">
+                                {
+                                    status === 'loading' ?
+                                        <div className='product__top-loading'>loading</div>
+                                        :
+                                    oneProduct?.images?.map((img, idx) => img &&
+                                        (
+                                        <React.Fragment key={img}>
+                                            <SwiperSlide>
+                                                <img onClick={al} className='product__top-image'
+                                                     src={`${process.env.REACT_APP_URL}${img}`}
+                                                     alt=''/>
+                                            </SwiperSlide>
+                                        </React.Fragment>
+
+                                    )
+                                    )
+                                }
+                                {/*<SwiperSlide>*/}
+                                {/*    <img onClick={al} className='product__top-image'*/}
+                                {/*         src="https://static.insales-cdn.com/images/products/1/2825/575752969/large_Air_Jordan_1___Black_Toe__-.jpeg"*/}
+                                {/*         alt=''/>*/}
+                                {/*</SwiperSlide>*/}
                             </Swiper>
                             <div className='product__top-gallery'>
                                 <Fancybox>
-                                    <a data-fancybox="gallery" href='https://static.insales-cdn.com/images/products/1/2825/575752969/large_Air_Jordan_1___Black_Toe__-.jpeg'
-                                       className='product__top-gallery-block'>
-                                        <img className='product__top-image'
-                                             src="https://static.insales-cdn.com/images/products/1/2825/575752969/large_Air_Jordan_1___Black_Toe__-.jpeg"
-                                             alt=''/>
-                                    </a>
-                                    <a data-fancybox="gallery" href='https://static.insales-cdn.com/images/products/1/2863/575753007/large_Air_Jordan_1___Black_Toe__-10.jpeg'
-                                       className='product__top-gallery-block'>
-                                        <img className='product__top-image'
-                                             src="https://static.insales-cdn.com/images/products/1/2863/575753007/large_Air_Jordan_1___Black_Toe__-10.jpeg"
-                                             alt=''/>
-                                    </a>
-                                    <a data-fancybox="gallery" href='https://static.insales-cdn.com/images/products/1/2848/575752992/large_Air_Jordan_1___Black_Toe__-01.jpeg'
-                                       className='product__top-gallery-block'>
-                                        <img className='product__top-image'
-                                             src="https://static.insales-cdn.com/images/products/1/2848/575752992/large_Air_Jordan_1___Black_Toe__-01.jpeg"
-                                             alt=''/>
-                                    </a>
-                                    <a data-fancybox="gallery" href='https://static.insales-cdn.com/images/products/1/2848/575752992/large_Air_Jordan_1___Black_Toe__-01.jpeg'
-                                        className='product__top-gallery-block'>
-                                        <img className='product__top-image'
-                                             src="https://static.insales-cdn.com/images/products/1/2825/575752969/large_Air_Jordan_1___Black_Toe__-.jpeg"
-                                             alt=''/>
-                                    </a>
-                                    <a className='product__top-gallery-block'>
-                                        <img className='product__top-image'
-                                             src="https://static.insales-cdn.com/images/products/1/2825/575752969/large_Air_Jordan_1___Black_Toe__-.jpeg"
-                                             alt=''/>
-                                    </a>
-                                    <a className='product__top-gallery-block'>
-                                        <img className='product__top-image'
-                                             src="https://static.insales-cdn.com/images/products/1/2825/575752969/large_Air_Jordan_1___Black_Toe__-.jpeg"
-                                             alt=''/>
-                                    </a>
-                                    <a className='product__top-gallery-block'>
-                                        <img className='product__top-image'
-                                             src="https://static.insales-cdn.com/images/products/1/2825/575752969/large_Air_Jordan_1___Black_Toe__-.jpeg"
-                                             alt=''/>
-                                    </a>
-                                    <a className='product__top-gallery-block'>
-                                        <img className='product__top-image'
-                                             src="https://static.insales-cdn.com/images/products/1/2825/575752969/large_Air_Jordan_1___Black_Toe__-.jpeg"
-                                             alt=''/>
-                                    </a>
-                                    <a className='product__top-gallery-block'>
-                                        <img className='product__top-image'
-                                             src="https://static.insales-cdn.com/images/products/1/2825/575752969/large_Air_Jordan_1___Black_Toe__-.jpeg"
-                                             alt=''/>
-                                    </a>
-                                    <a className='product__top-gallery-block'>
-                                        <img className='product__top-image'
-                                             src="https://static.insales-cdn.com/images/products/1/2825/575752969/large_Air_Jordan_1___Black_Toe__-.jpeg"
-                                             alt=''/>
-                                    </a>
-                                    <a className='product__top-gallery-block'>
-                                        <img className='product__top-image'
-                                             src="https://static.insales-cdn.com/images/products/1/2825/575752969/large_Air_Jordan_1___Black_Toe__-.jpeg"
-                                             alt=''/>
-                                    </a>
+                                    {status === 'loading' ?
+                                            <div className='product__top-l'>loading</div>
+                                            :
+                                            oneProduct?.images?.map((img) => img &&
+                                                (
+                                                    <React.Fragment key={img}>
+                                                        <a data-fancybox="gallery" href={`${process.env.REACT_APP_URL}${img}`}
+                                                           className='product__top-gallery-block'>
+                                                            <img className='product__top-image'
+                                                                 src={`${process.env.REACT_APP_URL}${img}`}
+                                                                 alt=''/>
+                                                        </a>
+                                                    </React.Fragment>
+
+                                                )
+                                            )
+                                    }
                                 </Fancybox>
                             </div>
                         </div>
