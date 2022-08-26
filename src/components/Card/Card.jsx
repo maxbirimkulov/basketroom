@@ -9,8 +9,8 @@ import {getOneProduct} from "../../redux/clothes";
 const Card = ({page, video, product }) => {
     const dispatch  = useDispatch();
     const getProductToPage = (id) =>{
-        dispatch(getOneProduct(id));
-        navigate('/product');
+        // dispatch(getOneProduct(id));
+        navigate(`/product/${id}`);
         window.scrollTo(0,0);
     };
 

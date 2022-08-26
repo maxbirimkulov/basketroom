@@ -3,14 +3,20 @@ import {NavLink, Link, useNavigate} from "react-router-dom";
 import {GiHearts} from 'react-icons/gi'
 import {HiShoppingCart} from 'react-icons/hi'
 import {FaSearch} from 'react-icons/fa'
+import {IoIosAddCircle} from 'react-icons/io'
+import {useDispatch} from "react-redux";
+import {searchProduct} from "../../redux/clothes";
 
 
 const Header = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const searching = (e) =>{
         e.preventDefault();
-        navigate('/search')
+        console.log(e.target[0].value);
+
+        dispatch(searchProduct(e.target[0].value));
     };
 
 
@@ -30,10 +36,17 @@ const Header = () => {
                         </div>
 
                         <form onSubmit={(e) => searching(e)} className='header__label'>
-                            <input className='header__label-input' type="text" placeholder='Поиск по каталогу'/>
+                            <input className='header__label-input' required type="text" placeholder='Поиск по каталогу'/>
                             <button className='header__label-btn'><FaSearch/></button>
                         </form>
 
+                        <NavLink to={'/add'} className='header__btn'>
+                            <IoIosAddCircle/>
+                            <div className='header__btn-text'>
+                                <p className='header__btn-title'>add</p>
+                                <p className='header__btn-num'></p>
+                            </div>
+                        </NavLink>
                         <NavLink to={'/favorites'} className='header__btn'>
                             <GiHearts/>
                             <div className='header__btn-text'>
@@ -41,6 +54,7 @@ const Header = () => {
                                 <p className='header__btn-num'>Кол-во: 0</p>
                             </div>
                         </NavLink>
+
                         <NavLink to={'/basket'} className='header__btn'>
                             <HiShoppingCart/>
                             <div className='header__btn-text'>

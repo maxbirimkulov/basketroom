@@ -1,7 +1,9 @@
-import React from "react";
-import {Link} from "react-router-dom";
+import React, {useEffect} from "react";
+import {Link, NavLink, useParams} from "react-router-dom";
 import Fancybox from "../../components/Fancybox/Fancybox";
 import Card from "../../components/Card/Card";
+import {MdFavorite} from 'react-icons/md'
+import {MdOutlineAddShoppingCart} from 'react-icons/md'
 import {Swiper, SwiperSlide} from "swiper/react";
 
 import "swiper/css";
@@ -10,15 +12,18 @@ import "swiper/css/navigation";
 // import required modules
 import {Navigation} from "swiper";
 import SalesInfo from "../../components/SalesInfo/SalesInfo";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {getOneProduct} from "../../redux/clothes";
+import ProductDetails from "./ProductDetails";
 
 
 const Product = () => {
+    const params = useParams();
+    const dispatch = useDispatch();
     const {oneProduct, status, error} = useSelector(state => state.clothes);
-    const al = () => {
-        console.log(oneProduct);
-    };
-    // console.log(oneProduct.images)
+    useEffect(( ) =>{
+        dispatch(getOneProduct(params.id))
+    },[]);
 
 
     return (
@@ -28,29 +33,23 @@ const Product = () => {
 
                     <div className="product__top">
                         <div className="product__top-images">
-                            <Swiper navigation={true} loop={true} modules={[Navigation]} className="mySwiper product__top-imgPlace">
+                            <Swiper initialSlide={1} navigation={true} loop={true} modules={[Navigation]} className="mySwiper product__top-imgPlace">
                                 {
                                     status === 'loading' ?
-                                        <div className='product__top-loading'>loading</div>
-                                        :
-                                    oneProduct?.images?.map((img, idx) => img &&
+                                    <div className='product__top-loading'>
+                                        <ProductDetails/>
+                                    </div>
+                                    :
+                                   JSON.stringify(oneProduct) !== '{}'  && oneProduct.images.map((img, idx) => img &&
                                         (
-                                        <React.Fragment key={img}>
                                             <SwiperSlide>
-                                                <img onClick={al} className='product__top-image'
+                                                <img className='product__top-image'
                                                      src={`${process.env.REACT_APP_URL}${img}`}
                                                      alt=''/>
                                             </SwiperSlide>
-                                        </React.Fragment>
-
                                     )
                                     )
                                 }
-                                {/*<SwiperSlide>*/}
-                                {/*    <img onClick={al} className='product__top-image'*/}
-                                {/*         src="https://static.insales-cdn.com/images/products/1/2825/575752969/large_Air_Jordan_1___Black_Toe__-.jpeg"*/}
-                                {/*         alt=''/>*/}
-                                {/*</SwiperSlide>*/}
                             </Swiper>
                             <div className='product__top-gallery'>
                                 <Fancybox>
@@ -59,7 +58,7 @@ const Product = () => {
                                             :
                                             oneProduct?.images?.map((img) => img &&
                                                 (
-                                                    <React.Fragment key={img}>
+                                                    <React.Fragment key={oneProduct.title + img }>
                                                         <a data-fancybox="gallery" href={`${process.env.REACT_APP_URL}${img}`}
                                                            className='product__top-gallery-block'>
                                                             <img className='product__top-image'
@@ -78,9 +77,9 @@ const Product = () => {
                         <div className='product__top-variables'>
                             <h3><Link className='product__top-link product__top-link-back'
                                       to={'/'}>Главная</Link> / <Link className='product__top-link '
-                                                                      to={'/'}>Мужские</Link></h3>
-                            <h2 className='product__top-title'>Air Jordan 1 'Black Toe'</h2>
-                            <p className='product__top-price'>13127 руб</p>
+                                                                      to={'/catalog'}>Мужские</Link></h3>
+                            <h2 className='product__top-title'>{oneProduct ? oneProduct.title : 'Air Jordan 1 \'Black Toe\''}</h2>
+                            <p className='product__top-price'>{oneProduct ? oneProduct.price : '13127'} руб</p>
                             <p className='product__top-comment'>Оставить отзыв</p>
                             <p className='product__top-text'>Кроссовки Майкла Джордана - Air Jordan 1 Retro. С этой
                                 модели начиналась история Jordan
@@ -101,6 +100,18 @@ const Product = () => {
                             </div>
                             <p className='product__top-return'>Обмен/Возврат в течение 14 дней</p>
 
+                            <div className='product__top-pick'>
+                                <span className='product__top-pickNum'>
+                                    <button className='product__top-pickBtn left'>-</button>
+                                    <input className='product__top-pickInput' type="number" defaultValue={1}/>
+                                    <button className='product__top-pickBtn right'>+</button>
+                                </span>
+                                <button className='product__top-pickAdd'><MdOutlineAddShoppingCart/> В корзину</button>
+                                <span className='product__top-pickFav'>
+                                    <MdFavorite/>
+                                </span>
+                            </div>
+                            <p>ui</p>
                         </div>
 
                     </div>

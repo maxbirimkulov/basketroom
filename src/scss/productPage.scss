@@ -12,7 +12,7 @@
       &-loading{
         width: 100%;
         height: 350px;
-        background-color: #999;
+        //background-color: #999;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -110,7 +110,81 @@
         }
 
       }
+      &-pick{
+        display: flex;
+        height: 48px;
+        align-items: center;
+        &Num{
+          height: 100%;
+          margin-right: 15px;
+          border-radius: 0.45rem;
+          display: flex;
+        }
+        &Btn{
+          height: 100%;
+          background-color: transparent;
+          padding: 9px 15px;
+          font-size: 19px;
+          border: 1px solid #e4e4e4;
+          &.left:active,&.right:active{
+            background-color: #e4e4e4;
+            transition: all .2s;
+          }
+          &.left:focus,&.right:focus{
+            border: 1px solid #969696;
+          }
+          &.left{
+            border-radius: 0.45rem 0 0 0.45rem;
+          }
+          &.right{
+            border-radius: 0 0.45rem 0.45rem 0;
+          }
+        }
+        &Input{
+          width: 75px;
+          text-align: center;
+          height: 100%;
+          padding: 9px 15px;
+          font-size: 19px;
+          border: 1px solid #e4e4e4;
+        }
+        &Fav{
+          height: 50px;
+          width: 50px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 24px;
+          opacity: .3;
+          cursor: pointer;
+          &:hover{
+            opacity: 1;
+          }
+        }
+        &Add{
+          height: 100%;
+          margin-right: 5px;
+          color: white;
+          background-color: $black;
+          padding: 9px 15px;
+          font-size: 19px;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          cursor: pointer;
+          border-radius: 0.45rem;
+          //&:hover{
+          //  background-color: #fff;
+          //  color: $black;
+          //}
+          &:active{
+            transform: scale(.9);
+            transition: all .2s;
+          }
+        }
+      }
       &-return{
+        margin-bottom: 10px;
         background-color: #f7f7f7;
         width: fit-content;
         font-size: 15px;

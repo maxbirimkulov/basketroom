@@ -1,5 +1,6 @@
 import React from 'react';
 import Card from "../../components/Card/Card";
+import FavoritesCardLoaded from "./FavoritesCardLoaded";
 
 const Favorites = () => {
     return (
@@ -9,6 +10,7 @@ const Favorites = () => {
                 <h2>Избранное</h2>
 
                 <div className='home__cardBlock-row'>
+                    <FavoritesCardLoaded/>
 
                     <div className="home__productCard">
                         <Card page='fav'/>

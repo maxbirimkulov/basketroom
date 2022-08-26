@@ -1,26 +1,42 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useForm} from "react-hook-form";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import SalesInfo from "../../components/SalesInfo/SalesInfo";
+import Typography from '@material-ui/core/Typography';
+import Slider from '@material-ui/core/Slider';
 import CardRow from "../../components/CardRow/CardRow";
 import Card from "../../components/Card/Card";
 import {Swiper, SwiperSlide} from "swiper/react";
 import {Navigation} from "swiper";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {getProducts} from "../../redux/clothes";
+import CatalogCardLoaded from "./CatalogCardLoaded";
+import FavoritesCardLoaded from "../Favorites/FavoritesCardLoaded";
 
 const Catalog = ({side}) => {
+    const {status, products, error, filter} = useSelector(s => s.clothes);
     const navigate = useNavigate();
+
     const {reset, handleSubmit, register} = useForm();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(getProducts({category:'sneakers', title: filter.title, from: '0', to: '200000', page: '1', desc: true }))
+    },[filter]);
+
 
     const resetSelect = () => {
         reset();
         window.scrollTo(0, 0);
 
     };
+    const [value, setValue] =  React.useState([20,100]);
+    const rangeSelector = (event, newValue) => {
+        setValue(newValue);
+        console.log(newValue)
+    };
 
 
-    const {status, products, error} = useSelector(s => s.clothes);
-    // console.log(products)
 
     return (
         <div className=''>
@@ -28,8 +44,19 @@ const Catalog = ({side}) => {
                 <div className="catalog">
 
                     <form className={`catalog__sidebar ${side && 'active'}`}>
+                        <h3>Цена</h3>
+
+                        <Slider
+                            value={value}
+                            onChange={rangeSelector}
+                            valueLabelDisplay="auto"
+                        />
+                        Price is between {value[0] * 100}  and {value[1] * 150}
+
+
 
                         <div className={'catalog__sidebar-categories simpleText'}>
+
                             <h3>Размер</h3>
 
                             <label   className={'catalog__sidebar-category'}>
@@ -194,22 +221,39 @@ const Catalog = ({side}) => {
                             </label>
 
                         </div>
-                        <button className={'Btn Btn-blue'} onClick={handleSubmit(resetSelect)}>Сбросить</button>
+                        <button className={'catalog__sidebar-reset'} onClick={handleSubmit(resetSelect)}>Сбросить</button>
+                        <div className='catalog__sidebar-found'>
+                            Найдено товаров: <span className='catalog__sidebar-found_count'>759</span>
+                        </div>
 
                     </form>
 
                     <div className={'catalog__list'}>
                         {
-                            products?.map(pare => (
-                                <div key={pare?.id} className="catalog__productCard">
-                                    <Card product={pare}/>
-                                </div>
-                            ))
+                            status === 'loading' ?
+                            <>
+                                {
+                                    new Array(8).fill(null, 0).map(() => (
+                                        <div className="catalog__productCard">
+                                            {/*<CatalogCardLoaded/>*/}
+                                            <FavoritesCardLoaded/>
+                                        </div>
+                                    ))
+                                }
+                            </>
+                                :
+                                products?.map(pare => (
+                                    <div key={pare?.id} className="catalog__productCard">
+                                        <Card product={pare}/>
+                                    </div>
+                                ))
+                        }
+                        {
+                            error && <h2>An error occerd: {error}</h2>
                         }
 
-                        <div className="catalog__productCard">
-                            <Card video={true}/>
-                        </div>
+
+
 
                     </div>
 

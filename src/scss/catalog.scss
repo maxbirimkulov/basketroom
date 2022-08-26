@@ -24,6 +24,41 @@
       &-navigate{
         margin-bottom: 45px;
       }
+      &-reset{
+        width: 100%;
+        background-color: transparent;
+        height: 40px;
+        border-radius: .35rem;
+        font-size: 15px;
+        cursor: pointer;
+        &:hover{
+          background-color: $black;
+          color: white;
+        }
+      }
+      &-found{
+        cursor: pointer;
+        margin-top: 20px;
+        background-color: $black;
+        color: white;
+        width: calc(100% + 31px);
+        position: sticky;
+        bottom: 15px;
+        transform: translate(-15px, 15px);
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 15px;
+        &_count{
+          background-color: #fff;
+          color: $black;
+          padding: 0 9px;
+          margin-left: 5px;
+          font-weight: bold;
+          border-radius: 10px;
+        }
+      }
       &-text{
         cursor: pointer;
         &:focus{
