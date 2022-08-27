@@ -15,21 +15,8 @@ const Favorites = () => {
                     <div className="home__productCard">
                         <Card page='fav'/>
                     </div>
-                    <div className="home__productCard">
-                        <Card page='fav'/>
-                    </div>
-                    <div className="home__productCard">
-                        <Card page='fav'/>
-                    </div>
-                    <div className="home__productCard">
-                        <Card page='fav'/>
-                    </div>
-                    <div className="home__productCard">
-                        <Card page='fav'/>
-                    </div>
-                    <div className="home__productCard">
-                        <Card page='fav'/>
-                    </div>
+
+
                 </div>
 
             </div>

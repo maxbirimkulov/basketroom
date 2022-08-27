@@ -108,6 +108,16 @@
         }
       }
     }
+    &submenu{
+      position: absolute;
+      top: 50px;
+      flex-direction: column;
+      gap: 10px;
+      display: none;
+      &:hover{
+
+      }
+    }
 
 
 

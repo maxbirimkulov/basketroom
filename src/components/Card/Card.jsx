@@ -3,25 +3,21 @@ import {IoHeartSharp} from 'react-icons/io5'
 import {FaEye} from 'react-icons/fa'
 import {FaTrash} from 'react-icons/fa'
 import {useNavigate} from "react-router-dom";
-import {useDispatch} from "react-redux";
-import {getOneProduct} from "../../redux/clothes";
+
+
 
 const Card = ({page, video, product }) => {
-    const dispatch  = useDispatch();
     const getProductToPage = (id) =>{
-        // dispatch(getOneProduct(id));
         navigate(`/product/${id}`);
         window.scrollTo(0,0);
     };
 
-    // console.log(`localhost:4444${product?.images[0]}`);
     const navigate = useNavigate();
 
     const [changeImg, setChangeImg] = useState(0);
     return (
 
         <div
-            // onMouseOver={() => setChangeImg(3)}
                onMouseOut={() => setChangeImg(0)}
                className={`productCard ${page === 'fav' ? 'favorites' : page === 'slide' ? 'slide' : ''}`}>
             <div className='productCard__like'>
@@ -35,7 +31,7 @@ const Card = ({page, video, product }) => {
                   onClick={() => getProductToPage(product?._id)}
                   className='productCard__hover2'>
             </div>
-            {/*<div  onMouseEnter={() => setChangeImg(3)} className='productCard__hover3'> </div>*/}
+            <div onClick={() => getProductToPage(product?._id)} className='productCard__hover3'> </div>
             {
                 product ?
                     <div className="productCard__img" style={{background: `url(${`${process.env.REACT_APP_URL}${ product?.images[changeImg] || product?.images[0]}`})center/contain no-repeat`}}/>

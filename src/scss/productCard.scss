@@ -86,7 +86,7 @@
       font-size: 0.82rem;
       border-radius: 0.37rem;
       cursor: pointer;
-      &:hover{
+      &:hover,&:focus{
         background-color: $black;
         color: white;
         transition: all .1s;

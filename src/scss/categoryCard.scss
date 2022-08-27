@@ -5,7 +5,11 @@
   border-radius: 0.37rem;
   overflow: hidden;
   cursor: pointer;
-  &:hover{
+  border: none;
+  text-align: left;
+  &:focus &__bg{
+    transform: scale(1.1);
+    transition: all .4s;
   }
  &__{
 

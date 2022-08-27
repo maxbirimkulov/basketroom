@@ -15,7 +15,7 @@ const Header = () => {
     const searching = (e) =>{
         e.preventDefault();
         console.log(e.target[0].value);
-
+        navigate('/catalog')
         dispatch(searchProduct(e.target[0].value));
     };
 
@@ -75,9 +75,16 @@ const Header = () => {
                     <nav className="header__menu-nav">
                         <Link className='header__menu-link' to='/catalog'>Бренды</Link>
                         <Link className='header__menu-link' to='/catalog'>Новинки</Link>
-                        <Link className='header__menu-link' to='/catalog'>Мужские</Link>
-                        <Link className='header__menu-link' to='/catalog'>Женские</Link>
-                        <Link className='header__menu-link' to='/catalog'>Одежда</Link>
+                        <Link className='header__menu-link' to='/catalog'>По заказу</Link>
+                        <Link className='header__menu-link' to='/catalog'>В наличие</Link>
+                        <Link className='header__menu-link' to='/catalog'>
+                            Одежда
+                            <ul className='header__submenu'>
+                                <li className='header__submenu-link'>Костюмы</li>
+                                <li className='header__submenu-link'>Форма</li>
+                                <li className='header__submenu-link'>Худи</li>
+                            </ul>
+                        </Link>
                         <Link className='header__menu-link' to='/catalog'>Premium</Link>
                         <Link className='header__menu-link' to='/catalog'>SALE</Link>
                     </nav>

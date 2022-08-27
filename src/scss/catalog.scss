@@ -21,8 +21,18 @@
       height: fit-content;
       padding: 15px;
       max-width: 298px;
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.5;
+      color: #343a40;
+      border-radius: 0.37rem;
+      border: 1px solid rgba(0, 0, 0, 0.1);
       &-navigate{
         margin-bottom: 45px;
+      }
+      &-select{
+        flex-grow: 1;
+        width: 100%;
       }
       &-reset{
         width: 100%;
@@ -100,17 +110,34 @@
     }
     &productCard{
       width: calc(32% - 5px);
+      &__title{
+        margin-bottom: 30px;
+
+      }
     }
     &list{
       width: 80%;
       gap: 12px;
       display: flex;
       flex-wrap: wrap;
+      align-content: start;
       &-top{
         display: flex;
         justify-content: flex-end;
         margin-bottom: 40px;
         gap: 30px;
+      }
+      &-paginate{
+        width: 100%;
+        text-align: center;
+        &Btn{
+          padding: 7px 13px;
+          height: 40px;
+          background-color: $black;
+          color: white;
+          border-radius: .43rem;
+          cursor: pointer;
+        }
       }
     }
 

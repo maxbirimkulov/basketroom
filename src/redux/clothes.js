@@ -6,7 +6,7 @@ export const getProducts = createAsyncThunk(
     'clothes/getProducts',
     async (filter,{rejectWithValue}) => {
         try {
-            const res  = await axios(`/clothes?title=${filter.title}&category=${filter.category}&from=${filter.from}&to=${filter.to}&desc=${filter.desc}&page=${filter.page}&limit=100`);
+            const res  = await axios(`/clothes?title=${filter.title}&category=${filter.category}&from=${filter.from}&to=${filter.to}&desc=${filter.desc}&page=${filter.page}&limit=${filter.limit}`);
             if (res.statusText !== 'OK') {
                 throw new Error('Server error !')
             }
@@ -75,11 +75,12 @@ const clothes = createSlice({
         oneProduct: {},
         filter: {
             range:{
-                from: 0,
-                to: 5000,
+                from: 2000,
+                to: 20000,
             },
             title: '',
             desc: true,
+            limit: 12,
             category: '',
             page: 1
         },
@@ -88,9 +89,19 @@ const clothes = createSlice({
         productsCount: 0,
     },
     reducers: {
-        searchProduct : ((state, action) => {
+        searchProduct : (state, action) => {
             state.filter = {...state.filter, title: action.payload}
-        })
+        },
+        changeRange : (state, action) => {
+            state.filter = {...state.filter, range: {
+                    from : action.payload.from,
+                    to: action.payload.to
+                }}
+        },
+        changeProductLimit : (state, action) =>{
+            state.filter = {...state.filter, limit: action.payload.limit};
+            state.category = action.payload.category
+        }
     },
 
     extraReducers: {
@@ -130,4 +141,4 @@ const clothes = createSlice({
 
 
 export default clothes.reducer;
-export const { searchProduct} = clothes.actions;
+export const { searchProduct, changeRange, changeProductLimit} = clothes.actions;

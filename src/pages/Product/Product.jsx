@@ -43,9 +43,10 @@ const Product = () => {
                                    JSON.stringify(oneProduct) !== '{}'  && oneProduct.images.map((img, idx) => img &&
                                         (
                                             <SwiperSlide>
-                                                <img className='product__top-image'
-                                                     src={`${process.env.REACT_APP_URL}${img}`}
-                                                     alt=''/>
+                                                <div className='product__top-backImg' style={{background: `url(${`${process.env.REACT_APP_URL}${img}`})center/contain no-repeat`}}> </div>
+                                                {/*<img className='product__top-image'*/}
+                                                {/*     src={`${process.env.REACT_APP_URL}${img}`}*/}
+                                                {/*     alt=''/>*/}
                                             </SwiperSlide>
                                     )
                                     )
@@ -61,9 +62,10 @@ const Product = () => {
                                                     <React.Fragment key={oneProduct.title + img }>
                                                         <a data-fancybox="gallery" href={`${process.env.REACT_APP_URL}${img}`}
                                                            className='product__top-gallery-block'>
-                                                            <img className='product__top-image'
-                                                                 src={`${process.env.REACT_APP_URL}${img}`}
-                                                                 alt=''/>
+                                                                <div className='product__top-galleryImage' style={{background: `url(${`${process.env.REACT_APP_URL}${img}`})center/contain no-repeat`}}> </div>
+                                                            {/*<img className='product__top-galleryImage'*/}
+                                                            {/*     src={`${process.env.REACT_APP_URL}${img}`}*/}
+                                                            {/*     alt=''/>*/}
                                                         </a>
                                                     </React.Fragment>
 
@@ -127,7 +129,7 @@ const Product = () => {
                 <h2 className='home__cardBlock-title'>Вам так же понравится</h2>
 
                 <div className='home__cardBlock-row'>
-                    <Swiper navigation={true} slidesPerView={'4'} modules={[Navigation]} className="mySwiper">
+                    <Swiper navigation={true} loop slidesPerView={'4'} modules={[Navigation]} className="mySwiper">
                         <SwiperSlide><Card page={'slide'}/></SwiperSlide>
                         <SwiperSlide><Card page={'slide'}/></SwiperSlide>
                         <SwiperSlide><Card page={'slide'}/></SwiperSlide>

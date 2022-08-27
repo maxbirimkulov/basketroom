@@ -131,6 +131,9 @@ const ClothesAdd = () => {
                     required: 'Это поле обязательное *',
                 })} className='create__form-select'  id='category'>
                     <option>sneakers</option>
+                    <option>hoody</option>
+                    <option>sport suit</option>
+                    <option>uniform</option>
                 </select>
             </div>
             <button className='create__form-btn' type='submit'>Создать</button>

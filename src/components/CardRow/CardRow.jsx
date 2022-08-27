@@ -17,9 +17,6 @@ const CardRow = ({category = 'Новинки'}) => {
                         </div>
                     ))
                 }
-                 <div className='home__productCard'>
-                    <Card/>
-                </div>
 
             </div>
         </section>

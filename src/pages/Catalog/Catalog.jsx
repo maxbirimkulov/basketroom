@@ -2,41 +2,47 @@ import React, {useEffect, useState} from 'react';
 import {useForm} from "react-hook-form";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import SalesInfo from "../../components/SalesInfo/SalesInfo";
-import Typography from '@material-ui/core/Typography';
+import {FaSearch} from 'react-icons/fa'
 import Slider from '@material-ui/core/Slider';
-import CardRow from "../../components/CardRow/CardRow";
+import debounce from "@material-ui/core/utils/debounce";
 import Card from "../../components/Card/Card";
 import {Swiper, SwiperSlide} from "swiper/react";
 import {Navigation} from "swiper";
 import {useDispatch, useSelector} from "react-redux";
-import {getProducts} from "../../redux/clothes";
-import CatalogCardLoaded from "./CatalogCardLoaded";
+import {getProducts, changeRange, changeProductLimit} from "../../redux/clothes";
+
 import FavoritesCardLoaded from "../Favorites/FavoritesCardLoaded";
 
 const Catalog = ({side}) => {
-    const {status, products, error, filter} = useSelector(s => s.clothes);
+    const {status, products, productsCount, error, filter} = useSelector(s => s.clothes);
     const navigate = useNavigate();
 
     const {reset, handleSubmit, register} = useForm();
     const dispatch = useDispatch();
-
     useEffect(() => {
-        dispatch(getProducts({category:'sneakers', title: filter.title, from: '0', to: '200000', page: '1', desc: true }))
+        dispatch(getProducts({category: filter.category, title: filter.title, from: filter.range.from, to: filter.range.to, page: '1', limit: filter.limit ,desc: true }))
     },[filter]);
 
 
     const resetSelect = () => {
         reset();
+        dispatch(getProducts({category: 'sneakers', title: '', from: filter.range.from, to: filter.range.to, page: '1', limit: 12 ,desc: true }))
         window.scrollTo(0, 0);
-
+        // убрать фильтры
     };
-    const [value, setValue] =  React.useState([20,100]);
+    const [value, setValue] =  React.useState([filter.range.from / 200, filter.range.to / 200]);
+
+
+
+
     const rangeSelector = (event, newValue) => {
-        setValue(newValue);
+           setValue(newValue);
+            dispatch(changeRange({from: newValue[0] * 200, to: newValue[1] * 200}));
         console.log(newValue)
     };
-
-
+    const productsOnPage = (count) =>{
+      dispatch(changeProductLimit({limit:count, category:'sneakers'}))
+    };
 
     return (
         <div className=''>
@@ -44,15 +50,46 @@ const Catalog = ({side}) => {
                 <div className="catalog">
 
                     <form className={`catalog__sidebar ${side && 'active'}`}>
-                        <h3>Цена</h3>
+                        <div className={'catalog__sidebar-categories simpleText'}>
 
-                        <Slider
-                            value={value}
-                            onChange={rangeSelector}
-                            valueLabelDisplay="auto"
-                        />
-                        Price is between {value[0] * 100}  and {value[1] * 150}
+                            <h3>Отображение и поиск</h3>
+                            <p><input type="text" placeholder='Поиск по категории'/>
+                                <button><FaSearch/></button></p>
+                            <p>
+                                <span>Отображать по</span>
+                                <select onChange={(e) => productsOnPage(+e.target.value)} className='catalog__sidebar-select'>
+                                    <option value="12">12 шт</option>
+                                    <option value="24">24 шт</option>
+                                    <option value="48">48 шт</option>
+                                    <option value="96">96 шт</option>
+                                </select>
+                            </p>
+                             <p>
+                                <span>Порядок</span>
+                                <select className='catalog__sidebar-select'>
+                                    <option value="">По умолчанию</option>
+                                    <option value="">По популярности</option>
+                                    <option value={true}>По возростанию цены</option>
+                                    <option value={false}>По убыванию цены</option>
+                                    <option value="new">По новинкам</option>
+                                    <option value="sale">По скидке</option>
+                                    <option value="">По алфавиту</option>
+                                </select>
+                            </p>
+                        </div>
 
+                        <div className={'catalog__sidebar-categories simpleText'}>
+
+                            <h3>Цена</h3>
+
+                            <Slider
+
+                                defaultValue={value}
+                                onChange={debounce(rangeSelector,2000)}
+                                valueLabelDisplay="auto"
+                            />
+                            Price is between {value[0] * 200}  and {value[1] * 200}
+                        </div>
 
 
                         <div className={'catalog__sidebar-categories simpleText'}>
@@ -124,7 +161,7 @@ const Catalog = ({side}) => {
                             </label>
 
                         </div>
-                        <p>Бренд</p>
+                        <h3>Бренд</h3>
                         <div className={'catalog__sidebar-categories simpleText'}>
                             <label  className={'catalog__sidebar-category'}>
                                 <input value={'dress'} className={'catalog__sidebar-category_box'} type="checkbox"
@@ -157,7 +194,7 @@ const Catalog = ({side}) => {
                                 <span className="category_box"/>AAPE
                             </label>
 
-                            <p>Пол</p>
+                            <h3>Пол</h3>
                             <p className={'catalog__sidebar-category'}>
                                 <input className={'catalog__sidebar-category_box'} id={'Худи, свитшоты'} type="checkbox"/>
                                 <span className="category_box"/>
@@ -223,17 +260,20 @@ const Catalog = ({side}) => {
                         </div>
                         <button className={'catalog__sidebar-reset'} onClick={handleSubmit(resetSelect)}>Сбросить</button>
                         <div className='catalog__sidebar-found'>
-                            Найдено товаров: <span className='catalog__sidebar-found_count'>759</span>
+                            Найдено товаров: <span className='catalog__sidebar-found_count'>{productsCount}</span>
                         </div>
 
                     </form>
+
+
+
 
                     <div className={'catalog__list'}>
                         {
                             status === 'loading' ?
                             <>
                                 {
-                                    new Array(8).fill(null, 0).map(() => (
+                                    new Array(productsCount).fill(null, 0).map(() => (
                                         <div className="catalog__productCard">
                                             {/*<CatalogCardLoaded/>*/}
                                             <FavoritesCardLoaded/>
@@ -253,11 +293,15 @@ const Catalog = ({side}) => {
                         }
 
 
-
+                    <p className='catalog__list-paginate'>
+                        {/*<button onClick={() => productsOnPage(filter.limit + 3)} className='catalog__list-paginateBtn'>{status === 'loading' ? 'Загружаем' : 'Показать еще'}</button>*/}
+                    </p>
+                        {filter.limit}
 
                     </div>
 
                 </div>
+
                 <h2 className='home__cardBlock-title'>Ранее просмотренные товары</h2>
 
                 <div className='home__cardBlock-row'>
