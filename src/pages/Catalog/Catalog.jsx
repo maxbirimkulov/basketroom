@@ -9,24 +9,30 @@ import Card from "../../components/Card/Card";
 import {Swiper, SwiperSlide} from "swiper/react";
 import {Navigation} from "swiper";
 import {useDispatch, useSelector} from "react-redux";
-import {getProducts, changeRange, changeProductLimit} from "../../redux/clothes";
+import {getProducts, changeRange, changeProductLimit, switchPage, clearFilters} from "../../redux/clothes";
 
 import FavoritesCardLoaded from "../Favorites/FavoritesCardLoaded";
 
 const Catalog = ({side}) => {
-    const {status, products, productsCount, error, filter} = useSelector(s => s.clothes);
+    const dispatch = useDispatch();
+    const params = useParams();
     const navigate = useNavigate();
 
+    useEffect(() =>{
+        dispatch(clearFilters({page: params.page}))
+    },[]);
+    const {status, products, productsCount, error, filter} = useSelector(s => s.clothes);
+
     const {reset, handleSubmit, register} = useForm();
-    const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(getProducts({category: filter.category, title: filter.title, from: filter.range.from, to: filter.range.to, page: '1', limit: filter.limit ,desc: true }))
+        dispatch(getProducts({category: filter.category, title: filter.title, from: filter.range.from, to: filter.range.to, page: filter.page, limit: filter.limit ,desc: filter.desc }))
     },[filter]);
 
 
     const resetSelect = () => {
         reset();
-        dispatch(getProducts({category: 'sneakers', title: '', from: filter.range.from, to: filter.range.to, page: '1', limit: 12 ,desc: true }))
+        navigate('/catalog/1')
+        dispatch(clearFilters({category: 'sneakers', title: '', from: filter.range.from, to: filter.range.to, page: '1', limit: 12 ,desc: false }));
         window.scrollTo(0, 0);
         // убрать фильтры
     };
@@ -41,7 +47,16 @@ const Catalog = ({side}) => {
         console.log(newValue)
     };
     const productsOnPage = (count) =>{
-      dispatch(changeProductLimit({limit:count, category:'sneakers'}))
+      dispatch(changeProductLimit({limit:count, page: '1'}))
+    };
+    const clickedPagination = (pageBtn) =>{
+        filter.page !== pageBtn &&
+        dispatch(switchPage(pageBtn))
+    };
+    const setSort = (e) =>{
+        const sign = e.target.value;
+        sign === 'По возростанию цены' && dispatch(clearFilters({desc: false}));
+        sign === 'По убыванию цены' && dispatch(clearFilters({desc: true}));
     };
 
     return (
@@ -65,15 +80,26 @@ const Catalog = ({side}) => {
                                 </select>
                             </p>
                              <p>
+                                <span>Сейчас на странице {filter.page}</span>
+                                <select onChange={(e) =>{clickedPagination(e.target.value) ;navigate(`/catalog/${e.target.value}`)}} className='catalog__sidebar-select'>
+                                    {
+                                        new Array(Math.ceil(productsCount / filter.limit)).fill(null,0).map((p, idx) =>(
+                                            <option>{idx+1}</option>
+                                        ))
+                                    }
+                                </select>
+                            </p>
+
+                             <p>
                                 <span>Порядок</span>
-                                <select className='catalog__sidebar-select'>
-                                    <option value="">По умолчанию</option>
-                                    <option value="">По популярности</option>
-                                    <option value={true}>По возростанию цены</option>
-                                    <option value={false}>По убыванию цены</option>
-                                    <option value="new">По новинкам</option>
-                                    <option value="sale">По скидке</option>
-                                    <option value="">По алфавиту</option>
+                                <select onChange={(e) => setSort(e)} className='catalog__sidebar-select'>
+                                    <option>По умолчанию</option>
+                                    <option>По популярности</option>
+                                    <option>По возростанию цены</option>
+                                    <option>По убыванию цены</option>
+                                    <option>По новинкам</option>
+                                    <option>По скидке</option>
+                                    <option>По алфавиту</option>
                                 </select>
                             </p>
                         </div>
@@ -88,7 +114,7 @@ const Catalog = ({side}) => {
                                 onChange={debounce(rangeSelector,2000)}
                                 valueLabelDisplay="auto"
                             />
-                            Price is between {value[0] * 200}  and {value[1] * 200}
+                            Цена от {value[0] * 200}р  до {value[1] * 200}р
                         </div>
 
 
@@ -269,35 +295,45 @@ const Catalog = ({side}) => {
 
 
                     <div className={'catalog__list'}>
-                        {
-                            status === 'loading' ?
-                            <>
-                                {
-                                    new Array(productsCount).fill(null, 0).map(() => (
-                                        <div className="catalog__productCard">
-                                            {/*<CatalogCardLoaded/>*/}
-                                            <FavoritesCardLoaded/>
+                        <div className="catalog__list-products">
+                            {
+                                status === 'loading' ?
+                                    <>
+                                        {
+                                            new Array(filter.limit).fill(null, 0).map(() => (
+                                                <div className="catalog__productCard">
+                                                    <FavoritesCardLoaded/>
+                                                </div>
+                                            ))
+                                        }
+                                    </>
+                                    :
+                                    products?.map(pare => (
+                                        <div key={pare?.id} className="catalog__productCard">
+                                            <Card product={pare}/>
                                         </div>
                                     ))
+                            }
+                            {
+                                error && <h2>An error occerd: {error}</h2>
+                            }
+                        </div>
+
+
+                        <div className='catalog__list-paginate'>
+                            {/*<button onClick={() => productsOnPage(filter.limit + 3)} className='catalog__list-paginateMore'>{status === 'loading' ? 'Загружаем' : 'Показать еще'}</button>*/}
+                            <div className='catalog__list-paginateBtns'>
+                                {
+                                    new Array(Math.ceil(productsCount / filter.limit)).fill(null,0).map((p, idx) =>(
+                                        <button
+                                            onClick={(e) =>{ clickedPagination(e.target.textContent); navigate(`/catalog/${idx + 1}`)}}
+                                            className={`catalog__list-paginateBtn ${filter.page == idx + 1 && 'active'}`}>{idx + 1}</button>
+                                    ))
                                 }
-                            </>
-                                :
-                                products?.map(pare => (
-                                    <div key={pare?.id} className="catalog__productCard">
-                                        <Card product={pare}/>
-                                    </div>
-                                ))
-                        }
-                        {
-                            error && <h2>An error occerd: {error}</h2>
-                        }
+                            </div>
+                        </div>
 
-
-                    <p className='catalog__list-paginate'>
-                        {/*<button onClick={() => productsOnPage(filter.limit + 3)} className='catalog__list-paginateBtn'>{status === 'loading' ? 'Загружаем' : 'Показать еще'}</button>*/}
-                    </p>
                         {filter.limit}
-
                     </div>
 
                 </div>

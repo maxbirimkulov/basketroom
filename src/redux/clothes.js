@@ -79,7 +79,7 @@ const clothes = createSlice({
                 to: 20000,
             },
             title: '',
-            desc: true,
+            desc: false,
             limit: 12,
             category: '',
             page: 1
@@ -98,10 +98,17 @@ const clothes = createSlice({
                     to: action.payload.to
                 }}
         },
+        switchPage : (state,action) => {
+            state.filter = {...state.filter, page: action.payload}
+        },
         changeProductLimit : (state, action) =>{
             state.filter = {...state.filter, limit: action.payload.limit};
-            state.category = action.payload.category
+            state.filter.page = action.payload.page;
+        },
+        clearFilters : (state,action) => {
+            state.filter = {...state.filter, ...action.payload}
         }
+
     },
 
     extraReducers: {
@@ -141,4 +148,4 @@ const clothes = createSlice({
 
 
 export default clothes.reducer;
-export const { searchProduct, changeRange, changeProductLimit} = clothes.actions;
+export const { searchProduct, changeRange, changeProductLimit, switchPage, clearFilters} = clothes.actions;

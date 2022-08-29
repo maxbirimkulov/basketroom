@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {NavLink, Link, useNavigate} from "react-router-dom";
 import {GiHearts} from 'react-icons/gi'
 import {HiShoppingCart} from 'react-icons/hi'
@@ -19,8 +19,10 @@ const Header = () => {
         dispatch(searchProduct(e.target[0].value));
     };
 
-
-
+    const [search, setSearch] = useState('');
+    const al = (e) =>{
+        setSearch(e.target.textContent)
+    };
     return (
         <>
             <header>
@@ -36,7 +38,17 @@ const Header = () => {
                         </div>
 
                         <form onSubmit={(e) => searching(e)} className='header__label'>
-                            <input className='header__label-input' required type="text" placeholder='Поиск по каталогу'/>
+                            <input onChange={(event => setSearch(event.target.value))} className='header__label-input' value={search} required type="text" placeholder='Поиск по каталогу'/>
+
+                            <div className='header__label-popup'>
+                                <ul className='header__label-list'>
+                                    <li onClick={(e) => al(e)} className='header__label-listItem'>air </li>
+                                    <li onClick={(e) => al(e)} className='header__label-listItem'>off</li>
+                                    <li onClick={(e) => al(e)} className='header__label-listItem'>white </li>
+                                    <li onClick={(e) => al(e)} className='header__label-listItem'>nike</li>
+                                    <li onClick={(e) => al(e)} className='header__label-listItem'>adidas</li>
+                                </ul>
+                            </div>
                             <button className='header__label-btn'><FaSearch/></button>
                         </form>
 
@@ -73,11 +85,11 @@ const Header = () => {
             <div className="header__menu">
                 <div className="container">
                     <nav className="header__menu-nav">
-                        <Link className='header__menu-link' to='/catalog'>Бренды</Link>
-                        <Link className='header__menu-link' to='/catalog'>Новинки</Link>
-                        <Link className='header__menu-link' to='/catalog'>По заказу</Link>
-                        <Link className='header__menu-link' to='/catalog'>В наличие</Link>
-                        <Link className='header__menu-link' to='/catalog'>
+                        <Link className='header__menu-link' to='/catalog/1'>Бренды</Link>
+                        <Link className='header__menu-link' to='/catalog/1'>Новинки</Link>
+                        <Link className='header__menu-link' to='/catalog/1'>По заказу</Link>
+                        <Link className='header__menu-link' to='/catalog/1'>В наличие</Link>
+                        <Link className='header__menu-link' to='/catalog/1'>
                             Одежда
                             <ul className='header__submenu'>
                                 <li className='header__submenu-link'>Костюмы</li>
@@ -85,8 +97,8 @@ const Header = () => {
                                 <li className='header__submenu-link'>Худи</li>
                             </ul>
                         </Link>
-                        <Link className='header__menu-link' to='/catalog'>Premium</Link>
-                        <Link className='header__menu-link' to='/catalog'>SALE</Link>
+                        <Link className='header__menu-link' to='/catalog/1'>Premium</Link>
+                        <Link className='header__menu-link' to='/catalog/1'>SALE</Link>
                     </nav>
                 </div>
             </div>

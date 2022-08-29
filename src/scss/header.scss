@@ -29,6 +29,7 @@
       margin-right: auto;
       width: 35%;
       position: relative;
+      z-index: 10;
       &-input{
         padding: 0.45rem 0.85rem;
         border-radius: 0.37rem;
@@ -36,6 +37,40 @@
         flex: 1 1 auto;
         max-width: 84%;
         margin: 0 auto;
+        z-index: 30;
+        &:focus+.header__label{
+          &-popup{
+            display: block;
+            opacity: 1;
+          }
+          &-list{
+            opacity: 1;
+            color: firebrick;
+          }
+        }
+
+      }
+      &-popup{
+        position: absolute;
+        top: 30px;
+        background-color: #fff;
+        border: 1px solid #ced4da;
+        width: 84%;
+        left: 8%;
+        border-radius: 0.37rem;
+        opacity: 0;
+        pointer-events: auto;
+        transition: all .4s;
+      }
+      &-list{
+        &Item{
+          padding: 0.3rem 0.85rem;
+          cursor: pointer;
+        }
+        &Item:hover{
+          background-color: $black;
+          color: white;
+        }
       }
       &-btn{
         background-color: $black;

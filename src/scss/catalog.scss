@@ -112,15 +112,23 @@
       width: calc(32% - 5px);
       &__title{
         margin-bottom: 30px;
-
+      }
+      &-loader{
       }
     }
     &list{
-      width: 80%;
-      gap: 12px;
       display: flex;
-      flex-wrap: wrap;
-      align-content: start;
+      width: 80%;
+
+      flex-direction: column;
+      &-products{
+        gap: 12px;
+        display: flex;
+        flex-wrap: wrap;
+        align-content: flex-start;
+        height: 100%;
+      }
+
       &-top{
         display: flex;
         justify-content: flex-end;
@@ -130,13 +138,34 @@
       &-paginate{
         width: 100%;
         text-align: center;
-        &Btn{
+        align-self: flex-end;
+        margin-top: auto;
+        &More{
           padding: 7px 13px;
           height: 40px;
           background-color: $black;
           color: white;
           border-radius: .43rem;
           cursor: pointer;
+        }
+        &Btn{
+          padding: 7px 11px;
+          height: 40px;
+          background-color: white;
+          border: 1px solid #dee2e6;
+          cursor: pointer;
+          &:hover, &.active{
+            background-color: $black;
+            color: white;
+            transition: all .3s;
+          }
+        }
+        &Btns{
+          margin: 15px auto 0;
+          border: 1px solid #dee2e6;
+          width: fit-content;
+          border-radius: .43rem;
+          overflow: hidden;
         }
       }
     }

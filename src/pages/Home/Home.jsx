@@ -10,13 +10,10 @@ import {useDispatch, useSelector} from "react-redux";
 
 const Home = () => {
     const dispatch  = useDispatch();
-    const {status, products, error} = useSelector(s => s.clothes);
+    const {status, products, error, filter} = useSelector(s => s.clothes);
 
     useEffect(() => {
-        dispatch(getProducts({category:'', title: '', from: '0', to: '200000', page: '1', desc: true }));
-
-        // JSON.parse(localStorage.getItem('oneProduct')) &&
-        // dispatch(getOneProduct(JSON.parse(localStorage.getItem('oneProduct'))._id))
+        dispatch(getProducts({category:'', title: '', from: '0', to: '200000', page: '1', desc: filter.desc }));
     },[]);
 
     return (

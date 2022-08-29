@@ -33,7 +33,7 @@ const Product = () => {
 
                     <div className="product__top">
                         <div className="product__top-images">
-                            <Swiper initialSlide={1} navigation={true} loop={true} modules={[Navigation]} className="mySwiper product__top-imgPlace">
+                            <Swiper initialSlide={1} navigation={true} modules={[Navigation]} className="mySwiper product__top-imgPlace">
                                 {
                                     status === 'loading' ?
                                     <div className='product__top-loading'>
