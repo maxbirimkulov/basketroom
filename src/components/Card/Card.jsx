@@ -3,7 +3,8 @@ import {IoHeartSharp} from 'react-icons/io5'
 import {FaEye} from 'react-icons/fa'
 import {FaTrash} from 'react-icons/fa'
 import {useNavigate} from "react-router-dom";
-
+import {useDispatch, useSelector} from "react-redux";
+import {findUser} from "../../redux/user";
 
 
 const Card = ({page, video, product }) => {
@@ -13,15 +14,29 @@ const Card = ({page, video, product }) => {
     };
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const user = useSelector(s => s.user);
 
     const [changeImg, setChangeImg] = useState(0);
+
+    const addFav = () => {
+
+        const user = JSON.parse(localStorage.getItem('user')) || {favourites:[], cart:[]};
+        localStorage.setItem('user', JSON.stringify({
+            ...user, favourites:
+                user.favourites.findIndex(el => el._id === product._id) >= 0 ?
+                    user.favourites.filter((el) => el._id !== product._id) :
+                    [...user.favourites, {...product}]
+        }));
+        dispatch(findUser({user: JSON.parse(localStorage.getItem('user'))}));
+    };
     return (
 
         <div
                onMouseOut={() => setChangeImg(0)}
                className={`productCard ${page === 'fav' ? 'favorites' : page === 'slide' ? 'slide' : ''}`}>
-            <div className='productCard__like'>
-                {   page === 'fav' ? <FaTrash/> : <IoHeartSharp/>   }
+            <div onClick={() => addFav()}  className='productCard__like'>
+                {   page === 'fav' ? <FaTrash/> : <span style={{opacity:  user?.favourites?.findIndex(el => el._id === product._id) >= 0 ? '1' : '0.4'}}><IoHeartSharp/></span>   }
             </div>
             <div  onMouseEnter={() => setChangeImg(1)}
                   onClick={() => getProductToPage(product?._id)}

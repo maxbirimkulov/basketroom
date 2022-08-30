@@ -4,13 +4,14 @@ import {GiHearts} from 'react-icons/gi'
 import {HiShoppingCart} from 'react-icons/hi'
 import {FaSearch} from 'react-icons/fa'
 import {IoIosAddCircle} from 'react-icons/io'
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {searchProduct} from "../../redux/clothes";
 
 
 const Header = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const user = useSelector(s => s.user)
 
     const searching = (e) =>{
         e.preventDefault();
@@ -63,7 +64,7 @@ const Header = () => {
                             <GiHearts/>
                             <div className='header__btn-text'>
                                 <p className='header__btn-title'>Избранное</p>
-                                <p className='header__btn-num'>Кол-во: 0</p>
+                                <p className='header__btn-num'>Кол-во: {user?.favourites?.length}</p>
                             </div>
                         </NavLink>
 

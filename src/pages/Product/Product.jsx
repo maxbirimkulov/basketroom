@@ -44,9 +44,6 @@ const Product = () => {
                                         (
                                             <SwiperSlide>
                                                 <div className='product__top-backImg' style={{background: `url(${`${process.env.REACT_APP_URL}${img}`})center/contain no-repeat`}}> </div>
-                                                {/*<img className='product__top-image'*/}
-                                                {/*     src={`${process.env.REACT_APP_URL}${img}`}*/}
-                                                {/*     alt=''/>*/}
                                             </SwiperSlide>
                                     )
                                     )
@@ -113,7 +110,10 @@ const Product = () => {
                                     <MdFavorite/>
                                 </span>
                             </div>
-                            <p>ui</p>
+
+                            <div className='product__top-category'>Находится в категориях :
+                                <span className='product__top-category_link'> {oneProduct?.category}</span>
+                            </div>
                         </div>
 
                     </div>

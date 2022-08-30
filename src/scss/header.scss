@@ -30,26 +30,6 @@
       width: 35%;
       position: relative;
       z-index: 10;
-      &-input{
-        padding: 0.45rem 0.85rem;
-        border-radius: 0.37rem;
-        border: 1px solid #ced4da;
-        flex: 1 1 auto;
-        max-width: 84%;
-        margin: 0 auto;
-        z-index: 30;
-        &:focus+.header__label{
-          &-popup{
-            display: block;
-            opacity: 1;
-          }
-          &-list{
-            opacity: 1;
-            color: firebrick;
-          }
-        }
-
-      }
       &-popup{
         position: absolute;
         top: 30px;
@@ -61,6 +41,7 @@
         opacity: 0;
         pointer-events: auto;
         transition: all .4s;
+        //transform: translateY(-10vh);
       }
       &-list{
         &Item{
@@ -72,6 +53,29 @@
           color: white;
         }
       }
+      &-input{
+        padding: 0.45rem 0.85rem;
+        border-radius: 0.37rem;
+        border: 1px solid #ced4da;
+        flex: 1 1 auto;
+        max-width: 84%;
+        margin: 0 auto;
+        z-index: 30;
+        &:focus+.header__label{
+          background-color: #f00;
+          &-popup{
+            display: block;
+            //transform: translateY(0);
+            opacity: 1;
+          }
+          &-list{
+            opacity: 1;
+            color: red;
+          }
+        }
+
+      }
+
       &-btn{
         background-color: $black;
         position: absolute;
@@ -80,7 +84,7 @@
         cursor: pointer;
         padding: 0.45rem 0.85rem;
         border-radius:0 0.37rem  0.37rem 0;
-
+        z-index: 31;
         color: white;
         display: flex;
         justify-content: center;

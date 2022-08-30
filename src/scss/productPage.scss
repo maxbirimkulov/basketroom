@@ -123,6 +123,7 @@
         display: flex;
         height: 48px;
         align-items: center;
+        margin-bottom: 25px;
         &Num{
           height: 100%;
           margin-right: 15px;
@@ -192,6 +193,19 @@
           }
         }
       }
+      &-category{
+        font-size: 15px;
+        font-weight: 400;
+        line-height: 1.5;
+        color: $black;
+        &_link{
+          cursor: pointer;
+        }
+        &_link:hover{
+          color: orange;
+        }
+      }
+
       &-return{
         margin-bottom: 10px;
         background-color: #f7f7f7;
