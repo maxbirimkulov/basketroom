@@ -26,7 +26,8 @@
 
     &label{
       display: flex;
-      margin-right: auto;
+      justify-content: center;
+      margin: 0 auto;
       width: 35%;
       position: relative;
       z-index: 10;
@@ -68,10 +69,9 @@
             //transform: translateY(0);
             opacity: 1;
           }
-          &-list{
-            opacity: 1;
-            color: red;
-          }
+         &-listItem{
+           pointer-events: none;
+         }
         }
 
       }
@@ -89,7 +89,9 @@
         display: flex;
         justify-content: center;
         align-items: center;
+
       }
+
     }
 
 
@@ -99,6 +101,11 @@
       gap: 10px;
       align-items: center;
       padding-left: 25px;
+      &-favorites, &-cart{
+        &.shake {
+          animation: shakeCart .4s ease-in-out forwards;
+        }
+      }
       &-text{
 
       }
@@ -142,20 +149,65 @@
         padding: 15px 0;
         font-weight: 600;
         cursor: pointer;
+        &.more::after{
+          display: inline-block;
+          margin-left: 0.255em;
+          vertical-align: 0.255em;
+          content: "";
+          border-top: 0.3em solid;
+          border-right: 0.3em solid transparent;
+          border-bottom: 0;
+          border-left: 0.3em solid transparent;
+        }
         &:hover{
-          opacity: .7;
+          color: rgba(0, 0, 0, .6);
         }
       }
     }
     &submenu{
       position: absolute;
-      top: 50px;
+      bottom: 0;
+      transform: translateY(100%);
       flex-direction: column;
       gap: 10px;
-      display: none;
-      &:hover{
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, .4);
+      background-color: #fff;
+      font-weight: 400;
+      color: $black;
 
+      &-link{
+        padding: 0.7rem 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 10rem;
+        background-color: #fff;
+        justify-content: space-between;
+        cursor: pointer;
+        &:hover{
+          background-color: #e4e4e4;
+        }
+        &.more::before {
+          position: absolute;
+          right: 0;
+        }
       }
+      &-categories{
+        position: absolute;
+        top: 0;
+        right: 1px;
+        font-weight: 400;
+        min-height: 100%;
+        max-height: 380px;
+        display: flex;
+        flex-direction: column;
+        //width: auto;
+        flex-wrap: wrap;
+        transform: translateX(100%);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 1);
+        background-color: #fff;
+      }
+
     }
 
 
@@ -184,18 +236,36 @@
   }
 }
 //@media (max-width: 716px) {
-//  .header{
-//    &__{
 //
-//      &menu{
-//
-//      }
-//
-//    }
-//  }
 //}
 
 
 
 
+@keyframes xAxis {
+  100% {
+    transform: translateX(calc(50vw - 105px));
+  }
+}
+
+@keyframes yAxis {
+  100% {
+    transform: translateY(calc(-50vh + 75px));
+  }
+}
+
+@keyframes shakeCart {
+  25% {
+    transform:translateX(6px)
+  }
+  50% {
+    transform:translateX(-4px);
+  }
+  75% {
+    transform:translateX(2px);
+  }
+  100% {
+    transform:translateX(0);
+  }
+}
 

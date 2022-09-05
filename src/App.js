@@ -11,10 +11,14 @@ import SearchResult from "./pages/SearchResult/SearchResult";
 import ClothesAdd from "./pages/AddClothes/AddClothes";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
-import {getOneProduct, getProducts} from "./redux/clothes";
+import {findUser} from "./redux/user";
 
 function App() {
-
+  const dispatch = useDispatch();
+  useEffect(() =>{
+    const user = JSON.parse(localStorage.getItem('user')) || {favourites:[], cart:[]};
+    dispatch(findUser({user: JSON.parse(localStorage.getItem('user'))}));
+  },[]);
 
   return (
     <div className="App">
@@ -26,6 +30,7 @@ function App() {
           <Route path='/basket' element={<Basket/>}/>
           <Route path='/catalog' element={<Catalog/>}/>
           <Route path='/catalog/:page' element={<Catalog/>}/>
+          <Route path='/catalog/:page/:category' element={<Catalog/>}/>
           <Route path='/search' element={<SearchResult/>}/>
           <Route path='/product/:id' element={<Product/>}/>
           <Route path='/add' element={<ClothesAdd/>}/>

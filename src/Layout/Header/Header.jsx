@@ -3,15 +3,18 @@ import {NavLink, Link, useNavigate} from "react-router-dom";
 import {GiHearts} from 'react-icons/gi'
 import {HiShoppingCart} from 'react-icons/hi'
 import {FaSearch} from 'react-icons/fa'
-import {IoIosAddCircle} from 'react-icons/io'
+import {IoIosAddCircle, IoIosArrowForward} from 'react-icons/io'
 import {useDispatch, useSelector} from "react-redux";
 import {searchProduct} from "../../redux/clothes";
+import HeaderSubmenuBasket from "../../components/HeaderSubmenuCards/HeaderSubmenuBasket";
+import HeaderSubmenuStreet from "../../components/HeaderSubmenuCards/HeaderSubmenuStreet";
 
 
 const Header = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const user = useSelector(s => s.user)
+    const user = useSelector(s => s.user.user)
+    let price = user?.cart?.reduce((acc, rec) => acc + rec.price, 0);
 
     const searching = (e) =>{
         e.preventDefault();
@@ -20,6 +23,7 @@ const Header = () => {
         dispatch(searchProduct(e.target[0].value));
     };
 
+    const [submenu, setSubmenu] = useState(false);
     const [search, setSearch] = useState('');
     const al = (e) =>{
         setSearch(e.target.textContent)
@@ -34,8 +38,7 @@ const Header = () => {
                         </h1>
 
                         <div className='header__contacts'>
-                            <a className="header__number text-dark" href="tel:89995137072">8-999-513-70-72</a>
-                            <a className="header__mail text-muted" href="mailto:Basketroom@inbox.ru">Basketroom@inbox.ru</a>
+
                         </div>
 
                         <form onSubmit={(e) => searching(e)} className='header__label'>
@@ -45,9 +48,9 @@ const Header = () => {
                                 <ul className='header__label-list'>
                                     <li onClick={(e) => al(e)} className='header__label-listItem'>air </li>
                                     <li onClick={(e) => al(e)} className='header__label-listItem'>off</li>
-                                    <li onClick={(e) => al(e)} className='header__label-listItem'>white </li>
-                                    <li onClick={(e) => al(e)} className='header__label-listItem'>nike</li>
-                                    <li onClick={(e) => al(e)} className='header__label-listItem'>adidas</li>
+                                    {/*<li onClick={(e) => al(e)} className='header__label-listItem'>white </li>*/}
+                                    {/*<li onClick={(e) => al(e)} className='header__label-listItem'>nike</li>*/}
+                                    {/*<li onClick={(e) => al(e)} className='header__label-listItem'>adidas</li>*/}
                                 </ul>
                             </div>
                             <button className='header__label-btn'><FaSearch/></button>
@@ -61,7 +64,9 @@ const Header = () => {
                             </div>
                         </NavLink>
                         <NavLink to={'/favorites'} className='header__btn'>
-                            <GiHearts/>
+                            <span id='favorites' className='header__btn-favorites'>
+                                <GiHearts/>
+                            </span>
                             <div className='header__btn-text'>
                                 <p className='header__btn-title'>Избранное</p>
                                 <p className='header__btn-num'>Кол-во: {user?.favourites?.length}</p>
@@ -69,10 +74,12 @@ const Header = () => {
                         </NavLink>
 
                         <NavLink to={'/basket'} className='header__btn'>
-                            <HiShoppingCart/>
+                            <span id='cart' className='header__btn-cart'>
+                                <HiShoppingCart/>
+                            </span>
                             <div className='header__btn-text'>
                                 <p className='header__btn-title'>Корзина</p>
-                                <p className='header__btn-num'>0 руб</p>
+                                <p className='header__btn-num'>{price || 0} руб</p>
                             </div>
                         </NavLink>
 
@@ -86,19 +93,26 @@ const Header = () => {
             <div className="header__menu">
                 <div className="container">
                     <nav className="header__menu-nav">
-                        <Link className='header__menu-link' to='/catalog/1'>Бренды</Link>
-                        <Link className='header__menu-link' to='/catalog/1'>Новинки</Link>
-                        <Link className='header__menu-link' to='/catalog/1'>По заказу</Link>
-                        <Link className='header__menu-link' to='/catalog/1'>В наличие</Link>
-                        <Link className='header__menu-link' to='/catalog/1'>
-                            Одежда
-                            <ul className='header__submenu'>
-                                <li className='header__submenu-link'>Костюмы</li>
-                                <li className='header__submenu-link'>Форма</li>
-                                <li className='header__submenu-link'>Худи</li>
-                            </ul>
+                        <Link className='header__menu-link more' to='/catalog/1' onMouseEnter={() => setSubmenu(true)} onMouseLeave={() => setSubmenu(false)}>
+                            Кросовки
+                            {
+                                submenu &&
+                                <ul className='header__submenu'>
+                                    <li className='header__submenu-link more' onMouseEnter={() => setSubmenu('basket')} onMouseLeave={() => setSubmenu(true)}>
+                                        Баскетбол <IoIosArrowForward/>
+                                        {   submenu === 'basket' &&  <HeaderSubmenuBasket/>   }
+                                    </li><li className='header__submenu-link more' onMouseEnter={() => setSubmenu('street')} onMouseLeave={() => setSubmenu(true)}>
+                                        Уличные <IoIosArrowForward/>
+                                        {   submenu === 'street' &&  <HeaderSubmenuStreet/>   }
+                                    </li>
+                                    <li className='header__submenu-link'>Детские</li>
+                                    <li className='header__submenu-link'>Premium</li>
+                                </ul>
+                            }
                         </Link>
-                        <Link className='header__menu-link' to='/catalog/1'>Premium</Link>
+                        <Link className='header__menu-link' to='/catalog/1'>Одежда</Link>
+                        <Link className='header__menu-link' to='/catalog/1'>Акксессуары</Link>
+                        <Link className='header__menu-link' to='/catalog/1'>В наличие</Link>
                         <Link className='header__menu-link' to='/catalog/1'>SALE</Link>
                     </nav>
                 </div>

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useForm} from "react-hook-form";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import SalesInfo from "../../components/SalesInfo/SalesInfo";
-import {FaSearch} from 'react-icons/fa'
+import makeAnimated from 'react-select/animated';
 import Slider from '@material-ui/core/Slider';
 import debounce from "@material-ui/core/utils/debounce";
 import Card from "../../components/Card/Card";
@@ -10,10 +10,18 @@ import {Swiper, SwiperSlide} from "swiper/react";
 import {Navigation} from "swiper";
 import {useDispatch, useSelector} from "react-redux";
 import {getProducts, changeRange, changeProductLimit, switchPage, clearFilters} from "../../redux/clothes";
+import Select from 'react-select';
 
 import FavoritesCardLoaded from "../Favorites/FavoritesCardLoaded";
-
+const animatedComponents = makeAnimated();
 const Catalog = ({side}) => {
+    const categoryOptions = [
+        { id: 1, value: 'Jordan', label: 'Jordan' },
+        { id: 2, value: 'adidas', label: 'adidas' },
+        { id: 3, value: 'Nike', label: 'Nike' },
+        { id: 4, value: 'Puma', label: 'Puma' },
+    ];
+
     const dispatch = useDispatch();
     const params = useParams();
     const navigate = useNavigate();
@@ -31,7 +39,7 @@ const Catalog = ({side}) => {
 
     const resetSelect = () => {
         reset();
-        navigate('/catalog/1')
+        navigate('/catalog/1');
         dispatch(clearFilters({category: 'sneakers', title: '', from: filter.range.from, to: filter.range.to, page: '1', limit: 12 ,desc: false }));
         window.scrollTo(0, 0);
         // убрать фильтры
@@ -42,19 +50,23 @@ const Catalog = ({side}) => {
 
 
     const rangeSelector = (event, newValue) => {
+
            setValue(newValue);
             dispatch(changeRange({from: newValue[0] * 200, to: newValue[1] * 200}));
-        console.log(newValue)
+        console.log(newValue);
+        dispatch(switchPage(1));
+        navigate('/catalog/1')
     };
     const productsOnPage = (count) =>{
-      dispatch(changeProductLimit({limit:count, page: '1'}))
+        dispatch(changeProductLimit({limit:count, page: '1'}));
+        navigate('/catalog/1')
     };
     const clickedPagination = (pageBtn) =>{
         filter.page !== pageBtn &&
         dispatch(switchPage(pageBtn))
     };
-    const setSort = (e) =>{
-        const sign = e.target.value;
+    const setSort = (target) =>{
+        const sign = target.value;
         sign === 'По возростанию цены' && dispatch(clearFilters({desc: false}));
         sign === 'По убыванию цены' && dispatch(clearFilters({desc: true}));
     };
@@ -68,40 +80,75 @@ const Catalog = ({side}) => {
                         <div className={'catalog__sidebar-categories simpleText'}>
 
                             <h3>Отображение и поиск</h3>
-                            <p><input type="text" placeholder='Поиск по категории'/>
-                                <button><FaSearch/></button></p>
-                            <p>
+                            <div>
+                                <Select
+                                    defaultValue={[categoryOptions[3]]}
+                                    isMulti
+                                    name="categories"
+                                    closeMenuOnSelect={false}
+                                    components={animatedComponents}
+                                    options={[
+                                        { id: 1, value: 'Jordan', label: 'Jordan' },
+                                        { id: 2, value: 'adidas', label: 'adidas' },
+                                        { id: 3, value: 'Nike', label: 'Nike' },
+                                        { id: 4, value: 'Puma', label: 'Puma' },
+                                    ]}
+                                    className="basic-multi-select"
+                                    classNamePrefix="select"
+                                />
+                            </div>
+                            <div>
                                 <span>Отображать по</span>
-                                <select onChange={(e) => productsOnPage(+e.target.value)} className='catalog__sidebar-select'>
-                                    <option value="12">12 шт</option>
-                                    <option value="24">24 шт</option>
-                                    <option value="48">48 шт</option>
-                                    <option value="96">96 шт</option>
-                                </select>
-                            </p>
-                             <p>
+                                <Select
+                                    onChange={(e) => productsOnPage(+e.value)}
+                                    defaultValue={{ id: 1, value: '12', label: '12 шт' }}
+                                    className='catalog__sidebar-select'
+                                options={[
+                                    { id: 1, value: '12', label: '12 шт' },
+                                    { id: 2, value: '24', label: '24 шт' },
+                                    { id: 3, value: '48', label: '48 шт' },
+                                    { id: 4, value: '96', label: '96 шт' },
+                                ]}
+                                />
+                            </div>
+                             <div>
                                 <span>Сейчас на странице {filter.page}</span>
-                                <select onChange={(e) =>{clickedPagination(e.target.value) ;navigate(`/catalog/${e.target.value}`)}} className='catalog__sidebar-select'>
-                                    {
-                                        new Array(Math.ceil(productsCount / filter.limit)).fill(null,0).map((p, idx) =>(
-                                            <option>{idx+1}</option>
-                                        ))
-                                    }
-                                </select>
-                            </p>
+                                 <Select
+                                     // defaultValue={}
+                                     className='catalog__sidebar-select'
+                                     options={[
 
-                             <p>
+                                             new Array(Math.ceil(productsCount / filter.limit)).fill(null,0).map((p, idx) =>{
+                                                 return  { id: idx, value: idx+1, label: `${idx+1} шт` }
+                                             })
+
+                                     ]}
+                                 />
+                                {/*<select onChange={(e) =>{clickedPagination(e.target.value) ;navigate(`/catalog/${e.target.value}`)}} className='catalog__sidebar-select'>*/}
+                                {/*    {*/}
+                                {/*        new Array(Math.ceil(productsCount / filter.limit)).fill(null,0).map((p, idx) =>(*/}
+                                {/*            <option className='catalog__sidebar-option'>{idx+1}</option>*/}
+                                {/*        ))*/}
+                                {/*    }*/}
+                                {/*</select>*/}
+                            </div>
+
+                             <div>
                                 <span>Порядок</span>
-                                <select onChange={(e) => setSort(e)} className='catalog__sidebar-select'>
-                                    <option>По умолчанию</option>
-                                    <option>По популярности</option>
-                                    <option>По возростанию цены</option>
-                                    <option>По убыванию цены</option>
-                                    <option>По новинкам</option>
-                                    <option>По скидке</option>
-                                    <option>По алфавиту</option>
-                                </select>
-                            </p>
+                                 <Select
+                                     onChange={(e) => setSort(e)}
+                                     className='catalog__sidebar-select'
+                                     options={[
+                                         { id: 1, value: 'По умолчанию', label: 'По умолчанию' },
+                                         { id: 2, value: 'По популярности', label: 'По популярности' },
+                                         { id: 3, value: 'По возростанию цены', label: 'По возростанию цены' },
+                                         { id: 4, value: 'По убыванию цены', label: 'По убыванию цены' },
+                                         { id: 5, value: 'По новинкам', label: 'По новинкам' },
+                                         { id: 6, value: 'По скидке', label: 'По скидке' },
+                                         { id: 7, value: 'По алфавиту', label: 'По алфавиту' },
+                                     ]}
+                                 />
+                            </div>
                         </div>
 
                         <div className={'catalog__sidebar-categories simpleText'}>
@@ -120,70 +167,102 @@ const Catalog = ({side}) => {
 
                         <div className={'catalog__sidebar-categories simpleText'}>
 
-                            <h3>Размер</h3>
+                            <h3 className='catalog__sidebar-title'>Размер</h3>
 
                             <label   className={'catalog__sidebar-category'}>
                                 <input {...register('xxs')}
-                                       value={38} className={'catalog__sidebar-category_box'} type="checkbox"
-                                       onClick={(e) =>''}/>
-                                <span className="category_box"/>12 US-46 EUR-30 cm
+                                       value={50} className={'catalog__sidebar-category_box'} type="checkbox"
+                                       onClick={(e) => console.log(e.target)}/>
+                                <span className="category_box"/> US-50
                             </label>
+                             <label   className={'catalog__sidebar-category'}>
+                                <input {...register('xxs')}
+                                       value={49} className={'catalog__sidebar-category_box'} type="checkbox"
+                                       onClick={(e) => console.log(e.target)}/>
+                                <span className="category_box"/> US-49
+                            </label>
+
+                            <label   className={'catalog__sidebar-category'}>
+                                <input {...register('xxs')}
+                                       value={48} className={'catalog__sidebar-category_box'} type="checkbox"
+                                       onClick={(e) => console.log(e.target)}/>
+                                <span className="category_box"/> US-48
+                            </label>
+                            <label   className={'catalog__sidebar-category'}>
+                                <input {...register('xxs')}
+                                       value={48} className={'catalog__sidebar-category_box'} type="checkbox"
+                                       onClick={(e) => console.log(e.target)}/>
+                                <span className="category_box"/> US-48
+                            </label>
+                            <label   className={'catalog__sidebar-category'}>
+                                <input {...register('xxs')}
+                                       value={47} className={'catalog__sidebar-category_box'} type="checkbox"
+                                       onClick={(e) => console.log(e.target)}/>
+                                <span className="category_box"/> US-47
+                            </label>
+                            <label   className={'catalog__sidebar-category'}>
+                                <input {...register('xxs')}
+                                       value={46} className={'catalog__sidebar-category_box'} type="checkbox"
+                                       onClick={(e) => console.log(e.target)}/>
+                                <span className="category_box"/> US-46
+                            </label>
+
                             <label  className={'catalog__sidebar-category'}>
                                 <input
-                                    value={40} className={'catalog__sidebar-category_box'} type="checkbox"
-                                    onClick={(e) =>''}/>
-                                <span className="category_box"/>11 US-45 EUR-29 cm
-                            </label>
-                            <label  className={'catalog__sidebar-category'}>
-                                <input
-                                    value={42} className={'catalog__sidebar-category_box'} type="checkbox"
-                                    onClick={(e) =>''}/>
-                                <span className="category_box"/>10 US-44 EUR-28 cm
+                                    value={45} className={'catalog__sidebar-category_box'} type="checkbox"
+                                    onClick={(e) => console.log(e.target)}/>
+                                <span className="category_box"/> US-45
                             </label>
                             <label  className={'catalog__sidebar-category'}>
                                 <input
                                     value={44} className={'catalog__sidebar-category_box'} type="checkbox"
-                                    onClick={(e) =>''}/>
-                                <span className="category_box"/>9.5 US-43 EUR-27.5 cm
+                                    onClick={(e) => console.log(e.target)}/>
+                                <span className="category_box"/> US-44
+                            </label>
+                            <label  className={'catalog__sidebar-category'}>
+                                <input
+                                    value={43} className={'catalog__sidebar-category_box'} type="checkbox"
+                                    onClick={(e) => console.log(e.target)}/>
+                                <span className="category_box"/> US-43
                             </label>
 
                             <label  className={'catalog__sidebar-category'}>
                                 <input
-                                    value={46} className={'catalog__sidebar-category_box'} type="checkbox"
-                                    onClick={(e) =>''}/>
-                                <span className="category_box"/>8.5 US-42 EUR-26.5 cm
+                                    value={42} className={'catalog__sidebar-category_box'} type="checkbox"
+                                    onClick={(e) => console.log(e.target)}/>
+                                <span className="category_box"/> US-42
                             </label>
 
                             <label  className={'catalog__sidebar-category'}>
                                 <input
-                                    value={48} className={'catalog__sidebar-category_box'} type="checkbox"
-                                    onClick={(e) =>''}/>
-                                <span className="category_box"/>8 US-41 EUR-26 cm
+                                    value={41} className={'catalog__sidebar-category_box'} type="checkbox"
+                                    onClick={(e) => console.log(e.target)}/>
+                                <span className="category_box"/> US-41
                             </label>
 
                             <label  className={'catalog__sidebar-category'}>
                                 <input
-                                    value={50} className={'catalog__sidebar-category_box'} type="checkbox"
-                                    onClick={(e) =>''}/>
-                                <span className="category_box"/>7 US-40 EUR-25 cm
+                                    value={40} className={'catalog__sidebar-category_box'} type="checkbox"
+                                    onClick={(e) => console.log(e.target)}/>
+                                <span className="category_box"/> US-40
                             </label>
                             <label  className={'catalog__sidebar-category'}>
                                 <input
-                                    value={50} className={'catalog__sidebar-category_box'} type="checkbox"
-                                    onClick={(e) =>''}/>
-                                <span className="category_box"/>7 US-38 EUR-24 cm
+                                    value={38} className={'catalog__sidebar-category_box'} type="checkbox"
+                                    onClick={(e) => console.log(e.target)}/>
+                                <span className="category_box"/> US-38
                             </label>
                             <label  className={'catalog__sidebar-category'}>
                                 <input
-                                    value={50} className={'catalog__sidebar-category_box'} type="checkbox"
-                                    onClick={(e) =>''}/>
-                                <span className="category_box"/>5 US-37 EUR-23.5 cm
+                                    value={37} className={'catalog__sidebar-category_box'} type="checkbox"
+                                    onClick={(e) => console.log(e.target)}/>
+                                <span className="category_box"/> US-37
                             </label>
                             <label  className={'catalog__sidebar-category'}>
                                 <input
-                                    value={50} className={'catalog__sidebar-category_box'} type="checkbox"
-                                    onClick={(e) =>''}/>
-                                <span className="category_box"/>4 US-36 EUR-23 cm
+                                    value={36} className={'catalog__sidebar-category_box'} type="checkbox"
+                                    onClick={(e) => console.log(e.target)}/>
+                                <span className="category_box"/> US-36
                             </label>
 
                         </div>
@@ -191,46 +270,46 @@ const Catalog = ({side}) => {
                         <div className={'catalog__sidebar-categories simpleText'}>
                             <label  className={'catalog__sidebar-category'}>
                                 <input value={'dress'} className={'catalog__sidebar-category_box'} type="checkbox"
-                                       onClick={(e) => ''}/>
+                                       onClick={(e) => console.log(e.target)}/>
                                 <span className="category_box"/>Jordan
                             </label>
                             <label  className={'catalog__sidebar-category'}>
                                 <input value={'skirt'} className={'catalog__sidebar-category_box'} type="checkbox"
-                                       onClick={(e) => ''}/>
+                                       onClick={(e) => console.log(e.target)}/>
                                 <span className="category_box"/>adidas
                             </label>
                             <label  className={'catalog__sidebar-category'}>
                                 <input value={'blouses'} className={'catalog__sidebar-category_box'} type="checkbox"
-                                       onClick={(e) => ''}/>
+                                       onClick={(e) => console.log(e.target)}/>
                                 <span className="category_box"/>Nike
                             </label>
                             <label  className={'catalog__sidebar-category'}>
                                 <input value={'top,t-shirt'} className={'catalog__sidebar-category_box'} type="checkbox"
-                                       onClick={(e) => ''}/>
+                                       onClick={(e) => console.log(e.target)}/>
                                 <span className="category_box"/>Puma
                             </label>
                             <label  className={'catalog__sidebar-category'}>
                                 <input value={'top,t-shirt'} className={'catalog__sidebar-category_box'} type="checkbox"
-                                       onClick={(e) => ''}/>
+                                       onClick={(e) => console.log(e.target)}/>
                                 <span className="category_box"/>Converse
                             </label>
                             <label  className={'catalog__sidebar-category'}>
                                 <input value={'top,t-shirt'} className={'catalog__sidebar-category_box'} type="checkbox"
-                                       onClick={(e) => ''}/>
+                                       onClick={(e) => console.log(e.target)}/>
                                 <span className="category_box"/>AAPE
                             </label>
 
                             <h3>Пол</h3>
-                            <p className={'catalog__sidebar-category'}>
+                            <div className={'catalog__sidebar-category'}>
                                 <input className={'catalog__sidebar-category_box'} id={'Худи, свитшоты'} type="checkbox"/>
                                 <span className="category_box"/>
                                 <label htmlFor="Худи, свитшоты">Мужчины</label>
-                            </p>
-                            <p className={'catalog__sidebar-category'}>
+                            </div>
+                            <div className={'catalog__sidebar-category'}>
                                 <input className={'catalog__sidebar-category_box'} id={'Жакеты, жилеты'} type="checkbox"/>
                                 <span className="category_box"/>
                                 <label htmlFor="Жакеты, жилеты">Женщины</label>
-                            </p>
+                            </div>
 
                         </div>
 
@@ -239,47 +318,47 @@ const Catalog = ({side}) => {
                             <h3>Цвет</h3>
                             <label  className={'catalog__sidebar-category'}>
                                 <input value={'white'} className={'catalog__sidebar-category_box'} type="checkbox"
-                                       onClick={(e) =>''}/>
+                                       onClick={(e) => console.log(e.target)}/>
                                 <span className="category_box"/>Белый
                             </label>
 
                             <label  className={'catalog__sidebar-category'}>
                                 <input value={'black'} className={'catalog__sidebar-category_box'} type="checkbox"
-                                       onClick={(e) =>''}/>
+                                       onClick={(e) => console.log(e.target)}/>
                                 <span className="category_box"/>Черный
                             </label>
 
                             <label   className={'catalog__sidebar-category'}>
                                 <input value={'red'} className={'catalog__sidebar-category_box'} type="checkbox"
-                                       onClick={(e) =>''}/>
+                                       onClick={(e) => console.log(e.target)}/>
                                 <span className="category_box"/>Красный
                             </label>
 
                             <label   className={'catalog__sidebar-category'}>
                                 <input
                                     value={'Beige'} className={'catalog__sidebar-category_box'} type="checkbox"
-                                    onClick={(e) =>''}/>
+                                    onClick={(e) => console.log(e.target)}/>
                                 <span className="category_box"/>Бежевый
                             </label>
 
                             <label   className={'catalog__sidebar-category'}>
                                 <input
                                     value={'blue'} className={'catalog__sidebar-category_box'} type="checkbox"
-                                    onClick={(e) =>''}/>
+                                    onClick={(e) => console.log(e.target)}/>
                                 <span className="category_box"/>Синий
                             </label>
 
                             <label   className={'catalog__sidebar-category'}>
                                 <input
                                     value={'lightgreen'} className={'catalog__sidebar-category_box'} type="checkbox"
-                                    onClick={(e) =>''}/>
+                                    onClick={(e) => console.log(e.target)}/>
                                 <span className="category_box"/>Зеленый
                             </label>
 
                             <label   className={'catalog__sidebar-category'}>
                                 <input
                                     value={'prints'} className={'catalog__sidebar-category_box'} type="checkbox"
-                                    onClick={(e) =>''}/>
+                                    onClick={(e) => console.log(e.target)}/>
                                 <span className="category_box"/>Принты
                             </label>
 
@@ -295,6 +374,14 @@ const Catalog = ({side}) => {
 
 
                     <div className={'catalog__list'}>
+                        <p>Главная/ мужские</p>
+                        <p>{params.category}</p>
+                        <p>{params.category && 'У всех баскетбольных кроссовок Майкла Джордана есть своя неповторимая история.' +
+                        ' История Air Jordan 7 началась в 1992 году. На силуэт кроссовок повлияли африканские мотивы, увиденные дизайнером' +
+                        ' Nike Тинкером Хатфилдом на одном уличном постере в городе Портланд. На плакате был чернокожий певец с гитарой форме африканского' +
+                        ' континента. Это первая модель, которая поставила точку в открытом глазу, баллону Air Bag в пятке. Air Jordan 7 Retro сыграли важную' +
+                        ' роль в карьере Майкла, именно в этих кроссовках, Джордан привел свою команду к победе на олимпиаде 1992 года. Кроссовки Майкла Джордана' +
+                        ' - Air Jordan 7, вы можете купить в баскетбольном магазине Basketroom.ru'}</p>
                         <div className="catalog__list-products">
                             {
                                 status === 'loading' ?
@@ -327,13 +414,12 @@ const Catalog = ({side}) => {
                                     new Array(Math.ceil(productsCount / filter.limit)).fill(null,0).map((p, idx) =>(
                                         <button
                                             onClick={(e) =>{ clickedPagination(e.target.textContent); navigate(`/catalog/${idx + 1}`)}}
-                                            className={`catalog__list-paginateBtn ${filter.page == idx + 1 && 'active'}`}>{idx + 1}</button>
+                                            className={`catalog__list-paginateBtn ${filter.page == (idx + 1) && 'active'}`}>{idx + 1}</button>
                                     ))
                                 }
                             </div>
                         </div>
 
-                        {filter.limit}
                     </div>
 
                 </div>

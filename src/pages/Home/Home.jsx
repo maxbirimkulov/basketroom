@@ -1,11 +1,11 @@
 import React, {useEffect} from 'react';
 import Slider from "./Slider/Slider";
 import Category from "../../components/CategoryCard/Category";
-import Card from "../../components/Card/Card";
 import CardRow from "../../components/CardRow/CardRow";
 import SalesInfo from "../../components/SalesInfo/SalesInfo";
-import {getOneProduct, getProducts} from "../../redux/clothes";
+import { getProducts} from "../../redux/clothes";
 import {useDispatch, useSelector} from "react-redux";
+
 
 
 const Home = () => {
@@ -37,19 +37,18 @@ const Home = () => {
             <div className="container">
 
                 {
-                    status === 'loading' && <h2>Loading...</h2>
-                }
-                {
                     error && <h2>An error occerd: {error}</h2>
                 }
-
-
 
                 <CardRow/>
                 <CardRow category={'SALE'}/>
                 <CardRow category={'Выбор покупателей'}/>
 
             </div>
+
+
+
+
             <div className="container">
                 <div className="home__category">
                     <Category text={'Travis Scott'} img={'https://static.insales-cdn.com/r/I-dzfSn1bJM/rs:fit:570:570:1/plain/images/collections/1/1228/81372364/Travis_Collection__01_.jpg'}/>
@@ -60,11 +59,7 @@ const Home = () => {
                     <Category text={'Nike Dunk'} img={'https://static.insales-cdn.com/r/gEWxamk3rVE/rs:fit:570:570:1/plain/images/collections/1/2154/88557674/018__%D0%9E%D1%80%D0%B8%D0%B3%D0%B8%D0%BD%D0%B0%D0%BB_.png'}/>
                 </div>
             </div>
-
             <SalesInfo/>
-
-
-
 
         </div>
     );

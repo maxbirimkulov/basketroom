@@ -27,6 +27,16 @@
       color: #343a40;
       border-radius: 0.37rem;
       border: 1px solid rgba(0, 0, 0, 0.1);
+      &-select{
+        display: block;
+      }
+      &-option{
+        padding: 30px;
+        background-color: red;
+        display: flex;
+        height: 30px;
+
+      }
       &-navigate{
         margin-bottom: 45px;
       }
@@ -92,6 +102,8 @@
         display: flex;
         flex-direction: column;
         gap: 10px;
+        //flex-wrap: wrap;
+        //max-height: 300px;
       }
       &-category{
         cursor: pointer;

@@ -5,6 +5,8 @@ import {FaTrash} from 'react-icons/fa'
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {findUser} from "../../redux/user";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const Card = ({page, video, product }) => {
@@ -12,22 +14,33 @@ const Card = ({page, video, product }) => {
         navigate(`/product/${id}`);
         window.scrollTo(0,0);
     };
+    const notify = (text) =>toast(text, {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        className: 'toast-message',
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const user = useSelector(s => s.user);
+    const user = useSelector(s => s.user.user);
 
     const [changeImg, setChangeImg] = useState(0);
 
     const addFav = () => {
-
         const user = JSON.parse(localStorage.getItem('user')) || {favourites:[], cart:[]};
         localStorage.setItem('user', JSON.stringify({
             ...user, favourites:
-                user.favourites.findIndex(el => el._id === product._id) >= 0 ?
-                    user.favourites.filter((el) => el._id !== product._id) :
+                user?.favourites.findIndex(el => el._id === product._id) >= 0 ?
+                    user?.favourites.filter((el) => el._id !== product._id) :
                     [...user.favourites, {...product}]
         }));
+        user?.favourites.findIndex(el => el._id === product._id) >= 0 ?
+            notify('Убрано') : notify('Добавлено в нужные👌');
         dispatch(findUser({user: JSON.parse(localStorage.getItem('user'))}));
     };
     return (
@@ -36,7 +49,7 @@ const Card = ({page, video, product }) => {
                onMouseOut={() => setChangeImg(0)}
                className={`productCard ${page === 'fav' ? 'favorites' : page === 'slide' ? 'slide' : ''}`}>
             <div onClick={() => addFav()}  className='productCard__like'>
-                {   page === 'fav' ? <FaTrash/> : <span style={{opacity:  user?.favourites?.findIndex(el => el._id === product._id) >= 0 ? '1' : '0.4'}}><IoHeartSharp/></span>   }
+                {   page === 'fav' ? <FaTrash/> : <span className={`${!user?.favourites?.filter(el => el?._id === product?._id).length && 'productCard__like-default'}`}><IoHeartSharp/></span>   }
             </div>
             <div  onMouseEnter={() => setChangeImg(1)}
                   onClick={() => getProductToPage(product?._id)}
@@ -62,6 +75,10 @@ const Card = ({page, video, product }) => {
                 </div>
                 <button onClick={() =>{getProductToPage(product?._id)}} className='productCard__btn'>{page === 'fav' ? 'Подробнее' : 'Выбрать'}<FaEye/></button>
             </div>
+            <ToastContainer
+                position="bottom-left"
+                closeOnClick={true}
+            />
         </div>
     );
 };

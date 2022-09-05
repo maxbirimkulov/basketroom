@@ -1,6 +1,7 @@
 import React from 'react';
 import Card from "../Card/Card";
 import {useSelector} from "react-redux";
+import FavoritesCardLoaded from "../../pages/Favorites/FavoritesCardLoaded";
 
 const CardRow = ({category = 'Новинки'}) => {
     const {status, products, error} = useSelector(s => s.clothes);
@@ -11,7 +12,21 @@ const CardRow = ({category = 'Новинки'}) => {
 
             <div className='home__cardBlock-row'>
                 {
-                    products?.map(pare => (
+                    status === 'loading' &&
+                        new Array(8).fill(null, 0).map(() => (
+                            <div className="home__productCard">
+                                <FavoritesCardLoaded/>
+                            </div>
+                        ))
+                }
+                {
+                    category === 'Новинки' ?
+                    products?.filter((item ) => item.category === 'sneakers' ).sort((a, b) => Date.parse(b.updatedAt) - Date.parse(a.updatedAt)).filter((item, idx) => idx < 8 ).map(pare => (
+                        <div key={pare._id} className='home__productCard'>
+                            <Card product={pare}/>
+                        </div>
+                    )) :
+                    products?.filter((item ) => item.category === 'sneakers' ).filter((item, idx) => idx < 8 ).map(pare => (
                         <div key={pare._id} className='home__productCard'>
                             <Card product={pare}/>
                         </div>

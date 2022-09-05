@@ -165,7 +165,6 @@
           justify-content: center;
           align-items: center;
           font-size: 24px;
-          opacity: .3;
           cursor: pointer;
           &:hover{
             opacity: 1;
@@ -222,5 +221,59 @@
 
 
 
+  }
+}
+.overlay{
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  z-index: 50;
+  background-color: rgba(0,0,0,.4);
+}
+.popup{
+  &__{
+    &box{
+      text-align: center;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      position: fixed;
+      padding: 20px;
+      background-color: #fff;
+      z-index: 100;
+    }
+    &title{
+      font-weight: 400;
+
+    }
+    &close{
+      position: absolute;
+      right: -30px;
+      top: 0;
+      font-size: 28px;
+      cursor: pointer;
+    }
+    &btns{
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+    }
+    &btn{
+      background-color: transparent;
+      border: 1px solid $black;
+      border-radius: 4px;
+      padding: 12px;
+      margin: 0 5px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      &.active, &:hover{
+        background-color: $black;
+        transition: all .4s;
+        color: white;
+      }
+    }
   }
 }

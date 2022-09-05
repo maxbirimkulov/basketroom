@@ -1,39 +1,121 @@
-import React, {useEffect} from "react";
-import {Link, NavLink, useParams} from "react-router-dom";
+import React, {useEffect, useRef, useState} from "react";
+import {Link, NavLink, useNavigate, useParams} from "react-router-dom";
 import Fancybox from "../../components/Fancybox/Fancybox";
 import Card from "../../components/Card/Card";
 import {MdFavorite} from 'react-icons/md'
-import {MdOutlineAddShoppingCart} from 'react-icons/md'
 import {Swiper, SwiperSlide} from "swiper/react";
-
 import "swiper/css";
 import "swiper/css/navigation";
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import {findUser} from "../../redux/user";
 // import required modules
-import {Navigation} from "swiper";
+import {Keyboard, Navigation} from "swiper";
 import SalesInfo from "../../components/SalesInfo/SalesInfo";
 import {useDispatch, useSelector} from "react-redux";
 import {getOneProduct} from "../../redux/clothes";
 import ProductDetails from "./ProductDetails";
+import {MdOutlineAddShoppingCart} from 'react-icons/md'
+import {AiFillCloseCircle} from 'react-icons/ai'
 
 
 const Product = () => {
+    const notify = (text) =>toast(text, {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        className: 'toast-message',
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+    });
     const params = useParams();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const user = useSelector(s => s.user.user);
+
+
     const {oneProduct, status, error} = useSelector(state => state.clothes);
     useEffect(( ) =>{
         dispatch(getOneProduct(params.id))
     },[]);
+    const [count, setCount] = useState(1);
+    const [popup, setPopup] = useState(false);
+    const favBtn = useRef(null);
+    const secs = Date.parse(oneProduct.createdAt);
 
+    const addFav = () => {
+        const favorites = document.querySelector('#favorites');
+        const favBtn = document.querySelector('#favBtn');
+        favBtn.classList.add('sendtocart');
+        setTimeout(() =>{
+            favBtn.classList.remove('sendtocart');
+            favorites.classList.add('shake');
+            setTimeout(() => {
+                favorites.classList.remove('shake');
+            },500)
+        },100);
 
+        const user = JSON.parse(localStorage.getItem('user')) || {favourites:[], cart:[]};
+        localStorage.setItem('user', JSON.stringify({
+            ...user, favourites:
+                user?.favourites.findIndex(el => el._id === oneProduct._id) >= 0 ?
+                    user?.favourites.filter((el) => el._id !== oneProduct._id) :
+                    [...user.favourites, {...oneProduct}]
+        }));
+        user?.favourites.findIndex(el => el._id === oneProduct._id) >= 0 ?
+            notify('Убрано') : notify('Добавлено в нужные👌');
+        dispatch(findUser({user: JSON.parse(localStorage.getItem('user'))}));
+    };
+
+    const addToCart = () =>{
+        const cart = document.querySelector('#cart');
+        const favBtn = document.querySelector('#favBtn');
+        favBtn.classList.add('sendtocart');
+        setTimeout(() =>{
+            favBtn.classList.remove('sendtocart');
+            cart.classList.add('shake');
+            setTimeout(() => {
+                cart.classList.remove('shake');
+            },500)
+        },100);
+
+        const user = JSON.parse(localStorage.getItem('user')) || {favourites:[], cart:[]};
+        localStorage.setItem('user', JSON.stringify({
+            ...user, cart:
+                user?.cart.findIndex(el => el._id === oneProduct._id) >= 0 ?
+                    user?.cart.filter((el) => el._id !== oneProduct._id) :
+                    [...user.cart, {...oneProduct}]
+        }));
+        user?.cart.findIndex(el => el._id === oneProduct._id) >= 0 ?
+            notify('Товар был убран') :  setPopup(true);
+        dispatch(findUser({user: JSON.parse(localStorage.getItem('user'))}));
+    };
     return (
         <div>
             <div className="container">
                 <div className='product'>
+                    {
+                        popup &&
+                            <>
+                                    <div className='popup__box'>
+                                        <h2 className='popup__title'>Товар был добавлен</h2>
+                                        <span className='popup__close' onClick={() => setPopup(false)}><AiFillCloseCircle/></span>
+                                        <div className='popup__btns'>
+                                            <button className='popup__btn active' onClick={() => navigate('/catalog/1')}>Продолжить покупки</button>
+                                            <button className='popup__btn ' onClick={() => navigate('/basket')}>Перейти в корзину</button>
+                                        </div>
+                                    </div>
+                                <div className="overlay" onClick={() => setPopup(false)}>
+
+                                </div>
+                            </>
+                    }
 
                     <div className="product__top">
                         <div className="product__top-images">
-                            <Swiper initialSlide={1} navigation={true} modules={[Navigation]} className="mySwiper product__top-imgPlace">
+                            <Swiper initialSlide={1}  navigation={true} keyboard={true} modules={[Navigation, Keyboard]} className="mySwiper product__top-imgPlace">
                                 {
                                     status === 'loading' ?
                                     <div className='product__top-loading'>
@@ -60,9 +142,6 @@ const Product = () => {
                                                         <a data-fancybox="gallery" href={`${process.env.REACT_APP_URL}${img}`}
                                                            className='product__top-gallery-block'>
                                                                 <div className='product__top-galleryImage' style={{background: `url(${`${process.env.REACT_APP_URL}${img}`})center/contain no-repeat`}}> </div>
-                                                            {/*<img className='product__top-galleryImage'*/}
-                                                            {/*     src={`${process.env.REACT_APP_URL}${img}`}*/}
-                                                            {/*     alt=''/>*/}
                                                         </a>
                                                     </React.Fragment>
 
@@ -100,14 +179,9 @@ const Product = () => {
                             <p className='product__top-return'>Обмен/Возврат в течение 14 дней</p>
 
                             <div className='product__top-pick'>
-                                <span className='product__top-pickNum'>
-                                    <button className='product__top-pickBtn left'>-</button>
-                                    <input className='product__top-pickInput' type="number" defaultValue={1}/>
-                                    <button className='product__top-pickBtn right'>+</button>
-                                </span>
-                                <button className='product__top-pickAdd'><MdOutlineAddShoppingCart/> В корзину</button>
-                                <span className='product__top-pickFav'>
-                                    <MdFavorite/>
+                                <button className='product__top-pickAdd' onClick={() => addToCart()}><MdOutlineAddShoppingCart/>{!user?.cart?.filter(el => el?._id === oneProduct?._id).length ? 'В корзину' : 'Убрать'} </button>
+                                <span className='product__top-pickFav' id='favBtn' ref={favBtn} onClick={() => addFav()}>
+                                    <span className={`${!user?.favourites?.filter(el => el?._id === oneProduct?._id).length && 'productCard__like-default'}`}><MdFavorite/> </span>
                                 </span>
                             </div>
 
@@ -121,7 +195,10 @@ const Product = () => {
 
                     </div>
                 </div>
-
+                <ToastContainer
+                    position="bottom-left"
+                    closeOnClick={true}
+                />
             </div>
 
 
