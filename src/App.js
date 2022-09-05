@@ -11,14 +11,16 @@ import SearchResult from "./pages/SearchResult/SearchResult";
 import ClothesAdd from "./pages/AddClothes/AddClothes";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {findUser} from "./redux/user";
 
 function App() {
   const dispatch = useDispatch();
-  useEffect(() =>{
-    const user = JSON.parse(localStorage.getItem('user')) || {favourites:[], cart:[]};
-    dispatch(findUser({user: JSON.parse(localStorage.getItem('user'))}));
-  },[]);
+  // useEffect(() =>{
+  //   const user = JSON.parse(localStorage.getItem('user')) || {favourites:[], cart:[]};
+  //   dispatch(findUser({user: JSON.parse(localStorage.getItem('user'))}));
+  // },[]);
 
   return (
     <div className="App">
@@ -36,6 +38,17 @@ function App() {
           <Route path='/add' element={<ClothesAdd/>}/>
         </Route>
       </Routes>
+      <ToastContainer
+          position="bottom-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+      />
     </div>
   );
 }

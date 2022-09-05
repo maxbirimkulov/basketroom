@@ -15,12 +15,6 @@ import Select from 'react-select';
 import FavoritesCardLoaded from "../Favorites/FavoritesCardLoaded";
 const animatedComponents = makeAnimated();
 const Catalog = ({side}) => {
-    const categoryOptions = [
-        { id: 1, value: 'Jordan', label: 'Jordan' },
-        { id: 2, value: 'adidas', label: 'adidas' },
-        { id: 3, value: 'Nike', label: 'Nike' },
-        { id: 4, value: 'Puma', label: 'Puma' },
-    ];
 
     const dispatch = useDispatch();
     const params = useParams();
@@ -65,6 +59,11 @@ const Catalog = ({side}) => {
         filter.page !== pageBtn &&
         dispatch(switchPage(pageBtn))
     };
+    const filterCategories = (target) =>{
+        const categories = target.map(obj => obj.value);
+        dispatch(clearFilters({category: categories}));
+        // alert(JSON.stringify(categories))
+    };
     const setSort = (target) =>{
         const sign = target.value;
         sign === 'По возростанию цены' && dispatch(clearFilters({desc: false}));
@@ -82,7 +81,8 @@ const Catalog = ({side}) => {
                             <h3>Отображение и поиск</h3>
                             <div>
                                 <Select
-                                    defaultValue={[categoryOptions[3]]}
+                                    onChange={(target) => filterCategories(target)}
+                                    defaultValue={[]}
                                     isMulti
                                     name="categories"
                                     closeMenuOnSelect={false}
@@ -299,17 +299,6 @@ const Catalog = ({side}) => {
                                 <span className="category_box"/>AAPE
                             </label>
 
-                            <h3>Пол</h3>
-                            <div className={'catalog__sidebar-category'}>
-                                <input className={'catalog__sidebar-category_box'} id={'Худи, свитшоты'} type="checkbox"/>
-                                <span className="category_box"/>
-                                <label htmlFor="Худи, свитшоты">Мужчины</label>
-                            </div>
-                            <div className={'catalog__sidebar-category'}>
-                                <input className={'catalog__sidebar-category_box'} id={'Жакеты, жилеты'} type="checkbox"/>
-                                <span className="category_box"/>
-                                <label htmlFor="Жакеты, жилеты">Женщины</label>
-                            </div>
 
                         </div>
 

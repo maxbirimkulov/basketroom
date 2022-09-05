@@ -101,9 +101,27 @@
       gap: 10px;
       align-items: center;
       padding-left: 25px;
+      position: relative;
       &-favorites, &-cart{
+        position: relative;
         &.shake {
           animation: shakeCart .4s ease-in-out forwards;
+        }
+        &:before {
+          content:attr(data-totalitems);
+          background: #2bd156;
+          font-size:14px;
+          font-weight:700;
+          position:absolute;
+          top:-22px;
+          right:-16px;
+          line-height:24px;
+          padding:0 5px;
+          height:24px;
+          min-width:24px;
+          color: white;
+          text-align:center;
+          border-radius:24px;
         }
       }
       &-text{
@@ -128,6 +146,11 @@
       &:hover.header__btn svg{
         background-color: #fff;
         opacity: 1!important;
+      }
+      &:hover .header__btn-favorites::before, &:hover .header__btn-cart::before{
+        color: white;
+        font-weight: 500;
+        font-size: 12px;
       }
     }
 
@@ -240,32 +263,4 @@
 //}
 
 
-
-
-@keyframes xAxis {
-  100% {
-    transform: translateX(calc(50vw - 105px));
-  }
-}
-
-@keyframes yAxis {
-  100% {
-    transform: translateY(calc(-50vh + 75px));
-  }
-}
-
-@keyframes shakeCart {
-  25% {
-    transform:translateX(6px)
-  }
-  50% {
-    transform:translateX(-4px);
-  }
-  75% {
-    transform:translateX(2px);
-  }
-  100% {
-    transform:translateX(0);
-  }
-}
 

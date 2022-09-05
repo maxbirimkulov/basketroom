@@ -41,13 +41,13 @@ input:focus{
 
 @keyframes xAxis {
   100% {
-    transform: translateX(calc(50vw - 105px));
+    transform: translateX(calc(500vw - 15px));
   }
 }
 
 @keyframes yAxis {
   100% {
-    transform: translateY(calc(-50vh + 75px));
+    transform: translateY(calc(-250vh + 75px));
   }
 }
 

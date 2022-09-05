@@ -26,6 +26,7 @@ const Product = () => {
         hideProgressBar: false,
         className: 'toast-message',
         closeOnClick: true,
+        theme:"dark",
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
@@ -48,14 +49,6 @@ const Product = () => {
     const addFav = () => {
         const favorites = document.querySelector('#favorites');
         const favBtn = document.querySelector('#favBtn');
-        favBtn.classList.add('sendtocart');
-        setTimeout(() =>{
-            favBtn.classList.remove('sendtocart');
-            favorites.classList.add('shake');
-            setTimeout(() => {
-                favorites.classList.remove('shake');
-            },500)
-        },100);
 
         const user = JSON.parse(localStorage.getItem('user')) || {favourites:[], cart:[]};
         localStorage.setItem('user', JSON.stringify({
@@ -67,6 +60,15 @@ const Product = () => {
         user?.favourites.findIndex(el => el._id === oneProduct._id) >= 0 ?
             notify('Убрано') : notify('Добавлено в нужные👌');
         dispatch(findUser({user: JSON.parse(localStorage.getItem('user'))}));
+        !user?.favourites.findIndex(el => el._id === oneProduct._id) >= 0 && favBtn.classList.add('sendtocart');
+        setTimeout(() =>{
+            favBtn.classList.remove('sendtocart');
+            favorites.classList.add('shake');
+            setTimeout(() => {
+                favorites.classList.remove('shake');
+            },500)
+        },100);
+        window.scrollTo(0, 0);
     };
 
     const addToCart = () =>{
@@ -80,7 +82,7 @@ const Product = () => {
                 cart.classList.remove('shake');
             },500)
         },100);
-
+        window.scrollTo(0, 0);
         const user = JSON.parse(localStorage.getItem('user')) || {favourites:[], cart:[]};
         localStorage.setItem('user', JSON.stringify({
             ...user, cart:
@@ -195,10 +197,7 @@ const Product = () => {
 
                     </div>
                 </div>
-                <ToastContainer
-                    position="bottom-left"
-                    closeOnClick={true}
-                />
+
             </div>
 
 

@@ -60,11 +60,11 @@ const Header = () => {
                             <IoIosAddCircle/>
                             <div className='header__btn-text'>
                                 <p className='header__btn-title'>add</p>
-                                <p className='header__btn-num'></p>
+                                <p className='header__btn-num'> </p>
                             </div>
                         </NavLink>
                         <NavLink to={'/favorites'} className='header__btn'>
-                            <span id='favorites' className='header__btn-favorites'>
+                            <span id='favorites' data-totalitems={user?.favourites?.length} className='header__btn-favorites'>
                                 <GiHearts/>
                             </span>
                             <div className='header__btn-text'>
@@ -74,7 +74,7 @@ const Header = () => {
                         </NavLink>
 
                         <NavLink to={'/basket'} className='header__btn'>
-                            <span id='cart' className='header__btn-cart'>
+                            <span id='cart' data-totalitems={user?.cart?.length} className='header__btn-cart'>
                                 <HiShoppingCart/>
                             </span>
                             <div className='header__btn-text'>

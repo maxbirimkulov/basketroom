@@ -21,6 +21,7 @@ const Card = ({page, video, product }) => {
         className: 'toast-message',
         closeOnClick: true,
         pauseOnHover: true,
+        theme:"dark",
         draggable: true,
         progress: undefined,
     });
@@ -75,10 +76,6 @@ const Card = ({page, video, product }) => {
                 </div>
                 <button onClick={() =>{getProductToPage(product?._id)}} className='productCard__btn'>{page === 'fav' ? 'Подробнее' : 'Выбрать'}<FaEye/></button>
             </div>
-            <ToastContainer
-                position="bottom-left"
-                closeOnClick={true}
-            />
         </div>
     );
 };

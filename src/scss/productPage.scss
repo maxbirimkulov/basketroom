@@ -166,10 +166,34 @@
           align-items: center;
           font-size: 24px;
           cursor: pointer;
+          position: relative;
+          &.sendtocart {
+              display:block;
+              animation: xAxis 1s forwards cubic-bezier(1.000,0.440,0.840,0.165);
+              &:before {
+                animation: yAxis 1s alternate forwards cubic-bezier(0.165, 0.840, 0.440, 1.000);
+              }
+          }
+          &:before {
+            content:'1';
+            display:block;
+            line-height:24px;
+            height:24px;
+            width:24px;
+            font-size:12px;
+            font-weight:600;
+            background:#2bd156;
+            color:white;
+            border-radius:20px;
+            text-align:center;
+
+          }
           &:hover{
             opacity: 1;
           }
+
         }
+
         &Add{
           height: 100%;
           margin-right: 5px;
