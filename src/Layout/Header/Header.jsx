@@ -13,7 +13,8 @@ import HeaderSubmenuStreet from "../../components/HeaderSubmenuCards/HeaderSubme
 const Header = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const user = useSelector(s => s.user.user)
+    const user = useSelector(s => s.user.user);
+    const {filter, status, error} = useSelector(state => state.clothes);
     let price = user?.cart?.reduce((acc, rec) => acc + rec.price, 0);
 
     const searching = (e) =>{
@@ -24,7 +25,7 @@ const Header = () => {
     };
 
     const [submenu, setSubmenu] = useState(false);
-    const [search, setSearch] = useState('');
+    const [search, setSearch] = useState(filter.title);
     const al = (e) =>{
         setSearch(e.target.textContent)
     };

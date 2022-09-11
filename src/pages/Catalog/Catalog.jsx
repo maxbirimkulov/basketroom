@@ -23,18 +23,25 @@ const Catalog = ({side}) => {
     useEffect(() =>{
         dispatch(clearFilters({page: params.page}))
     },[]);
-    const {status, products, productsCount, error, filter} = useSelector(s => s.clothes);
 
+    const {status, products, productsCount, error, filter} = useSelector(s => s.clothes);
     const {reset, handleSubmit, register} = useForm();
+    const pagesPaginate = [
+
+    ];
+    new Array(Math.ceil(productsCount / filter.limit)).fill(null,0).map((p, idx) =>{
+        pagesPaginate.push({ id: idx, value: idx + 1, label: `${idx + 1}` })
+    })
     useEffect(() => {
         dispatch(getProducts({category: filter.category, title: filter.title, from: filter.range.from, to: filter.range.to, page: filter.page, limit: filter.limit ,desc: filter.desc }))
     },[filter]);
 
 
+    const onSubmit = (data) => alert(JSON.stringify(data));
     const resetSelect = () => {
         reset();
         navigate('/catalog/1');
-        dispatch(clearFilters({category: 'sneakers', title: '', from: filter.range.from, to: filter.range.to, page: '1', limit: 12 ,desc: false }));
+        dispatch(clearFilters({category: '', title: '', from: filter.range.from, to: filter.range.to, page: '1', limit: 12 ,desc: false }));
         window.scrollTo(0, 0);
         // убрать фильтры
     };
@@ -44,7 +51,6 @@ const Catalog = ({side}) => {
 
 
     const rangeSelector = (event, newValue) => {
-
            setValue(newValue);
             dispatch(changeRange({from: newValue[0] * 200, to: newValue[1] * 200}));
         console.log(newValue);
@@ -52,12 +58,14 @@ const Catalog = ({side}) => {
         navigate('/catalog/1')
     };
     const productsOnPage = (count) =>{
+        filter.limit !== count &&
         dispatch(changeProductLimit({limit:count, page: '1'}));
         navigate('/catalog/1')
     };
     const clickedPagination = (pageBtn) =>{
         filter.page !== pageBtn &&
-        dispatch(switchPage(pageBtn))
+        dispatch(switchPage(pageBtn));
+        navigate(`/catalog/${pageBtn}`)
     };
     const filterCategories = (target) =>{
         const categories = target.map(obj => obj.value);
@@ -75,16 +83,36 @@ const Catalog = ({side}) => {
             <div className="container">
                 <div className="catalog">
 
-                    <form className={`catalog__sidebar ${side && 'active'}`}>
+                    <form className={`catalog__sidebar ${side && 'active'}`} onSubmit={handleSubmit(onSubmit)}>
                         <div className={'catalog__sidebar-categories simpleText'}>
 
                             <h3>Отображение и поиск</h3>
                             <div>
                                 <Select
                                     onChange={(target) => filterCategories(target)}
-                                    defaultValue={[]}
+                                    defaultValue={[{ id: 2, value: 'sneakers', label: 'sneakers' }]}
+                                    placeholder={'Посик по категориям'}
                                     isMulti
                                     name="categories"
+                                    closeMenuOnSelect={false}
+                                    components={animatedComponents}
+                                    options={[
+                                        { id: 1, value: 'hoody', label: 'hoody' },
+                                        { id: 2, value: 'sneakers', label: 'sneakers' },
+                                        { id: 3, value: 'sport suit', label: 'sport suit' },
+                                        { id: 4, value: 'uniform', label: 'uniform' },
+                                    ]}
+                                    className="basic-multi-select"
+                                    classNamePrefix="select"
+                                />
+                            </div>
+                              <div>
+                                <Select
+                                    onChange={(target) => alert(JSON.stringify(target))}
+                                    defaultValue={[]}
+                                    placeholder={'Посик по брендам'}
+                                    isMulti
+                                    name="brands"
                                     closeMenuOnSelect={false}
                                     components={animatedComponents}
                                     options={[
@@ -97,11 +125,12 @@ const Catalog = ({side}) => {
                                     classNamePrefix="select"
                                 />
                             </div>
+
                             <div>
                                 <span>Отображать по</span>
                                 <Select
                                     onChange={(e) => productsOnPage(+e.value)}
-                                    defaultValue={{ id: 1, value: '12', label: '12 шт' }}
+                                    placeholder={filter.limit + ' шт'}
                                     className='catalog__sidebar-select'
                                 options={[
                                     { id: 1, value: '12', label: '12 шт' },
@@ -114,23 +143,12 @@ const Catalog = ({side}) => {
                              <div>
                                 <span>Сейчас на странице {filter.page}</span>
                                  <Select
-                                     // defaultValue={}
                                      className='catalog__sidebar-select'
-                                     options={[
-
-                                             new Array(Math.ceil(productsCount / filter.limit)).fill(null,0).map((p, idx) =>{
-                                                 return  { id: idx, value: idx+1, label: `${idx+1} шт` }
-                                             })
-
-                                     ]}
+                                     onChange={(e) =>{clickedPagination(e.value)}}
+                                     placeholder={params.page}
+                                     options={pagesPaginate}
                                  />
-                                {/*<select onChange={(e) =>{clickedPagination(e.target.value) ;navigate(`/catalog/${e.target.value}`)}} className='catalog__sidebar-select'>*/}
-                                {/*    {*/}
-                                {/*        new Array(Math.ceil(productsCount / filter.limit)).fill(null,0).map((p, idx) =>(*/}
-                                {/*            <option className='catalog__sidebar-option'>{idx+1}</option>*/}
-                                {/*        ))*/}
-                                {/*    }*/}
-                                {/*</select>*/}
+
                             </div>
 
                              <div>
@@ -138,6 +156,7 @@ const Catalog = ({side}) => {
                                  <Select
                                      onChange={(e) => setSort(e)}
                                      className='catalog__sidebar-select'
+                                     defaultValue={{ id: 1, value: 'По умолчанию', label: 'По умолчанию' }}
                                      options={[
                                          { id: 1, value: 'По умолчанию', label: 'По умолчанию' },
                                          { id: 2, value: 'По популярности', label: 'По популярности' },
@@ -158,7 +177,7 @@ const Catalog = ({side}) => {
                             <Slider
 
                                 defaultValue={value}
-                                onChange={debounce(rangeSelector,2000)}
+                                onChange={debounce(rangeSelector,1500)}
                                 valueLabelDisplay="auto"
                             />
                             Цена от {value[0] * 200}р  до {value[1] * 200}р
@@ -170,96 +189,90 @@ const Catalog = ({side}) => {
                             <h3 className='catalog__sidebar-title'>Размер</h3>
 
                             <label   className={'catalog__sidebar-category'}>
-                                <input {...register('xxs')}
+                                <input {...register('sizes')}
                                        value={50} className={'catalog__sidebar-category_box'} type="checkbox"
                                        onClick={(e) => console.log(e.target)}/>
                                 <span className="category_box"/> US-50
                             </label>
                              <label   className={'catalog__sidebar-category'}>
-                                <input {...register('xxs')}
+                                <input {...register('sizes')}
                                        value={49} className={'catalog__sidebar-category_box'} type="checkbox"
                                        onClick={(e) => console.log(e.target)}/>
                                 <span className="category_box"/> US-49
                             </label>
 
                             <label   className={'catalog__sidebar-category'}>
-                                <input {...register('xxs')}
+                                <input {...register('sizes')}
                                        value={48} className={'catalog__sidebar-category_box'} type="checkbox"
                                        onClick={(e) => console.log(e.target)}/>
                                 <span className="category_box"/> US-48
                             </label>
                             <label   className={'catalog__sidebar-category'}>
-                                <input {...register('xxs')}
-                                       value={48} className={'catalog__sidebar-category_box'} type="checkbox"
-                                       onClick={(e) => console.log(e.target)}/>
-                                <span className="category_box"/> US-48
-                            </label>
-                            <label   className={'catalog__sidebar-category'}>
-                                <input {...register('xxs')}
+                                <input {...register('sizes')}
                                        value={47} className={'catalog__sidebar-category_box'} type="checkbox"
                                        onClick={(e) => console.log(e.target)}/>
                                 <span className="category_box"/> US-47
                             </label>
                             <label   className={'catalog__sidebar-category'}>
-                                <input {...register('xxs')}
+                                <input {...register('sizes')}
                                        value={46} className={'catalog__sidebar-category_box'} type="checkbox"
                                        onClick={(e) => console.log(e.target)}/>
                                 <span className="category_box"/> US-46
                             </label>
 
                             <label  className={'catalog__sidebar-category'}>
-                                <input
+                                <input {...register('sizes')}
                                     value={45} className={'catalog__sidebar-category_box'} type="checkbox"
                                     onClick={(e) => console.log(e.target)}/>
                                 <span className="category_box"/> US-45
                             </label>
                             <label  className={'catalog__sidebar-category'}>
-                                <input
+                                <input {...register('sizes')}
                                     value={44} className={'catalog__sidebar-category_box'} type="checkbox"
                                     onClick={(e) => console.log(e.target)}/>
                                 <span className="category_box"/> US-44
                             </label>
                             <label  className={'catalog__sidebar-category'}>
-                                <input
+                                <input {...register('sizes')}
                                     value={43} className={'catalog__sidebar-category_box'} type="checkbox"
                                     onClick={(e) => console.log(e.target)}/>
                                 <span className="category_box"/> US-43
                             </label>
 
                             <label  className={'catalog__sidebar-category'}>
-                                <input
+                                <input {...register('sizes')}
                                     value={42} className={'catalog__sidebar-category_box'} type="checkbox"
                                     onClick={(e) => console.log(e.target)}/>
                                 <span className="category_box"/> US-42
                             </label>
 
                             <label  className={'catalog__sidebar-category'}>
-                                <input
+                                <input {...register('sizes')}
                                     value={41} className={'catalog__sidebar-category_box'} type="checkbox"
                                     onClick={(e) => console.log(e.target)}/>
                                 <span className="category_box"/> US-41
                             </label>
 
                             <label  className={'catalog__sidebar-category'}>
-                                <input
+                                <input {...register('sizes')}
                                     value={40} className={'catalog__sidebar-category_box'} type="checkbox"
                                     onClick={(e) => console.log(e.target)}/>
                                 <span className="category_box"/> US-40
                             </label>
                             <label  className={'catalog__sidebar-category'}>
-                                <input
+                                <input {...register('sizes')}
                                     value={38} className={'catalog__sidebar-category_box'} type="checkbox"
                                     onClick={(e) => console.log(e.target)}/>
                                 <span className="category_box"/> US-38
                             </label>
                             <label  className={'catalog__sidebar-category'}>
-                                <input
+                                <input {...register('sizes')}
                                     value={37} className={'catalog__sidebar-category_box'} type="checkbox"
                                     onClick={(e) => console.log(e.target)}/>
                                 <span className="category_box"/> US-37
                             </label>
                             <label  className={'catalog__sidebar-category'}>
-                                <input
+                                <input {...register('sizes')}
                                     value={36} className={'catalog__sidebar-category_box'} type="checkbox"
                                     onClick={(e) => console.log(e.target)}/>
                                 <span className="category_box"/> US-36
@@ -269,32 +282,38 @@ const Catalog = ({side}) => {
                         <h3>Бренд</h3>
                         <div className={'catalog__sidebar-categories simpleText'}>
                             <label  className={'catalog__sidebar-category'}>
-                                <input value={'dress'} className={'catalog__sidebar-category_box'} type="checkbox"
+                                <input {...register('brand')}
+                                     value='jordan' className={'catalog__sidebar-category_box'} type="checkbox"
                                        onClick={(e) => console.log(e.target)}/>
                                 <span className="category_box"/>Jordan
                             </label>
                             <label  className={'catalog__sidebar-category'}>
-                                <input value={'skirt'} className={'catalog__sidebar-category_box'} type="checkbox"
+                                <input {...register('brand')}
+                                       value='adidas' className={'catalog__sidebar-category_box'} type="checkbox"
                                        onClick={(e) => console.log(e.target)}/>
                                 <span className="category_box"/>adidas
                             </label>
                             <label  className={'catalog__sidebar-category'}>
-                                <input value={'blouses'} className={'catalog__sidebar-category_box'} type="checkbox"
+                                <input {...register('brand')}
+                                       value='nike' className={'catalog__sidebar-category_box'} type="checkbox"
                                        onClick={(e) => console.log(e.target)}/>
                                 <span className="category_box"/>Nike
                             </label>
                             <label  className={'catalog__sidebar-category'}>
-                                <input value={'top,t-shirt'} className={'catalog__sidebar-category_box'} type="checkbox"
+                                <input {...register('brand')}
+                                       value='puma' className={'catalog__sidebar-category_box'} type="checkbox"
                                        onClick={(e) => console.log(e.target)}/>
                                 <span className="category_box"/>Puma
                             </label>
                             <label  className={'catalog__sidebar-category'}>
-                                <input value={'top,t-shirt'} className={'catalog__sidebar-category_box'} type="checkbox"
+                                <input {...register('brand')}
+                                       value='converse' className={'catalog__sidebar-category_box'} type="checkbox"
                                        onClick={(e) => console.log(e.target)}/>
                                 <span className="category_box"/>Converse
                             </label>
                             <label  className={'catalog__sidebar-category'}>
-                                <input value={'top,t-shirt'} className={'catalog__sidebar-category_box'} type="checkbox"
+                                <input {...register('brand')}
+                                       value='AAPE' className={'catalog__sidebar-category_box'} type="checkbox"
                                        onClick={(e) => console.log(e.target)}/>
                                 <span className="category_box"/>AAPE
                             </label>
@@ -353,9 +372,9 @@ const Catalog = ({side}) => {
 
                         </div>
                         <button className={'catalog__sidebar-reset'} onClick={handleSubmit(resetSelect)}>Сбросить</button>
-                        <div className='catalog__sidebar-found'>
+                        <button type='submit' className='catalog__sidebar-found'>
                             Найдено товаров: <span className='catalog__sidebar-found_count'>{productsCount}</span>
-                        </div>
+                        </button>
 
                     </form>
 

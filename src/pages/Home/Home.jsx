@@ -13,7 +13,7 @@ const Home = () => {
     const {status, products, error, filter} = useSelector(s => s.clothes);
 
     useEffect(() => {
-        dispatch(getProducts({category:'', title: '', from: '0', to: '200000', page: '1', desc: filter.desc }));
+        dispatch(getProducts({category:'sneakers', title: '', from: '0', to: '200000', page: '1', desc: filter.desc }));
     },[]);
 
     return (

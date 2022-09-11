@@ -1,10 +1,7 @@
-import React, {useEffect} from 'react';
 import Card from "../../components/Card/Card";
-import FavoritesCardLoaded from "./FavoritesCardLoaded";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 
 const Favorites = () => {
-    // const user = JSON.parse(localStorage.getItem('user')) || {favourites:[], cart:[]};
 
     const user = useSelector(s => s.user.user);
 

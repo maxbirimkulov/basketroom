@@ -4,6 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {findUser} from "../../redux/user";
 import {toast, ToastContainer} from "react-toastify";
 import {useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 
 
 const Basket = () => {
@@ -22,16 +23,20 @@ const Basket = () => {
         progress: undefined,
     });
     const clearCart = (product) =>{
-        const user = JSON.parse(localStorage.getItem('user')) || {favourites:[], cart:[]};
-        localStorage.setItem('user', JSON.stringify({
-            ...user, cart:
-                user?.cart.findIndex(el => el._id === product._id) >= 0 ?
-                    user?.cart.filter((el) => el._id !== product._id) :
-                    [...user.cart, {...product}]
-        }));
+        const cart = document.querySelector('#cart');
+        setTimeout(() =>{
+            cart.classList.add('shake');
+            setTimeout(() => {
+                cart.classList.remove('shake');
+            },500)
+        },200);
+        dispatch(findUser({user: {...user, cart:
+                    user?.cart.findIndex(el => el._id === product._id) >= 0 ?
+                        user?.cart.filter((el) => el._id !== product._id)
+                        : [...user.cart, {...product}]
+            }}));
         user?.cart.findIndex(el => el._id === product._id) >= 0 ?
             notify('Убрано') : notify('Добавлено в корзину👌');
-        dispatch(findUser({user: JSON.parse(localStorage.getItem('user'))}));
     };
     const getProductToPage = (id) =>{
         navigate(`/product/${id}`);
@@ -45,6 +50,7 @@ const Basket = () => {
                     <div className='basket__list'>
 
                         {
+                            user?.cart.length ?
                             user?.cart.map(item => (
                                 <div className='basket__card'>
                                     <div onClick={() => getProductToPage(item._id)} className='basket__card-img' style={{background:`url(${`${process.env.REACT_APP_URL}${item?.images[0]}`})center/cover no-repeat`}}> </div>
@@ -55,7 +61,12 @@ const Basket = () => {
                                     </div>
                                     <button className='basket__card-btn' onClick={() => clearCart(item)}><FaTrash/></button>
                                 </div>
-                            ))
+                            )) :
+                                <div className='basket__list-empty'>
+                                    <h3 className='basket__list-empty_title'>В вашей корзине пусто</h3>
+                                    <p className='basket__list-empty_text'>Перейти на <Link to={'/'} className='basket__list-empty_link'>  главную страницу</Link></p>
+                                    <img className='basket__list-empty_img' src="https://static.insales-cdn.com/assets/1/3047/1813479/1652615264/empty.png" alt="empty basket"/>
+                                </div>
                         }
 
 
@@ -63,16 +74,39 @@ const Basket = () => {
 
                     </div>
                     <div className='basket__info'>
-                        <p className='basket__info-title'>Скидки:</p>
-                        <div className='basket__info-nums'>
-                            <span>Скидка 0%</span>
-                            <span>- 0 руб</span>
+                        <div className='basket__info-block'>
+                            {
+                                user?.cart.length ?
+                                <>
+                                    <p className='basket__info-title'>Скидки:</p>
+                                    <div className='basket__info-nums'>
+                                        <span>Скидка 10%</span>
+                                        <span className='basket__info-sale'>- {Math.ceil(price * .1) || 0} руб</span>
+                                    </div>
+                                </> : ''
+                            }
+                            <div className='basket__info-nums basket__info-title'>
+                                <span>Итого:</span>
+                                <span>{price || 0} руб</span>
+                            </div>
                         </div>
-                        <div className='basket__info-nums basket__info-title'>
-                            <span>Итого:</span>
-                            <span>{price || '51354'} руб</span>
+                        {
+                            user?.cart.length ?
+                            <div className="basket__info-block">
+                                <p className=''>У вас есть промо-код?</p>
+                                <div className='basket__info-code'>
+                                    <input className='basket__info-input' type="text" placeholder='Промо-код'/>
+                                    <button className='header__label-btn'>Применить</button>
+                                </div>
+                            </div> : ''
+                        }
+
+                        <div className="basket__info-block">
+                            {  user?.cart.length ? <button className='basket__info-btn active'> <Link className='basket__info-btn_link' to={'/order'}>Оформить заказ</Link> </button> : ''}
+                            <button className='basket__info-btn'>
+                                <Link to={'/'} className='basket__info-btn_link'> Продолжить покупки</Link>
+                            </button>
                         </div>
-                        <p className=''>У вас есть промо-код?</p>
 
                     </div>
                 </div>

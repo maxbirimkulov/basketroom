@@ -71,6 +71,23 @@ const Slider = () => {
                         </div>
                     </div>
                 </SwiperSlide>
+                <SwiperSlide>
+                    <div className="slide slide2">
+                        <div className="container">
+                            <div className="slide__wrapper">
+                                <div className="slide__caption">
+
+                                    <h3 className='slide__caption-title'>КЛАССИКА ВНЕ ВРЕМЕНИ</h3>
+                                    <p className='slide__caption-text'>NIKE AIR FOCE 1</p>
+
+                                    <button className='slide__caption-btn'>Подробнее</button>
+                                </div>
+                                <img className="slide__image" src="https://static.insales-cdn.com/files/1/6156/16644108/original/Без_имени-5_d58168a1a1195c86d1a0d9de56fd937a.png"
+                                     alt="Слайдер Блок 3"/>
+                            </div>
+                        </div>
+                    </div>
+                </SwiperSlide>
 
             </Swiper>
 

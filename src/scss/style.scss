@@ -14,6 +14,8 @@
 body{
   position: relative;
   font-family: $Open;
+  scroll-behavior: smooth;
+
 }
 input:focus{
   outline: 2px solid lightskyblue ;
@@ -41,13 +43,13 @@ input:focus{
 
 @keyframes xAxis {
   100% {
-    transform: translateX(calc(500vw - 15px));
+    transform: translateX(calc(540vw - 15px));
   }
 }
 
 @keyframes yAxis {
   100% {
-    transform: translateY(calc(-250vh + 75px));
+    transform: translateY(calc(-230vh + 75px));
   }
 }
 
@@ -77,3 +79,5 @@ input:focus{
 @import "catalog";
 @import "clothesAdd";
 @import "basket";
+@import "favorites";
+@import "order";

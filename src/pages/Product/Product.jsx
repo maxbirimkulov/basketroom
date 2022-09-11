@@ -35,8 +35,6 @@ const Product = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const user = useSelector(s => s.user.user);
-
-
     const {oneProduct, status, error} = useSelector(state => state.clothes);
     useEffect(( ) =>{
         dispatch(getOneProduct(params.id))
@@ -50,49 +48,49 @@ const Product = () => {
         const favorites = document.querySelector('#favorites');
         const favBtn = document.querySelector('#favBtn');
 
-        const user = JSON.parse(localStorage.getItem('user')) || {favourites:[], cart:[]};
-        localStorage.setItem('user', JSON.stringify({
-            ...user, favourites:
-                user?.favourites.findIndex(el => el._id === oneProduct._id) >= 0 ?
-                    user?.favourites.filter((el) => el._id !== oneProduct._id) :
-                    [...user.favourites, {...oneProduct}]
-        }));
-        user?.favourites.findIndex(el => el._id === oneProduct._id) >= 0 ?
-            notify('Убрано') : notify('Добавлено в нужные👌');
-        dispatch(findUser({user: JSON.parse(localStorage.getItem('user'))}));
-        !user?.favourites.findIndex(el => el._id === oneProduct._id) >= 0 && favBtn.classList.add('sendtocart');
+
+        user?.favourites.findIndex(el => el._id === oneProduct._id) >= 0 ? notify('Убрано') : notify('Добавлено в нужные👌');
+            dispatch(findUser( {user: {...user, favourites:
+                    user?.favourites.findIndex(el => el._id === oneProduct._id) >= 0 ?
+                        user?.favourites.filter((el) => el._id !== oneProduct._id)
+                        : [...user.favourites, {...oneProduct}]
+                }}));
+            if (user?.favourites.findIndex(el => el._id === oneProduct._id) < 0) favBtn.classList.add('sendtocart')
         setTimeout(() =>{
             favBtn.classList.remove('sendtocart');
             favorites.classList.add('shake');
+            // favorites.setAttribute('data-totalitems', user?.favourites?.length);
             setTimeout(() => {
                 favorites.classList.remove('shake');
             },500)
-        },100);
+        },1300);
         window.scrollTo(0, 0);
     };
 
     const addToCart = () =>{
         const cart = document.querySelector('#cart');
         const favBtn = document.querySelector('#favBtn');
-        favBtn.classList.add('sendtocart');
         setTimeout(() =>{
-            favBtn.classList.remove('sendtocart');
             cart.classList.add('shake');
             setTimeout(() => {
                 cart.classList.remove('shake');
             },500)
-        },100);
+        },500);
         window.scrollTo(0, 0);
-        const user = JSON.parse(localStorage.getItem('user')) || {favourites:[], cart:[]};
-        localStorage.setItem('user', JSON.stringify({
-            ...user, cart:
-                user?.cart.findIndex(el => el._id === oneProduct._id) >= 0 ?
-                    user?.cart.filter((el) => el._id !== oneProduct._id) :
-                    [...user.cart, {...oneProduct}]
-        }));
+        // const user = JSON.parse(localStorage.getItem('user')) || {favourites:[], cart:[]};
+        // localStorage.setItem('user', JSON.stringify({
+        //     ...user, cart:
+        //         user?.cart.findIndex(el => el._id === oneProduct._id) >= 0 ?
+        //             user?.cart.filter((el) => el._id !== oneProduct._id) :
+        //             [...user.cart, {...oneProduct}]
+        // }));
         user?.cart.findIndex(el => el._id === oneProduct._id) >= 0 ?
             notify('Товар был убран') :  setPopup(true);
-        dispatch(findUser({user: JSON.parse(localStorage.getItem('user'))}));
+        dispatch(findUser({user: {...user, cart:
+                    user?.cart.findIndex(el => el._id === oneProduct._id) >= 0 ?
+                        user?.cart.filter((el) => el._id !== oneProduct._id)
+                        : [...user.cart, {...oneProduct}]
+            }}));
     };
     return (
         <div>
@@ -183,7 +181,7 @@ const Product = () => {
                             <div className='product__top-pick'>
                                 <button className='product__top-pickAdd' onClick={() => addToCart()}><MdOutlineAddShoppingCart/>{!user?.cart?.filter(el => el?._id === oneProduct?._id).length ? 'В корзину' : 'Убрать'} </button>
                                 <span className='product__top-pickFav' id='favBtn' ref={favBtn} onClick={() => addFav()}>
-                                    <span className={`${!user?.favourites?.filter(el => el?._id === oneProduct?._id).length && 'productCard__like-default'}`}><MdFavorite/> </span>
+                                    <span className={`${!user?.favourites?.filter(el => el?._id === oneProduct?._id).length && 'productCard__like-default'}`}><MdFavorite/>  <span className="cart-item"> </span></span>
                                 </span>
                             </div>
 

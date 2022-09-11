@@ -9,14 +9,10 @@ import Catalog from "./pages/Catalog/Catalog";
 import Product from "./pages/Product/Product";
 import SearchResult from "./pages/SearchResult/SearchResult";
 import ClothesAdd from "./pages/AddClothes/AddClothes";
-import {useDispatch, useSelector} from "react-redux";
-import {useEffect} from "react";
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {findUser} from "./redux/user";
 
 function App() {
-  const dispatch = useDispatch();
   // useEffect(() =>{
   //   const user = JSON.parse(localStorage.getItem('user')) || {favourites:[], cart:[]};
   //   dispatch(findUser({user: JSON.parse(localStorage.getItem('user'))}));

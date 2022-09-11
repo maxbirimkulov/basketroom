@@ -17,6 +17,21 @@ export const getProducts = createAsyncThunk(
         }
     }
 );
+
+export const getNewSearchCount = createAsyncThunk(
+            'clothes/getNewSearchCount',
+    async (filter, {rejectWithValue}) => {
+                try {
+                    const res = await axios(`/clothes?category=${filter.brand}`);
+                    if (res.statusText !== 'OK') {
+                        throw new Error('Server error!')
+                    }
+                    return res.data
+                } catch (e) {
+                    return rejectWithValue(e.message)
+                }
+    }
+);
 export const deleteProducts = createAsyncThunk(
     'clothes/deleteProducts',
     async (id, {rejectWithValue, dispatch}) => {
@@ -76,7 +91,7 @@ const clothes = createSlice({
         oneProduct: {},
         filter: {
             range:{
-                from: 2000,
+                from: 0,
                 to: 20000,
             },
             title: '',
@@ -126,6 +141,19 @@ const clothes = createSlice({
             state.status = 'rejected';
             state.error = action.payload;
         },
+        [getNewSearchCount.pending]: (state, action) => {
+          state.status = 'loading';
+          state.error = null
+        },
+        [getNewSearchCount.fulfilled]: (state, action) => {
+          state.status = 'resolved';
+          state.productsCount = action.payload.productsLength;
+        },
+        [getProducts.rejected]: (state, action) => {
+            state.status = 'rejected';
+            state.error = action.payload;
+        },
+
 
         [deleteProducts.rejected]: (state, action) => {
             state.status = 'rejected';
