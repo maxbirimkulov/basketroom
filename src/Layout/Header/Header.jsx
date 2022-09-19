@@ -20,12 +20,13 @@ const Header = () => {
     const searching = (e) =>{
         e.preventDefault();
         console.log(e.target[0].value);
-        navigate('/catalog')
+        navigate('/catalog');
         dispatch(searchProduct(e.target[0].value));
     };
 
     const [submenu, setSubmenu] = useState(false);
     const [search, setSearch] = useState(filter.title);
+
     const al = (e) =>{
         setSearch(e.target.textContent)
     };
@@ -43,15 +44,12 @@ const Header = () => {
                         </div>
 
                         <form onSubmit={(e) => searching(e)} className='header__label'>
-                            <input onChange={(event => setSearch(event.target.value))} className='header__label-input' value={search} required type="text" placeholder='Поиск по каталогу'/>
+                            <input onChange={(event => setSearch(event.target.value))} className='header__label-input' value={search}  type="text" placeholder='Поиск по каталогу'/>
 
                             <div className='header__label-popup'>
                                 <ul className='header__label-list'>
                                     <li onClick={(e) => al(e)} className='header__label-listItem'>air </li>
                                     <li onClick={(e) => al(e)} className='header__label-listItem'>off</li>
-                                    {/*<li onClick={(e) => al(e)} className='header__label-listItem'>white </li>*/}
-                                    {/*<li onClick={(e) => al(e)} className='header__label-listItem'>nike</li>*/}
-                                    {/*<li onClick={(e) => al(e)} className='header__label-listItem'>adidas</li>*/}
                                 </ul>
                             </div>
                             <button className='header__label-btn'><FaSearch/></button>
@@ -101,10 +99,10 @@ const Header = () => {
                                 <ul className='header__submenu'>
                                     <li className='header__submenu-link more' onMouseEnter={() => setSubmenu('basket')} onMouseLeave={() => setSubmenu(true)}>
                                         Баскетбол <IoIosArrowForward/>
-                                        {   submenu === 'basket' &&  <HeaderSubmenuBasket/>   }
+                                        {   submenu === 'basket' &&  <HeaderSubmenuBasket setSearch={setSearch}/>   }
                                     </li><li className='header__submenu-link more' onMouseEnter={() => setSubmenu('street')} onMouseLeave={() => setSubmenu(true)}>
                                         Уличные <IoIosArrowForward/>
-                                        {   submenu === 'street' &&  <HeaderSubmenuStreet/>   }
+                                        {   submenu === 'street' &&  <HeaderSubmenuStreet setSearch={setSearch}/>   }
                                     </li>
                                     <li className='header__submenu-link'>Детские</li>
                                     <li className='header__submenu-link'>Premium</li>

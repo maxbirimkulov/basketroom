@@ -4,6 +4,7 @@
   padding: 50px 0 100px;
   display: flex;
   gap: 20px;
+  position: relative;
   &__{
 
 
@@ -29,6 +30,33 @@
       border: 1px solid rgba(0, 0, 0, 0.1);
       &-select{
         display: block;
+      }
+      &-burger{
+        cursor: pointer;
+        display: none;
+        width: 20px;
+        height: 3px;
+        background-color: $black;
+        margin: 15px 0 0 1px;
+        position: absolute;
+        top: 0;
+        border-radius: 2px;
+        z-index: 10;
+        &:before, &:after{
+          content: '';
+          transition: all .4s;
+          width: 100%;
+          height: 3px;
+          background-color: $black;
+          position: absolute;
+          border-radius: 2px;
+        }
+        &:before{
+          bottom: -6px;
+        }
+        &:after{
+          top: -6px;
+        }
       }
       &-option{
         padding: 30px;
@@ -200,10 +228,27 @@
         transition: all .5s;
         &.active{
           padding: 20px;
-          background: #ffffff;
+          background: rgba(250,250,250,.95);
           transform: translateX(0%);
-          opacity: .87;
           width: 35%;
+          opacity: 1;
+        }
+        &-reset{
+          background-color: #fff;
+        }
+        &-burger{
+          display: block;
+          &.active{
+            background-color: transparent;
+          }
+          &.active.catalog__sidebar-burger:after{
+            //top: 0;
+            transform: rotate(-45deg);
+          }
+          &.active.catalog__sidebar-burger:before{
+            //top: 0;
+            transform: rotate(45deg);
+          }
         }
       }
       &list{
@@ -214,9 +259,12 @@
   }
 }
 @media (max-width: 700px) {
-  .catalogs{
-    &__card{
-      width: 45%;
+  .catalog{
+    &__productCard{
+      width: calc(50% - 12px);
+    }
+    &__sidebar{
+      min-width: 260px;
     }
   }
 }

@@ -33,3 +33,8 @@
 
  }
 }
+@media (max-width: 760px) {
+  .categoryCard{
+    width: calc(50% - 12px);
+  }
+}

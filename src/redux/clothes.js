@@ -7,7 +7,7 @@ export const getProducts = createAsyncThunk(
     'clothes/getProducts',
     async (filter,{rejectWithValue}) => {
         try {
-            const res  = await axios(`/clothes?title=${filter.title}&category=${filter.category}&from=${filter.from}&to=${filter.to}&desc=${filter.desc}&page=${filter.page}&limit=${filter.limit}`);
+            const res  = await axios(`/clothes?title=${filter.title}&category=${filter.category}&brand=${filter.brand}&from=${filter.from}&to=${filter.to}&desc=${filter.desc}&page=${filter.page}&limit=${filter.limit}`);
             if (res.statusText !== 'OK') {
                 throw new Error('Server error !')
             }
@@ -17,7 +17,6 @@ export const getProducts = createAsyncThunk(
         }
     }
 );
-
 export const getNewSearchCount = createAsyncThunk(
             'clothes/getNewSearchCount',
     async (filter, {rejectWithValue}) => {
@@ -88,6 +87,7 @@ const clothes = createSlice({
         products:[
 
         ],
+        watchedProducts: [],
         oneProduct: {},
         filter: {
             range:{
@@ -97,7 +97,8 @@ const clothes = createSlice({
             title: '',
             desc: false,
             limit: 12,
-            category: '',
+            category: [''],
+            brand: '',
             page: 1
         },
         status: '',
@@ -108,6 +109,10 @@ const clothes = createSlice({
         searchProduct : (state, action) => {
             state.filter = {...state.filter, title: action.payload}
         },
+        addWatchedProducts : (state, action) => {
+            state.watchedProducts = [ action.payload, ...state.watchedProducts.filter((el, idx) => idx < 15 )]
+        },
+
         changeRange : (state, action) => {
             state.filter = {...state.filter, range: {
                     from : action.payload.from,
@@ -136,6 +141,7 @@ const clothes = createSlice({
             state.status = 'resolved';
             state.products = action.payload.products;
             state.productsCount = action.payload.productsLength;
+            state.watchedProducts = state.watchedProducts
         },
         [getProducts.rejected]: (state, action) => {
             state.status = 'rejected';
@@ -177,4 +183,4 @@ const clothes = createSlice({
 
 
 export default clothes.reducer;
-export const { searchProduct, changeRange, changeProductLimit, switchPage, clearFilters} = clothes.actions;
+export const { searchProduct, changeRange, changeProductLimit, addWatchedProducts, switchPage, clearFilters} = clothes.actions;

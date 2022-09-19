@@ -20,7 +20,6 @@ const CardRow = ({category = 'Новинки'}) => {
                         ))
                 }
                 {
-                    // !products.length ? <h3>Пока нет, Сделать заказ</h3> :
 
                         category === 'Новинки' ?
                     products?.filter((item ) => item.category === 'sneakers' ).sort((a, b) => Date.parse(b.updatedAt) - Date.parse(a.updatedAt)).filter((item, idx) => idx < 8 ).map(pare => (

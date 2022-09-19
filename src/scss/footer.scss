@@ -9,7 +9,8 @@
       display: flex;
     }
     &block{
-      min-width: 200px;
+      width: 200px;
+      max-width: 25%;
       margin-right: 20px;
       &-title{
         font-size: 19px;

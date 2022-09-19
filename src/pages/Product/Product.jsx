@@ -35,19 +35,19 @@ const Product = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const user = useSelector(s => s.user.user);
-    const {oneProduct, status, error} = useSelector(state => state.clothes);
+    const {oneProduct, status, products , watchedProducts, error} = useSelector(state => state.clothes);
     useEffect(( ) =>{
         dispatch(getOneProduct(params.id))
-    },[]);
-    const [count, setCount] = useState(1);
+    },[params.id]);
     const [popup, setPopup] = useState(false);
     const favBtn = useRef(null);
+    const categorySliderLength = products?.filter((item ) => item.category === oneProduct?.category).length;
     const secs = Date.parse(oneProduct.createdAt);
+    const addedToFavorite = user?.favourites?.filter(el => el?._id === oneProduct?._id).length;
 
     const addFav = () => {
         const favorites = document.querySelector('#favorites');
         const favBtn = document.querySelector('#favBtn');
-
 
         user?.favourites.findIndex(el => el._id === oneProduct._id) >= 0 ? notify('Убрано') : notify('Добавлено в нужные👌');
             dispatch(findUser( {user: {...user, favourites:
@@ -77,13 +77,6 @@ const Product = () => {
             },500)
         },500);
         window.scrollTo(0, 0);
-        // const user = JSON.parse(localStorage.getItem('user')) || {favourites:[], cart:[]};
-        // localStorage.setItem('user', JSON.stringify({
-        //     ...user, cart:
-        //         user?.cart.findIndex(el => el._id === oneProduct._id) >= 0 ?
-        //             user?.cart.filter((el) => el._id !== oneProduct._id) :
-        //             [...user.cart, {...oneProduct}]
-        // }));
         user?.cart.findIndex(el => el._id === oneProduct._id) >= 0 ?
             notify('Товар был убран') :  setPopup(true);
         dispatch(findUser({user: {...user, cart:
@@ -181,12 +174,13 @@ const Product = () => {
                             <div className='product__top-pick'>
                                 <button className='product__top-pickAdd' onClick={() => addToCart()}><MdOutlineAddShoppingCart/>{!user?.cart?.filter(el => el?._id === oneProduct?._id).length ? 'В корзину' : 'Убрать'} </button>
                                 <span className='product__top-pickFav' id='favBtn' ref={favBtn} onClick={() => addFav()}>
-                                    <span className={`${!user?.favourites?.filter(el => el?._id === oneProduct?._id).length && 'productCard__like-default'}`}><MdFavorite/>  <span className="cart-item"> </span></span>
+                                    <span className={`${!addedToFavorite && 'productCard__like-default'}`}><MdFavorite/>  {addedToFavorite ? <span className="cart-item"> </span> : ''}</span>
                                 </span>
                             </div>
 
                             <div className='product__top-category'>Находится в категориях :
                                 <span className='product__top-category_link'> {oneProduct?.category}</span>
+                                <span className='product__top-category_link'> {oneProduct?.brand}</span>
                             </div>
                         </div>
 
@@ -203,33 +197,68 @@ const Product = () => {
                 <h2 className='home__cardBlock-title'>Вам так же понравится</h2>
 
                 <div className='home__cardBlock-row'>
-                    <Swiper navigation={true} loop slidesPerView={'4'} modules={[Navigation]} className="mySwiper">
-                        <SwiperSlide><Card page={'slide'}/></SwiperSlide>
-                        <SwiperSlide><Card page={'slide'}/></SwiperSlide>
-                        <SwiperSlide><Card page={'slide'}/></SwiperSlide>
-                        <SwiperSlide><Card page={'slide'}/></SwiperSlide>
-                        <SwiperSlide><Card page={'slide'}/></SwiperSlide>
-                        <SwiperSlide><Card page={'slide'}/></SwiperSlide>
-                        <SwiperSlide><Card page={'slide'}/></SwiperSlide>
+                    <Swiper navigation={true} slidesPerView={categorySliderLength > 3 ? '4' : categorySliderLength} loop={true} modules={[Navigation]}
+                            breakpoints={ {
+                                960: {
+                                    slidesPerView: '4',
+                                },
+                                720: {
+                                    slidesPerView: 3,
+                                },
+                                540: {
+                                    slidesPerView: 2,
+                                },
+                                0: {
+                                    slidesPerView: 1,
+                                },
+                            }   }
+                            className="mySwiper">
+                        {
+                            products?.filter((item ) => item.brand === oneProduct?.brand  ).map(pare => (
+                                <div key={pare._id} className='home__productCard'>
+                                    <SwiperSlide><Card product={pare} page={'slide'}/></SwiperSlide>
+                                </div>
+                            ))
+                        }
                     </Swiper>
 
                 </div>
             </div>
             <div className="container">
-                <h2 className='home__cardBlock-title'>Ранее просмотренные товары</h2>
+                {
+                    watchedProducts?.length > 4 &&
+                    <>
+                        <h2 className='home__cardBlock-title'>Ранее просмотренные товары</h2>
 
-                <div className='home__cardBlock-row'>
-                    <Swiper navigation={true} slidesPerView={'4'} loop={true} modules={[Navigation]} className="mySwiper">
-                        <SwiperSlide><Card page={'slide'}/></SwiperSlide>
-                        <SwiperSlide><Card page={'slide'}/></SwiperSlide>
-                        <SwiperSlide><Card page={'slide'}/></SwiperSlide>
-                        <SwiperSlide><Card page={'slide'}/></SwiperSlide>
-                        <SwiperSlide><Card page={'slide'}/></SwiperSlide>
-                        <SwiperSlide><Card page={'slide'}/></SwiperSlide>
-                        <SwiperSlide><Card page={'slide'}/></SwiperSlide>
-                    </Swiper>
+                        <div className='home__cardBlock-row'>
+                            <Swiper navigation={true} slidesPerView={'4'} modules={[Navigation]}
+                                    breakpoints={ {
+                                        960: {
+                                            slidesPerView: '4',
+                                        },
+                                        720: {
+                                            slidesPerView: 3,
+                                        },
+                                        540: {
+                                            slidesPerView: 2,
+                                        },
+                                        0: {
+                                            slidesPerView: 1,
+                                        },
+                                    }   }
+                                className="mySwiper">
+                                {
+                                    watchedProducts?.map((pare, idx) => (
+                                        // <React.Fragment key={pare._id}>
+                                            <SwiperSlide><Card product={pare} page={'slide'}/></SwiperSlide>
+                                        // </React.Fragment>
+                                    ))
+                                }
+                            </Swiper>
 
-                </div>
+                        </div>
+                    </>
+                }
             </div>
 
 

@@ -5,14 +5,19 @@ import {FaTrash} from 'react-icons/fa'
 import {useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {findUser} from "../../redux/user";
+import {addWatchedProducts} from "../../redux/clothes";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
-const Card = ({page, video, product }) => {
+const Card = ({page, video, product}) => {
+    const {watchedProducts} = useSelector(s => s.clothes)
     const getProductToPage = (id) =>{
         navigate(`/product/${id}`);
         window.scrollTo(0,0);
+        if (!watchedProducts.filter(el => el._id === product._id).length){
+            dispatch(addWatchedProducts(product))
+        }
     };
     const notify = (text) =>toast(text, {
         position: "bottom-right",
@@ -33,34 +38,35 @@ const Card = ({page, video, product }) => {
     const [changeImg, setChangeImg] = useState(0);
 
     const addFav = () => {
-        const user = JSON.parse(localStorage.getItem('user')) || {favourites:[], cart:[]};
-        localStorage.setItem('user', JSON.stringify({
-            ...user, favourites:
-                user?.favourites.findIndex(el => el._id === product._id) >= 0 ?
-                    user?.favourites.filter((el) => el._id !== product._id) :
-                    [...user.favourites, {...product}]
-        }));
+        dispatch(findUser( {user: {...user, favourites:
+                    user?.favourites.findIndex(el => el._id === product._id) >= 0 ?
+                        user?.favourites.filter((el) => el._id !== product._id)
+                        : [...user.favourites, {...product}]
+            }}));
         user?.favourites.findIndex(el => el._id === product._id) >= 0 ?
             notify('Убрано') : notify('Добавлено в нужные👌');
-        dispatch(findUser({user: JSON.parse(localStorage.getItem('user'))}));
     };
     return (
 
-        <div
-               onMouseOut={() => setChangeImg(0)}
+        <div onMouseOut={() => setChangeImg(0)}
                className={`productCard ${page === 'fav' ? 'favorites' : page === 'slide' ? 'slide' : ''}`}>
+
             <div onClick={() => addFav()}  className='productCard__like'>
                 {   page === 'fav' ? <FaTrash/> : <span className={`${!user?.favourites?.filter(el => el?._id === product?._id).length && 'productCard__like-default'}`}><IoHeartSharp/></span>   }
             </div>
-            <div  onMouseEnter={() => setChangeImg(1)}
-                  onClick={() => getProductToPage(product?._id)}
-                  className='productCard__hover1'>
+
+            <div className='productCard__hover' onClick={() => getProductToPage(product?._id)}>
+                {
+                    page !== 'slide' &&
+                    <>
+                        <div  onMouseEnter={() => setChangeImg(1)} className='productCard__hover1'> </div>
+                        <div  onMouseEnter={() => setChangeImg(2)} className='productCard__hover2'> </div>
+                        <div className='productCard__hover3'> </div>
+                    </>
+                }
             </div>
-            <div  onMouseEnter={() => setChangeImg(2)}
-                  onClick={() => getProductToPage(product?._id)}
-                  className='productCard__hover2'>
-            </div>
-            <div onClick={() => getProductToPage(product?._id)} className='productCard__hover3'> </div>
+
+
             {
                 product ?
                     <div className="productCard__img" style={{background: `url(${`${process.env.REACT_APP_URL}${ product?.images[changeImg] || product?.images[0]}`})center/contain no-repeat`}}/>

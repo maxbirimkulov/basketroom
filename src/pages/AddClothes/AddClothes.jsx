@@ -102,28 +102,39 @@ const ClothesAdd = () => {
             <div>
                 <ul className='create__form-sizes'>
                     <li>Выбрать размер :</li>
-                    <CreateSizes sizes={sizes} setSizes={setSizes} size='XS'/>
-                    <CreateSizes sizes={sizes} setSizes={setSizes} size='S'/>
-                    <CreateSizes sizes={sizes} setSizes={setSizes} size='M'/>
-                    <CreateSizes sizes={sizes} setSizes={setSizes} size='L'/>
-                    <CreateSizes sizes={sizes} setSizes={setSizes} size='XL'/>
-                    <CreateSizes sizes={sizes} setSizes={setSizes} size='XXL'/>
+                    <div>
+                        <CreateSizes sizes={sizes} setSizes={setSizes} size='50'/>
+                        <CreateSizes sizes={sizes} setSizes={setSizes} size='49'/>
+                        <CreateSizes sizes={sizes} setSizes={setSizes} size='48'/>
+                        <CreateSizes sizes={sizes} setSizes={setSizes} size='47'/>
+                        <CreateSizes sizes={sizes} setSizes={setSizes} size='46'/>
+                        <CreateSizes sizes={sizes} setSizes={setSizes} size='45'/>
+                        <CreateSizes sizes={sizes} setSizes={setSizes} size='44'/>
+                        <CreateSizes sizes={sizes} setSizes={setSizes} size='43'/>
+                        <CreateSizes sizes={sizes} setSizes={setSizes} size='42'/>
+                        <CreateSizes sizes={sizes} setSizes={setSizes} size='41'/>
+                    </div>
+                   <div>
+                       <CreateSizes sizes={sizes} setSizes={setSizes} size='40'/>
+                       <CreateSizes sizes={sizes} setSizes={setSizes} size='39'/>
+                       <CreateSizes sizes={sizes} setSizes={setSizes} size='38'/>
+                       <CreateSizes sizes={sizes} setSizes={setSizes} size='37'/>
+                       <CreateSizes sizes={sizes} setSizes={setSizes} size='36'/>
+                       <CreateSizes sizes={sizes} setSizes={setSizes} size='S'/>
+                       <CreateSizes sizes={sizes} setSizes={setSizes} size='M'/>
+                       <CreateSizes sizes={sizes} setSizes={setSizes} size='L'/>
+                       <CreateSizes sizes={sizes} setSizes={setSizes} size='XL'/>
+                       <CreateSizes sizes={sizes} setSizes={setSizes} size='XXL'/>
+                   </div>
+
                 </ul>
             </div>
             <div className='create__form-gender'>
-                <p className='create__form-title'>Товар для :</p>
-                <div className='create__form-inpt'>
-                    <input {...register('gender')} value='man' type="radio" id='man' />
-                    <label htmlFor="man">Для мужчин</label>
-                </div>
-                <div className='create__form-inpt'>
-                    <input {...register('gender')} value='woman' type="radio" id='woman'/>
-                    <label htmlFor="woman">Для женщин</label>
-                </div>
-                <div className='create__form-inpt'>
-                    <input {...register('gender')} value='uni' type="radio" id='uni' />
-                    <label htmlFor="uni">Унисекс</label>
-                </div>
+                {/*<p className='create__form-title'>Товар для :</p>*/}
+                {/*<div className='create__form-inpt'>*/}
+                {/*    <input {...register('gender')} value='uni' type="radio" id='uni' />*/}
+                {/*    <label htmlFor="uni">Унисекс</label>*/}
+                {/*</div>*/}
             </div>
             <div className='create__form-block'>
                 <label htmlFor="category">Категория</label>
@@ -136,6 +147,18 @@ const ClothesAdd = () => {
                     <option>uniform</option>
                 </select>
             </div>
+             <div className='create__form-block'>
+                <label htmlFor="category">Бренд</label>
+                <select {...register('brand', {
+                    required: 'Это поле обязательное *',
+                })} className='create__form-select'  id='brand'>
+                    <option>adidas</option>
+                    <option>nike</option>
+                    <option>puma</option>
+                    <option>jordan</option>
+                </select>
+            </div>
+
             <button className='create__form-btn' type='submit'>Создать</button>
         </form>
     );
