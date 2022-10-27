@@ -37,14 +37,19 @@ const ClothesAdd = () => {
     const [image9, setImage9] = useState('');
     const [image10, setImage10] = useState('');
 
+
+    const [category, setCategory] = useState('shoes')
+    const [subCategory, setSubCategory] = useState('basketball')
+
     const addClothe = (data) => {
         try {
             setLoading(true);
             axios.post('/clothes', {
                 ...data,
-                colors,
                 sizes,
-                images
+                images,
+                "category": category,
+                "subcategory": subCategory
             }).then(() => {
                 setLoading(false);
 
@@ -62,7 +67,6 @@ const ClothesAdd = () => {
         setImages([image1,image2,image3,image4, image5, image6, image7, image8, image9, image10])
     }, [image1,image2,image3,image4, image5, image6, image7, image8, image9, image10]);
 
-
     return (
         <form className='create__form-content' onSubmit={handleSubmit(addClothe)}>
             <div className='create__form-block'>
@@ -79,11 +83,9 @@ const ClothesAdd = () => {
                 })} className='create__form-input'  type="number" id='price'/>
                 <span>{errors?.price?.message}</span>
             </div>
-            <div className='create__form-block'>
-                <label className='create__form-label' htmlFor="inStock">Количество</label>
-                <input {...register('inStock', {
-                    required: 'Это поле обязательное *',
-                })} className='create__form-input'  type="number" id='inStock'/>
+            <div className='create__form-block create__form-block-check'>
+                <label className='create__form-label ' htmlFor="inStock">В наличии</label>
+                <input {...register('inStock' )} className=' create__form-input-checkbox'  type="checkbox" id='inStock'/>
                 <span>{errors?.inStock?.message}</span>
             </div>
             <ul style={{display:"flex", flexDirection:"column", rowGap:"10px", alignItems: "flex-start"}} className='create__form-block'>
@@ -98,54 +100,91 @@ const ClothesAdd = () => {
                 <ClothesAddBtn images={image9} setImages={setImage9} num={9}/>
                 <ClothesAddBtn images={image10} setImages={setImage10} num={10}/>
             </ul>
-          */}
-            <div>
-                <ul className='create__form-sizes'>
-                    <li>Выбрать размер :</li>
-                    <div>
-                        <CreateSizes sizes={sizes} setSizes={setSizes} size='50'/>
-                        <CreateSizes sizes={sizes} setSizes={setSizes} size='49'/>
-                        <CreateSizes sizes={sizes} setSizes={setSizes} size='48'/>
-                        <CreateSizes sizes={sizes} setSizes={setSizes} size='47'/>
-                        <CreateSizes sizes={sizes} setSizes={setSizes} size='46'/>
-                        <CreateSizes sizes={sizes} setSizes={setSizes} size='45'/>
-                        <CreateSizes sizes={sizes} setSizes={setSizes} size='44'/>
-                        <CreateSizes sizes={sizes} setSizes={setSizes} size='43'/>
-                        <CreateSizes sizes={sizes} setSizes={setSizes} size='42'/>
-                        <CreateSizes sizes={sizes} setSizes={setSizes} size='41'/>
-                    </div>
-                   <div>
-                       <CreateSizes sizes={sizes} setSizes={setSizes} size='40'/>
-                       <CreateSizes sizes={sizes} setSizes={setSizes} size='39'/>
-                       <CreateSizes sizes={sizes} setSizes={setSizes} size='38'/>
-                       <CreateSizes sizes={sizes} setSizes={setSizes} size='37'/>
-                       <CreateSizes sizes={sizes} setSizes={setSizes} size='36'/>
-                       <CreateSizes sizes={sizes} setSizes={setSizes} size='S'/>
-                       <CreateSizes sizes={sizes} setSizes={setSizes} size='M'/>
-                       <CreateSizes sizes={sizes} setSizes={setSizes} size='L'/>
-                       <CreateSizes sizes={sizes} setSizes={setSizes} size='XL'/>
-                       <CreateSizes sizes={sizes} setSizes={setSizes} size='XXL'/>
-                   </div>
-
-                </ul>
-            </div>
-            <div className='create__form-gender'>
-                {/*<p className='create__form-title'>Товар для :</p>*/}
-                {/*<div className='create__form-inpt'>*/}
-                {/*    <input {...register('gender')} value='uni' type="radio" id='uni' />*/}
-                {/*    <label htmlFor="uni">Унисекс</label>*/}
-                {/*</div>*/}
-            </div>
             <div className='create__form-block'>
                 <label htmlFor="category">Категория</label>
-                <select {...register('category', {
-                    required: 'Это поле обязательное *',
-                })} className='create__form-select'  id='category'>
-                    <option>sneakers</option>
-                    <option>hoody</option>
-                    <option>sport suit</option>
-                    <option>uniform</option>
+                <select onChange={(e) => setCategory(e.target.value)}  className='create__form-select'  id='category'>
+                    <option value='shoes'>Обувь</option>
+                    <option value='clothes'>Одежда</option>
+                    <option value='other'>Другое</option>
                 </select>
+            </div>
+
+            <div>
+                <div className='create__form-sizes'>
+                    {
+                        category !== 'other' ? <p className='create__form-sizes-text'>Выбрать размер :</p> : ''
+                    }
+                    {
+                        category === 'shoes' ?
+                            <div className='create__form-sizes-row'>
+                                <CreateSizes sizes={sizes} setSizes={setSizes} size='35.5'/>
+                                <CreateSizes sizes={sizes} setSizes={setSizes} size='36'/>
+                                <CreateSizes sizes={sizes} setSizes={setSizes} size='36.5'/>
+                                <CreateSizes sizes={sizes} setSizes={setSizes} size='37.5'/>
+                                <CreateSizes sizes={sizes} setSizes={setSizes} size='38'/>
+                                <CreateSizes sizes={sizes} setSizes={setSizes} size='38.5'/>
+                                <CreateSizes sizes={sizes} setSizes={setSizes} size='39'/>
+                                <CreateSizes sizes={sizes} setSizes={setSizes} size='40'/>
+                                <CreateSizes sizes={sizes} setSizes={setSizes} size='40.5'/>
+                                <CreateSizes sizes={sizes} setSizes={setSizes} size='41'/>
+                                <CreateSizes sizes={sizes} setSizes={setSizes} size='42'/>
+                                <CreateSizes sizes={sizes} setSizes={setSizes} size='42.5'/>
+                                <CreateSizes sizes={sizes} setSizes={setSizes} size='43'/>
+                                <CreateSizes sizes={sizes} setSizes={setSizes} size='44'/>
+                                <CreateSizes sizes={sizes} setSizes={setSizes} size='44.5'/>
+                                <CreateSizes sizes={sizes} setSizes={setSizes} size='45'/>
+                                <CreateSizes sizes={sizes} setSizes={setSizes} size='45.5'/>
+                                <CreateSizes sizes={sizes} setSizes={setSizes} size='46'/>
+                                <CreateSizes sizes={sizes} setSizes={setSizes} size='47'/>
+                                <CreateSizes sizes={sizes} setSizes={setSizes} size='47.5'/>
+                                <CreateSizes sizes={sizes} setSizes={setSizes} size='48.5'/>
+                                <CreateSizes sizes={sizes} setSizes={setSizes} size='49'/>
+                                <CreateSizes sizes={sizes} setSizes={setSizes} size='50'/>
+                            </div > : category === 'clothes' ?  <div  className='create__form-sizes-row'>
+                                <CreateSizes sizes={sizes} setSizes={setSizes} size='XS'/>
+                                <CreateSizes sizes={sizes} setSizes={setSizes} size='S'/>
+                                <CreateSizes sizes={sizes} setSizes={setSizes} size='M'/>
+                                <CreateSizes sizes={sizes} setSizes={setSizes} size='L'/>
+                                <CreateSizes sizes={sizes} setSizes={setSizes} size='XL'/>
+                                <CreateSizes sizes={sizes} setSizes={setSizes} size='XXL'/>
+                            </div> : ''
+                    }
+                </div>
+
+                {
+                    category === 'shoes' ?
+
+                        <div className='create__form-block'>
+                            <label htmlFor="category">Подкатегория</label>
+                            <select onChange={(e) => setSubCategory(e.target.value)}  className='create__form-select'  id='category'>
+                                <option value='basketball'>Баскетбольные</option>
+                                <option value='street'>Уличные</option>
+                                <option value='premium'>Премиум</option>
+                                <option value='other'>Другое</option>
+                            </select>
+                        </div>
+
+                        : category === 'clothes' ?
+                            <div className='create__form-block'>
+                                <label htmlFor="category">Подкатегория</label>
+                                <select onChange={(e) => setSubCategory(e.target.value)}  className='create__form-select'  id='category'>
+                                    <option value='form'>Форма</option>
+                                    <option value='hoodie'>Толстовки</option>
+                                    <option value='pants'>Штаны</option>
+                                    <option value='socks'>Носки</option>
+                                    <option value='accessories'>Аксессуары</option>
+                                </select>
+                            </div>
+                            : <div className='create__form-block'>
+                                <label htmlFor="category">Подкатегория</label>
+                                <select onChange={(e) => setSubCategory(e.target.value)}  className='create__form-select'  id='category'>
+                                    <option value='ball'>Мячи</option>
+                                    <option value='attribute'>Атрибутика</option>
+                                    <option value='decorations'>Украшения</option>
+                                    <option value='other'>Другое</option>
+                                </select>
+                            </div>
+                }
             </div>
              <div className='create__form-block'>
                 <label htmlFor="category">Бренд</label>
@@ -158,7 +197,16 @@ const ClothesAdd = () => {
                     <option>jordan</option>
                 </select>
             </div>
-
+            <div className='create__form-block'>
+                <label className='create__form-label' htmlFor="tag">Тег</label>
+                <input {...register('tag')} className='create__form-input'  type="text"  id='tag'/>
+                <span>{errors?.title?.message}</span>
+            </div>
+            <div className='create__form-block'>
+                <label className='create__form-label' htmlFor="description">Описание товара</label>
+                <textarea maxLength={250} {...register('description')} title='description' className='create__form-input create__form-textarea'  />
+                <span>{errors?.title?.message}</span>
+            </div>
             <button className='create__form-btn' type='submit'>Создать</button>
         </form>
     );

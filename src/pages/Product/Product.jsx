@@ -152,21 +152,20 @@ const Product = () => {
                             <h2 className='product__top-title'>{oneProduct ? oneProduct.title : 'Air Jordan 1 \'Black Toe\''}</h2>
                             <p className='product__top-price'>{oneProduct ? oneProduct.price : '13127'} руб</p>
                             <p className='product__top-comment'>Оставить отзыв</p>
-                            <p className='product__top-text'>Кроссовки Майкла Джордана - Air Jordan 1 Retro. С этой
-                                модели начиналась история Jordan
-                                Brand. Появившиеся на свет в 1988 году они поразили своим ярким дизайном, не
-                                применяемым ни в одной баскетбольной обуви того времени. За что и штрафовали Майкла
-                                на 5000 $ каждую игру, когда он появлялся в "единичках". Вся эта шумиха спровоцировала
-                                огромный интерес к модели и Nike это было на руку. В итоге толпы фанатов выстраивались
-                                в очередь, чтобы заполучить "запрещенную" модель Майкла Джордана. В наше время, Air
-                                Jordan 1 Retro считаются настоящей иконной стиля, которой хочется обладать. Кроссовки
-                                мужские Air Jordan 1 'Black Toe', вы можете купить в баскетбольном магазине
-                                Basketroom.ru
+                            <p className='product__top-text'>{
+                                oneProduct.description
+                            }
                             </p>
                             <p className='product__top-sizesText'>Размер</p>
                             <div className='product__top-sizes'>
-                                <button className='product__top-size active'>12 US-46 EUR-30 cm</button>
-                                <button className='product__top-size'>11 US-45 EUR-29 cm</button>
+
+                                {
+                                    oneProduct.sizes.map((size) => (
+                                        <button className='product__top-size active'> {size}</button>
+                                        )
+                                    )
+                                }
+
 
                             </div>
                             <p className='product__top-return'>Обмен/Возврат в течение 14 дней</p>

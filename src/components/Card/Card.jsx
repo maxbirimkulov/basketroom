@@ -8,6 +8,7 @@ import {findUser} from "../../redux/user";
 import {addWatchedProducts} from "../../redux/clothes";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from "../../axios";
 
 
 const Card = ({page, video, product}) => {
@@ -78,8 +79,9 @@ const Card = ({page, video, product}) => {
             <div className='productCard__bot'>
                 <div>
                     {   video && <p>+ видео-обзор</p>   }
-                    <span className='productCard__price'>{product?.price || '4991'} руб</span>
+                    <span className='productCard__price'>{product?.price || '4991'} $</span>
                 </div>
+                <button className='productCard__btn' onClick={() => axios.delete(`clothes/${product._id}`).then(() => alert('удалено'))}>Удалить</button>
                 <button onClick={() =>{getProductToPage(product?._id)}} className='productCard__btn'>{page === 'fav' ? 'Подробнее' : 'Выбрать'}<FaEye/></button>
             </div>
         </div>

@@ -11,6 +11,7 @@ import SearchResult from "./pages/SearchResult/SearchResult";
 import ClothesAdd from "./pages/AddClothes/AddClothes";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import CatalogForExample from "./pages/CatalogForExample/CatalogForExample";
 
 function App() {
   // useEffect(() =>{
@@ -29,6 +30,7 @@ function App() {
           <Route path='/catalog' element={<Catalog/>}/>
           <Route path='/catalog/:page' element={<Catalog/>}/>
           <Route path='/catalog/:page/:category' element={<Catalog/>}/>
+          <Route path='/catalogForExample' element={<CatalogForExample/>}/>
           <Route path='/search' element={<SearchResult/>}/>
           <Route path='/product/:id' element={<Product/>}/>
           <Route path='/add' element={<ClothesAdd/>}/>
