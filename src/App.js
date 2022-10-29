@@ -28,8 +28,10 @@ function App() {
           <Route path='/order' element={<Order/>}/>
           <Route path='/basket' element={<Basket/>}/>
           <Route path='/catalog' element={<Catalog/>}/>
-          <Route path='/catalog/:page' element={<Catalog/>}/>
-          <Route path='/catalog/:page/:category' element={<Catalog/>}/>
+          <Route path='/catalog/:category' element={<Catalog/>}/>
+
+
+          {/*<Route path='/catalog/:page/:category' element={<Catalog/>}/>*/}
           <Route path='/catalogForExample' element={<CatalogForExample/>}/>
           <Route path='/search' element={<SearchResult/>}/>
           <Route path='/product/:id' element={<Product/>}/>

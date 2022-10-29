@@ -94,7 +94,7 @@ const Header = () => {
             <div className="header__menu">
                 <div className="container">
                     <nav className="header__menu-nav">
-                        <Link className='header__menu-link more' to='/catalog/1' onMouseEnter={() => setSubmenu(true)} onMouseLeave={() => setSubmenu(false)}>
+                        <Link className='header__menu-link more' to='/catalog/shoes' onMouseEnter={() => setSubmenu(true)} onMouseLeave={() => setSubmenu(false)}>
                             Кросовки
                             {
                                 submenu &&
@@ -111,10 +111,10 @@ const Header = () => {
                                 </ul>
                             }
                         </Link>
-                        <Link className='header__menu-link' to='/catalog/1'>Одежда</Link>
-                        <Link className='header__menu-link' to='/catalog/1'>Акксессуары</Link>
-                        <Link className='header__menu-link' to='/catalog/1'>В наличие</Link>
-                        <Link className='header__menu-link' to='/catalog/1'>SALE</Link>
+                        <Link className='header__menu-link' to='/catalog/clothes'>Одежда</Link>
+                        <Link className='header__menu-link' to='/catalog/other'>Другое</Link>
+                        <Link className='header__menu-link' to='/catalog/instock'>В наличие</Link>
+                        <Link className='header__menu-link' to='/catalog/sale'>SALE</Link>
                     </nav>
                 </div>
             </div>

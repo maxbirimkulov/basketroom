@@ -23,10 +23,8 @@ const Catalog = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        dispatch(clearFilters({page: params.page, category: ''}))
-        console.log(123)
-        console.log(filter.category)
-    }, [params.category]);
+        dispatch(clearFilters({page: params.page}))
+    }, []);
 
     const {status, products, productsCount, watchedProducts, error, filter} = useSelector(s => s.clothes);
     const {reset, handleSubmit, register} = useForm();
@@ -86,7 +84,9 @@ const Catalog = () => {
         navigate(`/catalog/${pageBtn}`)
     };
     const filterCategories = (target) => {
-        dispatch(clearFilters({category: target}));
+        const categories = target.map(obj => obj.value);
+        dispatch(clearFilters({category: categories}));
+        // alert(JSON.stringify(categories))
     };
     const filterBrands = (target) => {
         const categories = target.map(obj => obj.value);
@@ -111,72 +111,42 @@ const Catalog = () => {
                             <h3>Отображение и поиск</h3>
                             <div>
                                 <Select
-                                    onChange={(e) => filterCategories(e.value)}
+                                    onChange={(target) => filterCategories(target)}
                                     placeholder={'Посик по категориям'}
-                                    className='catalog__sidebar-select'
-                                    defaultValue={filter.category}
+                                    isMulti
+                                    name="categories"
+                                    closeMenuOnSelect={false}
+                                    components={animatedComponents}
                                     options={
-                                            params.category === 'clothes' ?
+                                        params.category === 'clothes' ?
+                                            [
+                                                {id: 1, value: 'hoodie', label: 'Толстовки'},
+                                                {id: 2, value: 'form', label: 'Форма'},
+                                                {id: 3, value: 'pants', label: 'Штаны'},
+                                                {id: 4, value: 'socks', label: 'Носки'},
+                                                {id: 4, value: 'accessories', label: 'Аксессуары'},
+                                            ] : params.category === 'shoes' ?
                                                 [
-                                                    {id: 1, value: 'hoodie', label: 'Толстовки'},
-                                                    {id: 2, value: 'form', label: 'Форма'},
-                                                    {id: 3, value: 'pants', label: 'Штаны'},
-                                                    {id: 4, value: 'socks', label: 'Носки'},
-                                                    {id: 4, value: 'accessories', label: 'Аксессуары'},
-                                                ] : params.category === 'shoes' ?
+                                                    {id: 1, value: 'basketball', label: 'Баскетбольные'},
+                                                    {id: 2, value: 'street', label: 'Уличные'},
+                                                    {id: 3, value: 'premium', label: 'Премиум'},
+                                                    {id: 4, value: 'other', label: 'Другое'},
+                                                ] : params.category === 'other' ?
                                                     [
-                                                        {id: 1, value: 'basketball', label: 'Баскетбольные'},
-                                                        {id: 2, value: 'street', label: 'Уличные'},
-                                                        {id: 3, value: 'premium', label: 'Премиум'},
+                                                        {id: 1, value: 'ball', label: 'Мячи'},
+                                                        {id: 2, value: 'attribute', label: 'Атрибутика'},
+                                                        {id: 3, value: 'decorations', label: 'Украшения'},
                                                         {id: 4, value: 'other', label: 'Другое'},
-                                                    ] : params.category === 'other' ?
-                                                        [
-                                                            {id: 1, value: 'ball', label: 'Мячи'},
-                                                            {id: 2, value: 'attribute', label: 'Атрибутика'},
-                                                            {id: 3, value: 'decorations', label: 'Украшения'},
-                                                            {id: 4, value: 'other', label: 'Другое'},
-                                                        ] : []
+                                                    ] : []
 
-                                        }
+                                    }
+                                    className="basic-multi-select"
+                                    classNamePrefix="select"
                                 />
-                                {/*<Select*/}
-                                {/*    onChange={(target) => filterCategories(target)}*/}
-                                {/*    placeholder={'Посик по категориям'}*/}
-                                {/*    isMulti*/}
-                                {/*    name="categories"*/}
-                                {/*    closeMenuOnSelect={false}*/}
-                                {/*    components={animatedComponents}*/}
-                                {/*    options={*/}
-                                {/*        params.category === 'clothes' ?*/}
-                                {/*            [*/}
-                                {/*                {id: 1, value: 'hoodie', label: 'Толстовки'},*/}
-                                {/*                {id: 2, value: 'form', label: 'Форма'},*/}
-                                {/*                {id: 3, value: 'pants', label: 'Штаны'},*/}
-                                {/*                {id: 4, value: 'socks', label: 'Носки'},*/}
-                                {/*                {id: 4, value: 'accessories', label: 'Аксессуары'},*/}
-                                {/*            ] : params.category === 'shoes' ?*/}
-                                {/*                [*/}
-                                {/*                    {id: 1, value: 'basketball', label: 'Баскетбольные'},*/}
-                                {/*                    {id: 2, value: 'street', label: 'Уличные'},*/}
-                                {/*                    {id: 3, value: 'premium', label: 'Премиум'},*/}
-                                {/*                    {id: 4, value: 'other', label: 'Другое'},*/}
-                                {/*                ] : params.category === 'other' ?*/}
-                                {/*                    [*/}
-                                {/*                        {id: 1, value: 'ball', label: 'Мячи'},*/}
-                                {/*                        {id: 2, value: 'attribute', label: 'Атрибутика'},*/}
-                                {/*                        {id: 3, value: 'decorations', label: 'Украшения'},*/}
-                                {/*                        {id: 4, value: 'other', label: 'Другое'},*/}
-                                {/*                    ] : []*/}
-
-                                {/*    }*/}
-                                {/*    className="basic-multi-select"*/}
-                                {/*    classNamePrefix="select"*/}
-                                {/*/>*/}
                             </div>
                             <div>
                                 <Select
                                     onChange={(target) => filterBrands(target)}
-                                    defaultValue={[]}
                                     placeholder={'Посик по брендам'}
                                     isMulti
                                     name="brands"
