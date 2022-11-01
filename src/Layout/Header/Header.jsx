@@ -8,6 +8,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {searchProduct} from "../../redux/clothes";
 import HeaderSubmenuBasket from "../../components/HeaderSubmenuCards/HeaderSubmenuBasket";
 import HeaderSubmenuStreet from "../../components/HeaderSubmenuCards/HeaderSubmenuStreet";
+import logo from './basketlogo.png'
 
 
 const Header = () => {
@@ -36,7 +37,7 @@ const Header = () => {
                 <div className="container">
                     <div className="header">
                         <h1 onClick={()=> navigate('/')}>
-                            <img className="logo" src="https://static.insales-cdn.com/assets/1/3047/1813479/1652615264/Basketroom__Logo_.jpg" alt='basket brand logo'/>
+                            <img width={120} className="logo" src={logo} alt='basket brand logo'/>
                         </h1>
 
                         <div className='header__contacts'>

@@ -5,6 +5,7 @@ import ClothesAddBtn from "./ClothesAddBtn/ClothesAddBtn";
 import {useForm} from "react-hook-form";
 import {useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
+import CreateColors from "./CreateColors/CreateColors";
 
 const ClothesAdd = () => {
 
@@ -21,7 +22,7 @@ const ClothesAdd = () => {
 
     const navigate = useNavigate();
 
-    const [colors, setColors] = useState('');
+    const [colors, setColors] = useState([]);
     const [sizes, setSizes] = useState([]);
     const [images, setImages] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -47,6 +48,7 @@ const ClothesAdd = () => {
             axios.post('/clothes', {
                 ...data,
                 sizes,
+                colors,
                 images,
                 "category": category,
                 "subcategory": subCategory
@@ -54,13 +56,28 @@ const ClothesAdd = () => {
                 setLoading(false);
 
                 toast("Продукт успешно создан");
-                reset()
+                reset();
+                setColors([]);
+                setSizes([]);
+                resetImages()
             }).catch(() => {
                 toast("Ошибка при создании продукта")
             })
         } catch (err) {
             toast("Ошибка при создании продукта")
         }
+    };
+    const resetImages = () =>{
+      setImage1('')
+      setImage2('')
+      setImage3('')
+      setImage4('')
+      setImage5('')
+      setImage6('')
+      setImage7('')
+      setImage8('')
+      setImage9('')
+      setImage10('')
     };
 
     useEffect( () => {
@@ -102,7 +119,7 @@ const ClothesAdd = () => {
             </ul>
             <div className='create__form-block'>
                 <label htmlFor="category">Категория</label>
-                <select onChange={(e) => setCategory(e.target.value)}  className='create__form-select'  id='category'>
+                <select onChange={(e) => {setCategory(e.target.value);  setSizes([]); setColors([])}}  className='create__form-select'  id='category'>
                     <option value='shoes'>Обувь</option>
                     <option value='clothes'>Одежда</option>
                     <option value='other'>Другое</option>
@@ -149,6 +166,25 @@ const ClothesAdd = () => {
                                 <CreateSizes sizes={sizes} setSizes={setSizes} size='XXL'/>
                             </div> : ''
                     }
+                </div>
+                <div className={'create__form-sizes'}>
+                    <p className='create__form-sizes-text'>Выбрать цвета :</p>
+                    <div className='create__form-sizes-row'>
+                        <CreateColors colors={colors} setColors={setColors} color='white'/>
+                        <CreateColors colors={colors} setColors={setColors} color='black'/>
+                        <CreateColors colors={colors} setColors={setColors} color='grey'/>
+                        <CreateColors colors={colors} setColors={setColors} color='red'/>
+                        <CreateColors colors={colors} setColors={setColors} color='brown'/>
+                        <CreateColors colors={colors} setColors={setColors} color='pink'/>
+                        <CreateColors colors={colors} setColors={setColors} color='orange'/>
+                        <CreateColors colors={colors} setColors={setColors} color='yellow'/>
+                        <CreateColors colors={colors} setColors={setColors} color='#66CDAA'/>
+                        <CreateColors colors={colors} setColors={setColors} color='blue'/>
+                        <CreateColors colors={colors} setColors={setColors} color='blue'/>
+                        <CreateColors colors={colors} setColors={setColors} color='violet'/>
+
+                    </div >
+
                 </div>
 
                 {
