@@ -21,7 +21,7 @@ const ClothesAdd = () => {
 
     const navigate = useNavigate();
 
-    const [colors, setColors] = useState('');
+    const [colors, setColors] = useState([]);
     const [sizes, setSizes] = useState([]);
     const [images, setImages] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -42,25 +42,34 @@ const ClothesAdd = () => {
     const [subCategory, setSubCategory] = useState('basketball')
 
     const addClothe = (data) => {
-        try {
-            setLoading(true);
-            axios.post('/clothes', {
-                ...data,
-                sizes,
-                images,
-                "category": category,
-                "subcategory": subCategory
-            }).then(() => {
-                setLoading(false);
+        console.log({
+            ...data,
+            sizes,
+            images,
+            category,
+            subCategory
+        })
+        reset()
 
-                toast("Продукт успешно создан");
-                reset()
-            }).catch(() => {
-                toast("Ошибка при создании продукта")
-            })
-        } catch (err) {
-            toast("Ошибка при создании продукта")
-        }
+        // try {
+        //     setLoading(true);
+        //     axios.post('/clothes', {
+        //         ...data,
+        //         sizes,
+        //         images,
+        //         "category": category,
+        //         "subcategory": subCategory
+        //     }).then(() => {
+        //         setLoading(false);
+        //
+        //         toast("Продукт успешно создан");
+        //         reset()
+        //     }).catch(() => {
+        //         toast("Ошибка при создании продукта")
+        //     })
+        // } catch (err) {
+        //     toast("Ошибка при создании продукта")
+        // }
     };
 
     useEffect( () => {
@@ -176,8 +185,8 @@ const ClothesAdd = () => {
                                 </select>
                             </div>
                             : <div className='create__form-block'>
-                                <label htmlFor="category">Подкатегория</label>
-                                <select onChange={(e) => setSubCategory(e.target.value)}  className='create__form-select'  id='category'>
+                                <label htmlFor="subcategory">Подкатегория</label>
+                                <select onChange={(e) => setSubCategory(e.target.value)}  className='create__form-select'  id='subcategory'>
                                     <option value='ball'>Мячи</option>
                                     <option value='attribute'>Атрибутика</option>
                                     <option value='decorations'>Украшения</option>
@@ -187,7 +196,7 @@ const ClothesAdd = () => {
                 }
             </div>
              <div className='create__form-block'>
-                <label htmlFor="category">Бренд</label>
+                <label htmlFor="brand">Бренд</label>
                 <select {...register('brand', {
                     required: 'Это поле обязательное *',
                 })} className='create__form-select'  id='brand'>
