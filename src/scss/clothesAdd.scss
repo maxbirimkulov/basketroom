@@ -5,6 +5,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  &-tag{
+    width: 200px;
+  }
   &-label {
     width: 100px;
   }
@@ -78,6 +81,7 @@
   &-btn {
     padding: 15px 0;
     background: #E0BEA2;
+    //background: #fcb17e;
     border: none;
     color: white;
     cursor: pointer;
@@ -147,6 +151,9 @@
 .create__size {
   background: black;
   color: white;
+}
+.create__color{
+  border-radius: 50%;
 }
 input[type='number']::-webkit-outer-spin-button,
 input[type='number']::-webkit-inner-spin-button {

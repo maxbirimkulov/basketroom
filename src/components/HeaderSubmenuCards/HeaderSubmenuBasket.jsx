@@ -3,6 +3,7 @@ import {NavLink, Link, useNavigate} from "react-router-dom";
 import {IoIosArrowForward} from 'react-icons/io'
 import {searchProduct} from "../../redux/clothes";
 import {useDispatch} from "react-redux";
+import {brandsData} from "../../utils/brands";
 
 const HeaderSubmenuBasket = ({setSearch}) => {
     const [drop, setDrop] = useState(false);
