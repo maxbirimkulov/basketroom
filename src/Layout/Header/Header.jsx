@@ -44,7 +44,7 @@ const Header = () => {
                         </div>
 
                         <form onSubmit={(e) => searching(e)} className='header__label'>
-                            <input onChange={(event => setSearch(event.target.value))} className='header__label-input' value={search}  type="text" placeholder='Поиск по каталогу'/>
+                            <input onChange={(event => setSearch(event.target.value))} className='header__label-input' value={search}  type="search" placeholder='Поиск по каталогу'/>
 
                             <div className='header__label-popup'>
                                 <ul className='header__label-list'>

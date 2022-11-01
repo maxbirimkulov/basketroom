@@ -14,6 +14,7 @@ const ClothesAddBtn = ({images,setImages, num}) => {
             await axios.post('/upload', formData).then(({data}) =>  setImages(data.url))
 
         } catch (err){
+            console.log(e)
             console.log(err, 'Ошибка')
             alert('Ошибка при загрузке файла')
         }

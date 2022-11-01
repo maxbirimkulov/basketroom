@@ -1,21 +1,27 @@
 import React, {useEffect, useState} from 'react';
 import {useForm} from "react-hook-form";
-import {Link, useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import SalesInfo from "../../components/SalesInfo/SalesInfo";
-import makeAnimated from 'react-select/animated';
-import Slider from '@material-ui/core/Slider';
-import debounce from "@material-ui/core/utils/debounce";
 import Card from "../../components/Card/Card";
 import {Swiper, SwiperSlide} from "swiper/react";
 import {Navigation} from "swiper";
 import {useDispatch, useSelector} from "react-redux";
-import {getProducts, changeRange, changeProductLimit, switchPage, clearFilters} from "../../redux/clothes";
-import Select from 'react-select';
+import {getProducts, switchPage, clearFilters} from "../../redux/clothes";
 import {GiHamburgerMenu} from 'react-icons/gi';
 
 import FavoritesCardLoaded from "../Favorites/FavoritesCardLoaded";
+import SelectByCategory from "../../components/Selects/SelectByCategory/SelectByCategory";
+import SelectByBrands from "../../components/Selects/SelectByBrands/SelectByBrands";
+import SelectOnPageCount from "../../components/Selects/SelectOnPageCount/SelectOnPageCount";
+import ShowPage from "../../components/Selects/ShowPage/ShowPage";
+import SortType from "../../components/Selects/SortType/SortType";
+import ChooseSizes from "../../components/Selects/ChooseSizes/ChooseSizes";
+import ChooseBrand from "../../components/Selects/ChooseBrand/ChooseBrand";
+import SelectPrice from "../../components/Selects/SelectPrice/SelectPrice";
+import CatalogList from "../../components/CatalogList/CatalogList";
+import CatalogPagination from "../../components/CatalogPagination/CatalogPagination";
 
-const animatedComponents = makeAnimated();
+
 const Catalog = () => {
 
     const dispatch = useDispatch();
@@ -23,17 +29,21 @@ const Catalog = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        dispatch(clearFilters({page: params.page, category: ''}))
+        dispatch(clearFilters({page: params.page, category: ''}));
         console.log(123)
         console.log(filter.category)
     }, [params.category]);
 
-    const {status, products, productsCount, watchedProducts, error, filter} = useSelector(s => s.clothes);
-    const {reset, handleSubmit, register} = useForm();
+    const {productsCount, watchedProducts, filter} = useSelector(s => s.clothes);
+    const {
+        reset,
+        handleSubmit,
+        register
+    } = useForm();
     const pagesPaginate = [];
     new Array(Math.ceil(productsCount / filter.limit)).fill(null, 0).map((p, idx) => {
         pagesPaginate.push({id: idx, value: idx + 1, label: `${idx + 1}`})
-    })
+    });
     useEffect(() => {
         dispatch(getProducts({
             category: filter.category,
@@ -46,17 +56,16 @@ const Catalog = () => {
             desc: filter.desc
         }))
     }, [filter]);
-
-
     const onSubmit = (data) => alert(JSON.stringify(data));
     const resetSelect = () => {
         reset();
         navigate('/catalog/1');
         dispatch(clearFilters({
-            category: [''],
+            category: '',
             title: '',
             from: filter.range.from,
             to: filter.range.to,
+            brand: '',
             page: '1',
             limit: 12,
             desc: false
@@ -64,41 +73,10 @@ const Catalog = () => {
         window.scrollTo(0, 0);
         // убрать фильтры
     };
-    const [value, setValue] = React.useState([filter.range.from, filter.range.to]);
     const [side, setSide] = useState(false);
 
 
-    const rangeSelector = (event, newValue) => {
-        setValue(newValue);
-        dispatch(changeRange({from: newValue[0], to: newValue[1]}));
-        console.log(newValue);
-        dispatch(switchPage(1));
-        navigate('/catalog/1')
-    };
-    const productsOnPage = (count) => {
-        filter.limit !== count &&
-        dispatch(changeProductLimit({limit: count, page: '1'}));
-        navigate('/catalog/1')
-    };
-    const clickedPagination = (pageBtn) => {
-        filter.page !== pageBtn &&
-        dispatch(switchPage(pageBtn));
-        navigate(`/catalog/${pageBtn}`)
-    };
-    const filterCategories = (target) => {
-        dispatch(clearFilters({category: target}));
-    };
-    const filterBrands = (target) => {
-        const categories = target.map(obj => obj.value);
-        dispatch(clearFilters({brand: categories}));
-        // alert(JSON.stringify(categories))
-    };
 
-    const setSort = (target) => {
-        const sign = target.value;
-        sign === 'По возростанию цены' && dispatch(clearFilters({desc: false}));
-        sign === 'По убыванию цены' && dispatch(clearFilters({desc: true}));
-    };
 
     return (
         <div className=''>
@@ -109,287 +87,34 @@ const Catalog = () => {
                         <div className={'catalog__sidebar-categories simpleText'}>
 
                             <h3>Отображение и поиск</h3>
-                            <div>
-                                <Select
-                                    onChange={(e) => filterCategories(e.value)}
-                                    placeholder={'Посик по категориям'}
-                                    className='catalog__sidebar-select'
-                                    defaultValue={filter.category}
-                                    options={
-                                            params.category === 'clothes' ?
-                                                [
-                                                    {id: 1, value: 'hoodie', label: 'Толстовки'},
-                                                    {id: 2, value: 'form', label: 'Форма'},
-                                                    {id: 3, value: 'pants', label: 'Штаны'},
-                                                    {id: 4, value: 'socks', label: 'Носки'},
-                                                    {id: 4, value: 'accessories', label: 'Аксессуары'},
-                                                ] : params.category === 'shoes' ?
-                                                    [
-                                                        {id: 1, value: 'basketball', label: 'Баскетбольные'},
-                                                        {id: 2, value: 'street', label: 'Уличные'},
-                                                        {id: 3, value: 'premium', label: 'Премиум'},
-                                                        {id: 4, value: 'other', label: 'Другое'},
-                                                    ] : params.category === 'other' ?
-                                                        [
-                                                            {id: 1, value: 'ball', label: 'Мячи'},
-                                                            {id: 2, value: 'attribute', label: 'Атрибутика'},
-                                                            {id: 3, value: 'decorations', label: 'Украшения'},
-                                                            {id: 4, value: 'other', label: 'Другое'},
-                                                        ] : []
+                            <SelectByCategory/>
 
-                                        }
-                                />
-                                {/*<Select*/}
-                                {/*    onChange={(target) => filterCategories(target)}*/}
-                                {/*    placeholder={'Посик по категориям'}*/}
-                                {/*    isMulti*/}
-                                {/*    name="categories"*/}
-                                {/*    closeMenuOnSelect={false}*/}
-                                {/*    components={animatedComponents}*/}
-                                {/*    options={*/}
-                                {/*        params.category === 'clothes' ?*/}
-                                {/*            [*/}
-                                {/*                {id: 1, value: 'hoodie', label: 'Толстовки'},*/}
-                                {/*                {id: 2, value: 'form', label: 'Форма'},*/}
-                                {/*                {id: 3, value: 'pants', label: 'Штаны'},*/}
-                                {/*                {id: 4, value: 'socks', label: 'Носки'},*/}
-                                {/*                {id: 4, value: 'accessories', label: 'Аксессуары'},*/}
-                                {/*            ] : params.category === 'shoes' ?*/}
-                                {/*                [*/}
-                                {/*                    {id: 1, value: 'basketball', label: 'Баскетбольные'},*/}
-                                {/*                    {id: 2, value: 'street', label: 'Уличные'},*/}
-                                {/*                    {id: 3, value: 'premium', label: 'Премиум'},*/}
-                                {/*                    {id: 4, value: 'other', label: 'Другое'},*/}
-                                {/*                ] : params.category === 'other' ?*/}
-                                {/*                    [*/}
-                                {/*                        {id: 1, value: 'ball', label: 'Мячи'},*/}
-                                {/*                        {id: 2, value: 'attribute', label: 'Атрибутика'},*/}
-                                {/*                        {id: 3, value: 'decorations', label: 'Украшения'},*/}
-                                {/*                        {id: 4, value: 'other', label: 'Другое'},*/}
-                                {/*                    ] : []*/}
-
-                                {/*    }*/}
-                                {/*    className="basic-multi-select"*/}
-                                {/*    classNamePrefix="select"*/}
-                                {/*/>*/}
-                            </div>
-                            <div>
-                                <Select
-                                    onChange={(target) => filterBrands(target)}
-                                    defaultValue={[]}
-                                    placeholder={'Посик по брендам'}
-                                    isMulti
-                                    name="brands"
-                                    closeMenuOnSelect={false}
-                                    components={animatedComponents}
-                                    options={[
-                                        {id: 1, value: 'jordan', label: 'jordan'},
-                                        {id: 2, value: 'adidas', label: 'adidas'},
-                                        {id: 3, value: 'nike', label: 'nike'},
-                                        {id: 4, value: 'puma', label: 'puma'},
-                                    ]}
-                                    className="basic-multi-select"
-                                    classNamePrefix="select"
-                                />
-                            </div>
-
+                            <SelectByBrands/>
                             <div>
                                 <span>Отображать по</span>
-                                <Select
-                                    onChange={(e) => productsOnPage(+e.value)}
-                                    placeholder={filter.limit + ' шт'}
-                                    className='catalog__sidebar-select'
-                                    options={[
-                                        {id: 1, value: '12', label: '12 шт'},
-                                        {id: 2, value: '24', label: '24 шт'},
-                                        {id: 3, value: '48', label: '48 шт'},
-                                        {id: 4, value: '96', label: '96 шт'},
-                                    ]}
-                                />
+                                <SelectOnPageCount/>
                             </div>
                             <div>
                                 <span>Сейчас на странице {filter.page} из {pagesPaginate.length}</span>
-                                <Select
-                                    className='catalog__sidebar-select'
-                                    onChange={(e) => {
-                                        clickedPagination(e.value)
-                                    }}
-                                    placeholder={params.page}
-                                    options={pagesPaginate}
-                                />
-
+                               <ShowPage/>
                             </div>
-
                             <div>
                                 <span>Порядок</span>
-                                <Select
-                                    onChange={(e) => setSort(e)}
-                                    className='catalog__sidebar-select'
-                                    defaultValue={{id: 1, value: 'По умолчанию', label: 'По умолчанию'}}
-                                    options={[
-                                        {id: 1, value: 'По умолчанию', label: 'По умолчанию'},
-                                        {id: 2, value: 'По популярности', label: 'По популярности'},
-                                        {id: 3, value: 'По возростанию цены', label: 'По возростанию цены'},
-                                        {id: 4, value: 'По убыванию цены', label: 'По убыванию цены'},
-                                        {id: 5, value: 'По новинкам', label: 'По новинкам'},
-                                        {id: 6, value: 'По скидке', label: 'По скидке'},
-                                        {id: 7, value: 'По алфавиту', label: 'По алфавиту'},
-                                    ]}
-                                />
+                                <SortType/>
                             </div>
                         </div>
 
                         <div className={'catalog__sidebar-categories simpleText'}>
-
-                            <h3>Цена</h3>
-
-                            <Slider
-                                defaultValue={value}
-                                onChange={debounce(rangeSelector, 1500)}
-                                valueLabelDisplay="auto"
-                                step={10}
-                                min={0}
-                                max={20000}
-                            />
-                            Цена от {value[0]}р до {value[1]}р
+                           <SelectPrice/>
                         </div>
-
-
                         <div className={'catalog__sidebar-categories simpleText'}>
-
                             <h3 className='catalog__sidebar-title'>Размер</h3>
-
-                            <label className={'catalog__sidebar-category'}>
-                                <input {...register('sizes')}
-                                       value={50} className={'catalog__sidebar-category_box'} type="checkbox"
-                                       onClick={(e) => console.log(e.target)}/>
-                                <span className="category_box"/> US-50
-                            </label>
-                            <label className={'catalog__sidebar-category'}>
-                                <input {...register('sizes')}
-                                       value={49} className={'catalog__sidebar-category_box'} type="checkbox"
-                                       onClick={(e) => console.log(e.target)}/>
-                                <span className="category_box"/> US-49
-                            </label>
-
-                            <label className={'catalog__sidebar-category'}>
-                                <input {...register('sizes')}
-                                       value={48} className={'catalog__sidebar-category_box'} type="checkbox"
-                                       onClick={(e) => console.log(e.target)}/>
-                                <span className="category_box"/> US-48
-                            </label>
-                            <label className={'catalog__sidebar-category'}>
-                                <input {...register('sizes')}
-                                       value={47} className={'catalog__sidebar-category_box'} type="checkbox"
-                                       onClick={(e) => console.log(e.target)}/>
-                                <span className="category_box"/> US-47
-                            </label>
-                            <label className={'catalog__sidebar-category'}>
-                                <input {...register('sizes')}
-                                       value={46} className={'catalog__sidebar-category_box'} type="checkbox"
-                                       onClick={(e) => console.log(e.target)}/>
-                                <span className="category_box"/> US-46
-                            </label>
-
-                            <label className={'catalog__sidebar-category'}>
-                                <input {...register('sizes')}
-                                       value={45} className={'catalog__sidebar-category_box'} type="checkbox"
-                                       onClick={(e) => console.log(e.target)}/>
-                                <span className="category_box"/> US-45
-                            </label>
-                            <label className={'catalog__sidebar-category'}>
-                                <input {...register('sizes')}
-                                       value={44} className={'catalog__sidebar-category_box'} type="checkbox"
-                                       onClick={(e) => console.log(e.target)}/>
-                                <span className="category_box"/> US-44
-                            </label>
-                            <label className={'catalog__sidebar-category'}>
-                                <input {...register('sizes')}
-                                       value={43} className={'catalog__sidebar-category_box'} type="checkbox"
-                                       onClick={(e) => console.log(e.target)}/>
-                                <span className="category_box"/> US-43
-                            </label>
-
-                            <label className={'catalog__sidebar-category'}>
-                                <input {...register('sizes')}
-                                       value={42} className={'catalog__sidebar-category_box'} type="checkbox"
-                                       onClick={(e) => console.log(e.target)}/>
-                                <span className="category_box"/> US-42
-                            </label>
-
-                            <label className={'catalog__sidebar-category'}>
-                                <input {...register('sizes')}
-                                       value={41} className={'catalog__sidebar-category_box'} type="checkbox"
-                                       onClick={(e) => console.log(e.target)}/>
-                                <span className="category_box"/> US-41
-                            </label>
-
-                            <label className={'catalog__sidebar-category'}>
-                                <input {...register('sizes')}
-                                       value={40} className={'catalog__sidebar-category_box'} type="checkbox"
-                                       onClick={(e) => console.log(e.target)}/>
-                                <span className="category_box"/> US-40
-                            </label>
-                            <label className={'catalog__sidebar-category'}>
-                                <input {...register('sizes')}
-                                       value={38} className={'catalog__sidebar-category_box'} type="checkbox"
-                                       onClick={(e) => console.log(e.target)}/>
-                                <span className="category_box"/> US-38
-                            </label>
-                            <label className={'catalog__sidebar-category'}>
-                                <input {...register('sizes')}
-                                       value={37} className={'catalog__sidebar-category_box'} type="checkbox"
-                                       onClick={(e) => console.log(e.target)}/>
-                                <span className="category_box"/> US-37
-                            </label>
-                            <label className={'catalog__sidebar-category'}>
-                                <input {...register('sizes')}
-                                       value={36} className={'catalog__sidebar-category_box'} type="checkbox"
-                                       onClick={(e) => console.log(e.target)}/>
-                                <span className="category_box"/> US-36
-                            </label>
-
+                            <ChooseSizes register={register}/>
                         </div>
+
                         <h3>Бренд</h3>
                         <div className={'catalog__sidebar-categories simpleText'}>
-                            <label className={'catalog__sidebar-category'}>
-                                <input {...register('brand')}
-                                       value='jordan' className={'catalog__sidebar-category_box'} type="checkbox"
-                                       onClick={(e) => console.log(e.target)}/>
-                                <span className="category_box"/>Jordan
-                            </label>
-                            <label className={'catalog__sidebar-category'}>
-                                <input {...register('brand')}
-                                       value='adidas' className={'catalog__sidebar-category_box'} type="checkbox"
-                                       onClick={(e) => console.log(e.target)}/>
-                                <span className="category_box"/>adidas
-                            </label>
-                            <label className={'catalog__sidebar-category'}>
-                                <input {...register('brand')}
-                                       value='nike' className={'catalog__sidebar-category_box'} type="checkbox"
-                                       onClick={(e) => console.log(e.target)}/>
-                                <span className="category_box"/>Nike
-                            </label>
-                            <label className={'catalog__sidebar-category'}>
-                                <input {...register('brand')}
-                                       value='puma' className={'catalog__sidebar-category_box'} type="checkbox"
-                                       onClick={(e) => console.log(e.target)}/>
-                                <span className="category_box"/>Puma
-                            </label>
-                            <label className={'catalog__sidebar-category'}>
-                                <input {...register('brand')}
-                                       value='converse' className={'catalog__sidebar-category_box'} type="checkbox"
-                                       onClick={(e) => console.log(e.target)}/>
-                                <span className="category_box"/>Converse
-                            </label>
-                            <label className={'catalog__sidebar-category'}>
-                                <input {...register('brand')}
-                                       value='AAPE' className={'catalog__sidebar-category_box'} type="checkbox"
-                                       onClick={(e) => console.log(e.target)}/>
-                                <span className="category_box"/>AAPE
-                            </label>
-
-
+                            <ChooseBrand register={register}/>
                         </div>
 
                         <div className={'catalog__sidebar-categories simpleText'}>
@@ -442,7 +167,9 @@ const Catalog = () => {
                             {/*</label>*/}
 
                         </div>
-                        <button className={'catalog__sidebar-reset'} onClick={handleSubmit(resetSelect)}>Сбросить
+
+                        <button className={'catalog__sidebar-reset'} onClick={handleSubmit(resetSelect)}>
+                            Сбросить
                         </button>
                         <button type='submit' className='catalog__sidebar-found'>
                             Найдено товаров: <span className='catalog__sidebar-found_count'>{productsCount}</span>
@@ -464,45 +191,10 @@ const Catalog = () => {
                             ' роль в карьере Майкла, именно в этих кроссовках, Джордан привел свою команду к победе на олимпиаде 1992 года. Кроссовки Майкла Джордана' +
                             ' - Air Jordan 7, вы можете купить в баскетбольном магазине Basketroom.ru'}</p>
                         <div className="catalog__list-products">
-                            {
-                                status === 'loading' ?
-                                    <>
-                                        {
-                                            new Array(filter.limit).fill(null, 0).map(() => (
-                                                <div className="catalog__productCard">
-                                                    <FavoritesCardLoaded/>
-                                                </div>
-                                            ))
-                                        }
-                                    </>
-                                    :
-                                    products?.map(pare => (
-                                        <div key={pare?.id} className="catalog__productCard">
-                                            <Card product={pare}/>
-                                        </div>
-                                    ))
-                            }
-                            {
-                                error && <h2>An error occerd: {error}</h2>
-                            }
+                            <CatalogList/>
                         </div>
 
-
-                        <div className='catalog__list-paginate'>
-                            {/*<button onClick={() => productsOnPage(filter.limit + 3)} className='catalog__list-paginateMore'>{status === 'loading' ? 'Загружаем' : 'Показать еще'}</button>*/}
-                            <div className='catalog__list-paginateBtns'>
-                                {
-                                    new Array(Math.ceil(productsCount / filter.limit)).fill(null, 0).map((p, idx) => (
-                                        <button
-                                            onClick={(e) => {
-                                                clickedPagination(e.target.textContent);
-                                                navigate(`/catalog/${idx + 1}`)
-                                            }}
-                                            className={`catalog__list-paginateBtn ${filter.page == (idx + 1) && 'active'}`}>{idx + 1}</button>
-                                    ))
-                                }
-                            </div>
-                        </div>
+                        <CatalogPagination/>
 
                     </div>
 
