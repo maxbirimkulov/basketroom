@@ -20,7 +20,7 @@ const HeaderSubmenuStreet = ({setSearch}) => {
         <div className='header__submenu-categories'>
             <div className='header__submenu-link' onMouseEnter={() => setDrop('adidas')}>
                 adidas <IoIosArrowForward/>
-                <div className='header__submenu-categories'>
+                <div className={drop === 'adidas' && `header__submenu-drop`}>
                     {
                         drop === 'adidas' && adidasLi.map(li => (
                             <div onClick={(e) => searching(e)} className='header__submenu-link'>{li}</div>
@@ -30,7 +30,7 @@ const HeaderSubmenuStreet = ({setSearch}) => {
             </div>
             <div className='header__submenu-link' onMouseEnter={() => setDrop('nike')}>
                 nike <IoIosArrowForward/>
-                <div className='header__submenu-categories'>
+                <div className={drop === 'nike' && `header__submenu-drop`}>
                     {
                         drop === 'nike' && nikeKi.map(li => (
                             <p className='header__submenu-link'>{li}</p>

@@ -30,9 +30,11 @@ const SelectByBrands = () => {
                 allBrands: []
             }
         ).allBrands.sort((a,b) => a.value + b.value);
+    // console.log(options)
     const dispatch = useDispatch();
 
     const handleChange = (event) => {
+        console.log(32)
         dispatch(clearFilters({brand: event.target.value}));
     };
 
@@ -45,19 +47,15 @@ const SelectByBrands = () => {
                 <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    value={filter.brands}
-                    label={'Поиск по категориям'}
+                    value={filter.brand}
+                    label={'Поиск по бренду'}
                     onChange={handleChange}
                 >
-                    <div className={'demo-simple-select'}>
+                    {/*<div className={'demo-simple-select'}>*/}
                         {
-                            options.map((item) => (
-                                <MenuItem
-                                    key={item.id} value={item.value}
-                                >{item.label}</MenuItem>
-                            ))
+                            options.map((item) => <MenuItem key={item.id} value={item.value} >{item.label}</MenuItem> )
                         }
-                    </div>
+                    {/*</div>*/}
 
 
 
