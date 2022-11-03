@@ -7,6 +7,7 @@ import {useNavigate} from "react-router-dom";
 import {toast} from "react-toastify";
 import CreateColors from "./CreateColors/CreateColors";
 
+
 const ClothesAdd = () => {
 
     const {
@@ -41,25 +42,41 @@ const ClothesAdd = () => {
 
     const [category, setCategory] = useState('shoes')
     const [subCategory, setSubCategory] = useState('basketball')
+    const [brand, setBrand] = useState('nike')
+
+    const [tags,setTags] = useState([])
+    const [tag,setTag] = useState('')
+
 
     const addClothe = (data) => {
         try {
             setLoading(true);
+
             axios.post('/clothes', {
                 ...data,
                 sizes,
                 colors,
                 images,
+                brand,
+                "tag": tag,
                 "category": category,
                 "subcategory": subCategory
-            }).then(() => {
-                setLoading(false);
+            }).then( async () => {
+                await setLoading(false);
+                await resetImages()
+                if (!tags.filter((item) => item.title.includes(tag)).length){
+                    await axios.post('/tag', {
+                        "title": tag,
+                        category,
+                        "subcategory": subCategory,
+                        brand
+                    }).then(() => console.log('Тег успешно создан')).catch(() => console.log('ошибка при создание тега'))
+                }
+               await toast("Продукт успешно создан");
+               await reset();
+               await setColors([]);
+               await setSizes([]);
 
-                toast("Продукт успешно создан");
-                reset();
-                setColors([]);
-                setSizes([]);
-                resetImages()
             }).catch(() => {
                 toast("Ошибка при создании продукта")
             })
@@ -83,6 +100,14 @@ const ClothesAdd = () => {
     useEffect( () => {
         setImages([image1,image2,image3,image4, image5, image6, image7, image8, image9, image10])
     }, [image1,image2,image3,image4, image5, image6, image7, image8, image9, image10]);
+
+    useEffect(() => {
+        axios(`/tag?category=${category}&subcategory=${subCategory}&brand=${brand}`).then(({data}) => {
+            setTags(data)
+            console.log(data)
+        }).catch((err) => console.log(err))
+    },[subCategory, brand, category])
+
 
     return (
         <form className='create__form-content' onSubmit={handleSubmit(addClothe)}>
@@ -212,8 +237,8 @@ const ClothesAdd = () => {
                                 </select>
                             </div>
                             : <div className='create__form-block'>
-                                <label htmlFor="category">Подкатегория</label>
-                                <select onChange={(e) => setSubCategory(e.target.value)}  className='create__form-select'  id='category'>
+                                <label htmlFor="subcategory">Подкатегория</label>
+                                <select onChange={(e) => setSubCategory(e.target.value)}  className='create__form-select'  id='subcategory'>
                                     <option value='ball'>Мячи</option>
                                     <option value='attribute'>Атрибутика</option>
                                     <option value='decorations'>Украшения</option>
@@ -223,20 +248,24 @@ const ClothesAdd = () => {
                 }
             </div>
              <div className='create__form-block'>
-                <label htmlFor="category">Бренд</label>
-                <select {...register('brand', {
-                    required: 'Это поле обязательное *',
-                })} className='create__form-select'  id='brand'>
-                    <option>adidas</option>
-                    <option>nike</option>
-                    <option>puma</option>
-                    <option>jordan</option>
+                <label htmlFor="brand">Бренд</label>
+                <select value={brand} onChange={(e) => setBrand(e.target.value)}  className='create__form-select'  id='brand'>
+                    <option value='adidas'>Adidas</option>
+                    <option value='nike'>Nike</option>
+                    <option value='puma'>Puma</option>
+                    <option value='jordan'>Jordan</option>
                 </select>
             </div>
             <div className='create__form-block'>
                 <label className='create__form-label' htmlFor="tag">Тег</label>
-                <input {...register('tag')} className='create__form-input'  type="text"  id='tag'/>
-                <span>{errors?.title?.message}</span>
+                <input value={tag} onChange={(e) => setTag(e.target.value)} type="search"/>
+                <ul>
+                    {tags && tags.filter((item) => {
+                        return item.title.includes(tag)
+                    }).map((item) => (
+                        <li  onClick={()=> setTag(item.title)}>{item.title}</li>
+                    ))}
+                </ul>
             </div>
             <div className='create__form-block'>
                 <label className='create__form-label' htmlFor="description">Описание товара</label>

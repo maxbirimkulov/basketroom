@@ -5,6 +5,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  &-tag{
+    width: 200px;
+  }
   &-label {
     width: 100px;
   }
