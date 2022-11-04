@@ -7,7 +7,7 @@ import {Swiper, SwiperSlide} from "swiper/react";
 import {Navigation} from "swiper";
 import {useDispatch, useSelector} from "react-redux";
 import {getProducts, switchPage, clearFilters} from "../../redux/clothes";
-import {GiHamburgerMenu} from 'react-icons/gi';
+import {CgMenuGridO} from 'react-icons/cg';
 
 import FavoritesCardLoaded from "../Favorites/FavoritesCardLoaded";
 import SelectByCategory from "../../components/Selects/SelectByCategory/SelectByCategory";
@@ -82,7 +82,10 @@ const Catalog = () => {
         <div className=''>
             <div className="container">
                 <div className="catalog">
-                    <p className={`catalog__sidebar-burger ${side && 'active'}`} onClick={() => setSide(!side)}> </p>
+                    <div  onClick={() => setSide(!side)} className={`catalog__sidebar-trigger ${side && 'active'}`}>
+                        <CgMenuGridO/>
+                        <p className={`catalog__sidebar-burger ${side && 'active'}`}> </p>
+                    </div>
                     <form className={`catalog__sidebar ${side && 'active'}`} onSubmit={handleSubmit(onSubmit)}>
                         <div className={'catalog__sidebar-categories simpleText'}>
 
@@ -180,9 +183,9 @@ const Catalog = () => {
 
                     <div className={'catalog__list'}>
                         <p>Главная/ мужские</p>
-                        <p>{Array.isArray(filter?.category) && filter?.category.map(el => (
+                        <p>{Array.isArray(filter?.category) ? filter?.category.map(el => (
                             <span>{el}/  </span>
-                        ))}</p>
+                        )) : 'net category'}</p>
                         <p>
                             {params.category && 'У всех баскетбольных кроссовок Майкла Джордана есть своя неповторимая история.' +
                             ' История Air Jordan 7 началась в 1992 году. На силуэт кроссовок повлияли африканские мотивы, увиденные дизайнером' +

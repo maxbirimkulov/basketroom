@@ -160,7 +160,7 @@ const Product = () => {
                             <div className='product__top-sizes'>
 
                                 {
-                                    oneProduct.sizes.map((size) => (
+                                    oneProduct?.sizes?.map((size) => (
                                         <button className='product__top-size active'> {size}</button>
                                         )
                                     )
@@ -213,7 +213,7 @@ const Product = () => {
                             }   }
                             className="mySwiper">
                         {
-                            products?.filter((item ) => item.brand === oneProduct?.brand  ).map(pare => (
+                            products?.filter((item ) => item.brand === oneProduct?.brand  )?.map(pare => (
                                 <div key={pare._id} className='home__productCard'>
                                     <SwiperSlide><Card product={pare} page={'slide'}/></SwiperSlide>
                                 </div>

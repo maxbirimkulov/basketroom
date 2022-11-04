@@ -12,7 +12,7 @@ const CatalogList = () => {
                 status === 'loading' ?
                     <>
                         {
-                            new Array(filter.limit).fill(null, 0).map(() => (
+                            new Array(filter.limit).fill(null, 0)?.map(() => (
                                 <div className="catalog__productCard">
                                     <FavoritesCardLoaded/>
                                 </div>

@@ -258,8 +258,13 @@ const ClothesAdd = () => {
             </div>
             <div className='create__form-block'>
                 <label className='create__form-label' htmlFor="tag">Тег</label>
-                <input value={tag} onChange={(e) => setTag(e.target.value)} type="search"/>
-                <ul>
+                <input className='' value={tag} onChange={(e) => setTag(e.target.value)} type="search"/>
+                <ul className='create__form-ul'>
+                    <li  onClick={()=> setTag('tem.title')}>mlka</li>
+                    <li  onClick={()=> setTag('tem.title')}>mlka</li>
+                    <li  onClick={()=> setTag('tem.title')}>mlka</li>
+                    <li  onClick={()=> setTag('tem.title')}>mlka</li>
+
                     {tags && tags.filter((item) => {
                         return item.title.includes(tag)
                     }).map((item) => (

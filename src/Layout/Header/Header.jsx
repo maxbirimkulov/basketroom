@@ -15,10 +15,10 @@ const Header = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const user = useSelector(s => s.user.user);
-    const {filter, status, error} = useSelector(state => state.clothes);
+    const {filter} = useSelector(state => state.clothes);
     let price = user?.cart?.reduce((acc, rec) => acc + rec.price, 0);
 
-    const searching = (e) =>{
+    const searching = (e) => {
         e.preventDefault();
         console.log(e.target[0].value);
         navigate('/catalog');
@@ -27,8 +27,9 @@ const Header = () => {
 
     const [submenu, setSubmenu] = useState(false);
     const [search, setSearch] = useState(filter.title);
+    const [hidden, setHidden ] = useState(false)
 
-    const al = (e) =>{
+    const al = (e) => {
         setSearch(e.target.textContent)
     };
     return (
@@ -36,7 +37,7 @@ const Header = () => {
             <header>
                 <div className="container">
                     <div className="header">
-                        <h1 onClick={()=> navigate('/')}>
+                        <h1 onClick={() => navigate('/')}>
                             <img width={120} className="logo" src={logo} alt='basket brand logo'/>
                         </h1>
 
@@ -45,11 +46,12 @@ const Header = () => {
                         </div>
 
                         <form onSubmit={(e) => searching(e)} className='header__label'>
-                            <input onChange={(event => setSearch(event.target.value))} className='header__label-input' value={search}  type="search" placeholder='Поиск по каталогу'/>
+                            <input onChange={(event => setSearch(event.target.value))} className='header__label-input'
+                                   value={search} type="search" placeholder='Поиск по каталогу'/>
 
                             <div className='header__label-popup'>
                                 <ul className='header__label-list'>
-                                    <li onClick={(e) => al(e)} className='header__label-listItem'>air </li>
+                                    <li onClick={(e) => al(e)} className='header__label-listItem'>air</li>
                                     <li onClick={(e) => al(e)} className='header__label-listItem'>off</li>
                                 </ul>
                             </div>
@@ -64,7 +66,8 @@ const Header = () => {
                             </div>
                         </NavLink>
                         <NavLink to={'/favorites'} className='header__btn'>
-                            <span id='favorites' data-totalitems={user?.favourites?.length} className='header__btn-favorites'>
+                            <span id='favorites' data-totalitems={user?.favourites?.length}
+                                  className='header__btn-favorites'>
                                 <GiHearts/>
                             </span>
                             <div className='header__btn-text'>
@@ -94,18 +97,22 @@ const Header = () => {
             </header>
             <div className="header__menu">
                 <div className="container">
-                    <nav className="header__menu-nav">
-                        <Link className='header__menu-link more' to='/catalog/shoes' onMouseEnter={() => setSubmenu(true)} onMouseLeave={() => setSubmenu(false)}>
+                    <nav className={`header__menu-nav ${hidden && 'hidden'}`}>
+                        <Link className='header__menu-link more' to='/catalog/shoes'
+                              onMouseEnter={() => setSubmenu(true)} onMouseLeave={() => setSubmenu(false)}>
                             Кросовки
                             {
                                 submenu &&
                                 <ul className='header__submenu'>
-                                    <li className='header__submenu-link more' onMouseEnter={() => setSubmenu('basket')} onMouseLeave={() => setSubmenu(true)}>
+                                    <li className='header__submenu-link more' onMouseEnter={() => setSubmenu('basket')}
+                                        onMouseLeave={() => setSubmenu(true)}>
                                         Баскетбол <IoIosArrowForward/>
-                                        {   submenu === 'basket' &&  <HeaderSubmenuBasket setSearch={setSearch}/>   }
-                                    </li><li className='header__submenu-link more' onMouseEnter={() => setSubmenu('street')} onMouseLeave={() => setSubmenu(true)}>
+                                        {submenu === 'basket' && <HeaderSubmenuBasket setSearch={setSearch}/>}
+                                    </li>
+                                    <li className='header__submenu-link more' onMouseEnter={() => setSubmenu('street')}
+                                        onMouseLeave={() => setSubmenu(true)}>
                                         Уличные <IoIosArrowForward/>
-                                        {   submenu === 'street' &&  <HeaderSubmenuStreet setSearch={setSearch}/>   }
+                                        {submenu === 'street' && <HeaderSubmenuStreet setSearch={setSearch}/>}
                                     </li>
                                     <li className='header__submenu-link'>Детские</li>
                                     <li className='header__submenu-link'>Premium</li>
@@ -115,10 +122,16 @@ const Header = () => {
                         <Link className='header__menu-link' to='/catalog/clothes'>Одежда</Link>
                         <Link className='header__menu-link' to='/catalog/other'>Другое</Link>
                         <Link className='header__menu-link' to='/catalog/instock'>В наличие</Link>
-                        <Link className='header__menu-link' to='/catalog/sale'>SALE</Link>
+                        <Link onClick={() => alert(2)} className='header__menu-link' to='/catalog/sale'>SALE</Link>
                     </nav>
                 </div>
+                <div onClick={(e) =>{ e.stopPropagation(); setHidden(!hidden)}} className='header__menu-burger'>
+                    <p className="header__sidebar-burger"> </p>
+                </div>
             </div>
+
+
+
         </>
     );
 };
