@@ -122,6 +122,10 @@ const ClothesAdd = () => {
                 <label className='create__form-label' htmlFor="price">Цена</label>
                 <input {...register('price', {
                     required: 'Это поле обязательное *',
+                    max: {
+                        value: 20000,
+                        message: 'Максимум 20000'
+                    }
                 })} className='create__form-input'  type="number" id='price'/>
                 <span>{errors?.price?.message}</span>
             </div>
