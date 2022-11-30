@@ -5,10 +5,13 @@ import {HiShoppingCart} from 'react-icons/hi'
 import {FaSearch} from 'react-icons/fa'
 import {IoIosAddCircle, IoIosArrowForward} from 'react-icons/io'
 import {useDispatch, useSelector} from "react-redux";
-import {searchProduct} from "../../redux/clothes";
+import {clearFilters, searchProduct} from "../../redux/clothes";
 import HeaderSubmenuBasket from "../../components/HeaderSubmenuCards/HeaderSubmenuBasket";
 import HeaderSubmenuStreet from "../../components/HeaderSubmenuCards/HeaderSubmenuStreet";
 import logo from './basketlogo.png'
+import HeaderSubmenuPremium from "../../components/HeaderSubmenuCards/HeaderSubmenuPremium";
+import HeaderMenuMoreSneakers from "../../components/HeaderMenuMore/HeaderMenuMoreSneakers";
+import HeaderMenuMoreClothes from "../../components/HeaderMenuMore/HeaderMenuMoreClothes";
 
 
 const Header = () => {
@@ -27,7 +30,7 @@ const Header = () => {
 
     const [submenu, setSubmenu] = useState(false);
     const [search, setSearch] = useState(filter.title);
-    const [hidden, setHidden ] = useState(false)
+    const [hidden, setHidden ] = useState(false);
 
     const al = (e) => {
         setSearch(e.target.textContent)
@@ -95,31 +98,12 @@ const Header = () => {
 
 
             </header>
+
             <div className="header__menu">
                 <div className="container">
                     <nav className={`header__menu-nav ${hidden && 'hidden'}`}>
-                        <Link className='header__menu-link more' to='/catalog/shoes'
-                              onMouseEnter={() => setSubmenu(true)} onMouseLeave={() => setSubmenu(false)}>
-                            Кросовки
-                            {
-                                submenu &&
-                                <ul className='header__submenu'>
-                                    <li className='header__submenu-link more' onMouseEnter={() => setSubmenu('basket')}
-                                        onMouseLeave={() => setSubmenu(true)}>
-                                        Баскетбол <IoIosArrowForward/>
-                                        {submenu === 'basket' && <HeaderSubmenuBasket setSearch={setSearch}/>}
-                                    </li>
-                                    <li className='header__submenu-link more' onMouseEnter={() => setSubmenu('street')}
-                                        onMouseLeave={() => setSubmenu(true)}>
-                                        Уличные <IoIosArrowForward/>
-                                        {submenu === 'street' && <HeaderSubmenuStreet setSearch={setSearch}/>}
-                                    </li>
-                                    <li className='header__submenu-link'>Детские</li>
-                                    <li className='header__submenu-link'>Premium</li>
-                                </ul>
-                            }
-                        </Link>
-                        <Link className='header__menu-link' to='/catalog/clothes'>Одежда</Link>
+                       <HeaderMenuMoreSneakers/>
+                       <HeaderMenuMoreClothes/>
                         <Link className='header__menu-link' to='/catalog/other'>Другое</Link>
                         <Link className='header__menu-link' to='/catalog/instock'>В наличие</Link>
                         <Link onClick={() => alert(2)} className='header__menu-link' to='/catalog/sale'>SALE</Link>

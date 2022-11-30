@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
-import {NavLink, Link, useNavigate} from "react-router-dom";
-import {IoIosArrowForward} from 'react-icons/io'
-import {searchProduct} from "../../redux/clothes";
+import {useNavigate} from "react-router-dom";
+import {clearFilters, searchProduct} from "../../redux/clothes";
 import {useDispatch} from "react-redux";
 import {brandsData} from "../../utils/brands";
 
@@ -16,7 +15,9 @@ const HeaderSubmenuBasket = ({setSearch}) => {
         navigate('/catalog');
         dispatch(searchProduct(e.target.textContent));
     };
-    // console.log(brandsData);
+    const handleClick = (event) =>{
+        dispatch(clearFilters({brand: event.target.dataset.value, category: 'basketball'}));
+    };
 
 
     const adidasLi = ['Yeezy', 'adidas Lifestyle', 'adidas Basketball', 'adidas Harden', 'adidas D Rose', 'adidas Trae Young','Yeezy', 'adidas Lifestyle', 'adidas Basketball', 'adidas Harden', 'adidas D Rose', 'adidas Trae Young',];
@@ -28,39 +29,9 @@ const HeaderSubmenuBasket = ({setSearch}) => {
         <div className='header__submenu-drop'>
             {
                 basketballLi.map(li => (
-                    <div key={li.id} onClick={(e) => searching(e)} className='header__submenu-link'>{li.label}</div>
+                    <div key={li.id} onClick={(e) => handleClick(e)} data-value={li.value} className='header__submenu-link'>{li.label}</div>
                 ))
             }
-            <div className='header__submenu-link' onMouseEnter={() => setDrop('adidas')}>
-                adidas <IoIosArrowForward/>
-                <div className={drop === 'adidas' && `header__submenu-drop`}>
-                    {
-                        drop === 'adidas' && basketballLi.map(li => (
-                                <div key={li.id} onClick={(e) => searching(e)} className='header__submenu-link'>{li.label}</div>
-                            ))
-                    }
-                </div>
-            </div>
-            <div className='header__submenu-link' onMouseEnter={() => setDrop('nike')}>
-                nike <IoIosArrowForward/>
-                <div className={drop === 'nike' && `header__submenu-drop`}>
-                    {
-                        drop === 'nike' && nikeKi.map(li => (
-                            <div onClick={(e) => searching(e)} className='header__submenu-link'>{li}</div>
-                        ))
-                    }
-                </div>
-            </div>
-            {/*<div className='header__submenu-link' onMouseEnter={() => setDrop('puma')}>*/}
-            {/*    Puma <IoIosArrowForward/>*/}
-            {/*    <div className={drop === 'puma' && `header__submenu-drop`}>*/}
-            {/*        {*/}
-            {/*            drop === 'puma' && adidasLi.map(li => (*/}
-            {/*                <div onClick={(e) => searching(e)} className='header__submenu-link'>{li}</div>*/}
-            {/*            ))*/}
-            {/*        }*/}
-            {/*    </div>*/}
-            {/*</div>*/}
 
         </div>
     );

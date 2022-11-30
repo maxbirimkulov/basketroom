@@ -213,6 +213,7 @@
         }
       }
       &-link{
+        position: relative;
         font-family: "Open Sans", sans-serif;
         padding: 15px 0;
         font-weight: 600;
@@ -235,6 +236,7 @@
     &submenu{
       position: absolute;
       bottom: 0;
+      left: -30px;
       transform: translateY(100%);
       flex-direction: column;
       gap: 10px;
