@@ -39,7 +39,7 @@ const HeaderMenuMoreClothes = () => {
                         onMouseLeave={() => setSubmenu(true)}>
                         <div  onClick={() => dispatch(clearFilters({brand: '', category: 'pants'}))}>Штаны </div>
                         <IoIosArrowForward/>
-                        {submenu === 'street' && <HeaderSubmenuStreet />}
+                        {submenu === 'street' && <HeaderSubmenuStreet category={'pants'}/>}
                     </li>
                     <li className='header__submenu-link'>Носки</li>
                     <li className='header__submenu-link'>Аксессуары</li>

@@ -53,7 +53,7 @@ const SelectByBrands = () => {
                 >
                     {/*<div className={'demo-simple-select'}>*/}
                         {
-                            options.map((item) => <MenuItem key={item.id} value={item.value} >{item.label}</MenuItem> )
+                            options?.map((item) => <MenuItem key={item.id} value={item.value} >{item.label}</MenuItem> )
                         }
                     {/*</div>*/}
 
