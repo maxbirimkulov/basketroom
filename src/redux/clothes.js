@@ -98,6 +98,7 @@ const clothes = createSlice({
             desc: false,
             limit: 12,
             category: '',
+            subcategory: '',
             brand: '',
             page: 1
         },

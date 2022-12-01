@@ -122,6 +122,10 @@ const ClothesAdd = () => {
                 <label className='create__form-label' htmlFor="price">Цена</label>
                 <input {...register('price', {
                     required: 'Это поле обязательное *',
+                    max: {
+                        value: 20000,
+                        message: 'Максимум 20000'
+                    }
                 })} className='create__form-input'  type="number" id='price'/>
                 <span>{errors?.price?.message}</span>
             </div>
@@ -260,11 +264,6 @@ const ClothesAdd = () => {
                 <label className='create__form-label' htmlFor="tag">Тег</label>
                 <input className='' value={tag} onChange={(e) => setTag(e.target.value)} type="search"/>
                 <ul className='create__form-ul'>
-                    <li  onClick={()=> setTag('tem.title')}>mlka</li>
-                    <li  onClick={()=> setTag('tem.title')}>mlka</li>
-                    <li  onClick={()=> setTag('tem.title')}>mlka</li>
-                    <li  onClick={()=> setTag('tem.title')}>mlka</li>
-
                     {tags && tags.filter((item) => {
                         return item.title.includes(tag)
                     }).map((item) => (
