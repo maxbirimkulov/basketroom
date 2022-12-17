@@ -14,7 +14,7 @@ function SelectBrand() {
 
     const {filter} = useSelector(s => s.clothes);
     const handleChange = (event) => {
-        dispatch(clearFilters({category: event.target.value}));
+        dispatch(clearFilters({subcategory: event.target.value}));
     };
 
     const dispatch = useDispatch();
@@ -52,7 +52,7 @@ function SelectBrand() {
                 <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    value={filter.category}
+                    value={filter.subcategory}
                     label={'Поиск по категориям'}
                     onChange={handleChange}
                 >

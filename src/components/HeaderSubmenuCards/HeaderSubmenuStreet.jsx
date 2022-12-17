@@ -9,7 +9,7 @@ const HeaderSubmenuStreet = ({category = 'street'}) => {
 
 
     const handleClick = (event) =>{
-        dispatch(clearFilters({brand: event.target.dataset.value, category: category}));
+        dispatch(clearFilters({brand: event.target.dataset.value, subcategory: category}));
     };
 
 

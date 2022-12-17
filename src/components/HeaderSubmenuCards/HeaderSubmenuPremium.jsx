@@ -9,7 +9,7 @@ const HeaderSubmenuPremium = ({setSearch}) => {
 
 
     const handleClick = (event) =>{
-        dispatch(clearFilters({brand: event.target.dataset.value, category: 'premium'}));
+        dispatch(clearFilters({brand: event.target.dataset.value, subcategory: 'premium'}));
     };
 
 

@@ -89,7 +89,7 @@ const Header = () => {
                             </div>
                         </NavLink>
 
-                        <NavLink to={'/catalogForExample'}>CatalogForExample</NavLink>
+                        {/*<NavLink to={'/catalogForExample'}>CatalogForExample</NavLink>*/}
 
 
                     </div>

@@ -37,9 +37,15 @@ const Product = () => {
     const user = useSelector(s => s.user.user);
     const {oneProduct, status, products , watchedProducts, error} = useSelector(state => state.clothes);
     useEffect(( ) =>{
-        dispatch(getOneProduct(params.id))
+
+        if (oneProduct?._id !== params.id){
+            dispatch(getOneProduct(params.id))
+        }
     },[params.id]);
     const [popup, setPopup] = useState(false);
+    const [mySizes, setMySizes] = useState([]);
+    const sameBrands = products?.filter((item ) => item.brand === oneProduct?.brand  )
+    console.log(sameBrands)
     const favBtn = useRef(null);
     const categorySliderLength = products?.filter((item ) => item.category === oneProduct?.category).length;
     const secs = Date.parse(oneProduct.createdAt);
@@ -48,28 +54,36 @@ const Product = () => {
     const addFav = () => {
         const favorites = document.querySelector('#favorites');
         const favBtn = document.querySelector('#favBtn');
-
         user?.favourites.findIndex(el => el._id === oneProduct._id) >= 0 ? notify('Убрано') : notify('Добавлено в нужные👌');
             dispatch(findUser( {user: {...user, favourites:
                     user?.favourites.findIndex(el => el._id === oneProduct._id) >= 0 ?
                         user?.favourites.filter((el) => el._id !== oneProduct._id)
                         : [...user.favourites, {...oneProduct}]
                 }}));
-            if (user?.favourites.findIndex(el => el._id === oneProduct._id) < 0) favBtn.classList.add('sendtocart')
-        setTimeout(() =>{
-            favBtn.classList.remove('sendtocart');
+            // if (user?.favourites.findIndex(el => el._id === oneProduct._id) < 0) favBtn.classList.add('sendtocart');
+        const moveAmount = setTimeout(() =>{
             favorites.classList.add('shake');
+            // favBtn.classList.remove('sendtocart');
             // favorites.setAttribute('data-totalitems', user?.favourites?.length);
             setTimeout(() => {
                 favorites.classList.remove('shake');
             },500)
-        },1300);
+        },300);
         window.scrollTo(0, 0);
+
+        return () => {
+            clearTimeout(moveAmount)
+        }
+    };
+    const handleChoseSize = (size) =>{
+        console.log(mySizes)
+      setMySizes(prev => prev.indexOf(size) === -1 ? [...prev, size] : prev.filter(el => el !== size));
     };
 
     const addToCart = () =>{
         const cart = document.querySelector('#cart');
         const favBtn = document.querySelector('#favBtn');
+        if (mySizes.length){
         setTimeout(() =>{
             cart.classList.add('shake');
             setTimeout(() => {
@@ -81,9 +95,14 @@ const Product = () => {
             notify('Товар был убран') :  setPopup(true);
         dispatch(findUser({user: {...user, cart:
                     user?.cart.findIndex(el => el._id === oneProduct._id) >= 0 ?
+
                         user?.cart.filter((el) => el._id !== oneProduct._id)
-                        : [...user.cart, {...oneProduct}]
+                        : [...user.cart, {...oneProduct, sizes: mySizes}]
             }}));
+        }
+        else {
+            notify('Выберите размер')
+        }
     };
     return (
         <div>
@@ -92,14 +111,14 @@ const Product = () => {
                     {
                         popup &&
                             <>
-                                    <div className='popup__box'>
-                                        <h2 className='popup__title'>Товар был добавлен</h2>
-                                        <span className='popup__close' onClick={() => setPopup(false)}><AiFillCloseCircle/></span>
-                                        <div className='popup__btns'>
-                                            <button className='popup__btn active' onClick={() => navigate('/catalog/1')}>Продолжить покупки</button>
-                                            <button className='popup__btn ' onClick={() => navigate('/basket')}>Перейти в корзину</button>
-                                        </div>
+                                <div className='popup__box'>
+                                    <h2 className='popup__title'>Товар был добавлен</h2>
+                                    <span className='popup__close' onClick={() => setPopup(false)}><AiFillCloseCircle/></span>
+                                    <div className='popup__btns'>
+                                        <button className='popup__btn active' onClick={() => navigate('/catalog/1')}>Продолжить покупки</button>
+                                        <button className='popup__btn ' onClick={() => navigate('/basket')}>Перейти в корзину</button>
                                     </div>
+                                </div>
                                 <div className="overlay" onClick={() => setPopup(false)}>
 
                                 </div>
@@ -108,7 +127,7 @@ const Product = () => {
 
                     <div className="product__top">
                         <div className="product__top-images">
-                            <Swiper initialSlide={1}  navigation={true} keyboard={true} modules={[Navigation, Keyboard]} className="mySwiper product__top-imgPlace">
+                            <Swiper initialSlide={0}  navigation={true} keyboard={true} modules={[Navigation, Keyboard]} className="mySwiper product__top-imgPlace">
                                 {
                                     status === 'loading' ?
                                     <div className='product__top-loading'>
@@ -117,9 +136,11 @@ const Product = () => {
                                     :
                                    JSON.stringify(oneProduct) !== '{}'  && oneProduct.images.map((img, idx) => img &&
                                         (
-                                            <SwiperSlide>
-                                                <div className='product__top-backImg' style={{background: `url(${`${process.env.REACT_APP_URL}${img}`})center/contain no-repeat`}}> </div>
-                                            </SwiperSlide>
+                                            <React.Fragment key={idx}>
+                                                <SwiperSlide>
+                                                    <div className='product__top-backImg' style={{background: `url(${`${process.env.REACT_APP_URL}${img}`})center/contain no-repeat`}}> </div>
+                                                </SwiperSlide>
+                                            </React.Fragment>
                                     )
                                     )
                                 }
@@ -129,9 +150,9 @@ const Product = () => {
                                     {status === 'loading' ?
                                             <div className='product__top-l'>loading</div>
                                             :
-                                            oneProduct?.images?.map((img) => img &&
+                                            oneProduct?.images?.map((img, idx) => img &&
                                                 (
-                                                    <React.Fragment key={oneProduct.title + img }>
+                                                    <React.Fragment key={idx}>
                                                         <a data-fancybox="gallery" href={`${process.env.REACT_APP_URL}${img}`}
                                                            className='product__top-gallery-block'>
                                                                 <div className='product__top-galleryImage' style={{background: `url(${`${process.env.REACT_APP_URL}${img}`})center/contain no-repeat`}}> </div>
@@ -160,10 +181,12 @@ const Product = () => {
                             <div className='product__top-sizes'>
 
                                 {
-                                    oneProduct?.sizes?.map((size) => (
-                                        <button className='product__top-size active'> {size}</button>
+                                    oneProduct?.sizes?.map((size, idx) =>{
+                                        console.log(idx)
+                                        return (
+                                        <button key={idx} className={`product__top-size ${mySizes.indexOf(size)> -1 && 'active'}`} onClick={() => handleChoseSize(size)}> {size}</button>
                                         )
-                                    )
+                                    })
                                 }
 
 
@@ -213,11 +236,14 @@ const Product = () => {
                             }   }
                             className="mySwiper">
                         {
-                            products?.filter((item ) => item.brand === oneProduct?.brand  )?.map(pare => (
-                                <div key={pare._id} className='home__productCard'>
+                            sameBrands.length >= 3 &&
+                            sameBrands?.map((pare, idx) =>{
+                                console.log(idx)
+                                return (
+                                <div key={idx} className='home__productCard'>
                                     <SwiperSlide><Card product={pare} page={'slide'}/></SwiperSlide>
                                 </div>
-                            ))
+                            )})
                         }
                     </Swiper>
 
@@ -247,11 +273,13 @@ const Product = () => {
                                     }   }
                                 className="mySwiper">
                                 {
-                                    watchedProducts?.map((pare, idx) => (
-                                        // <React.Fragment key={pare._id}>
+                                    watchedProducts?.map((pare, idx) =>{
+                                        console.log(idx)
+                                        return (
+                                        <React.Fragment key={idx}>
                                             <SwiperSlide><Card product={pare} page={'slide'}/></SwiperSlide>
-                                        // </React.Fragment>
-                                    ))
+                                        </React.Fragment>
+                                    )})
                                 }
                             </Swiper>
 

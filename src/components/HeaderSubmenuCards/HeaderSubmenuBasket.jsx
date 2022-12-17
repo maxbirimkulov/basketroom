@@ -16,7 +16,7 @@ const HeaderSubmenuBasket = ({setSearch}) => {
         dispatch(searchProduct(e.target.textContent));
     };
     const handleClick = (event) =>{
-        dispatch(clearFilters({brand: event.target.dataset.value, category: 'basketball'}));
+        dispatch(clearFilters({brand: event.target.dataset.value, subcategory: 'basketball'}));
     };
 
 

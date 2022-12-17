@@ -29,7 +29,7 @@ const Catalog = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        dispatch(clearFilters({page: params.page, category: ''}));
+        dispatch(clearFilters({page: params.page, brand: '', subcategory: '', category: params.category}));
         console.log(123)
         console.log(filter.category)
     }, [params.category]);
@@ -49,6 +49,7 @@ const Catalog = () => {
             category: filter.category,
             brand: filter.brand,
             title: filter.title,
+            subcategory: filter.subcategory,
             from: filter.range.from,
             to: filter.range.to,
             page: filter.page,

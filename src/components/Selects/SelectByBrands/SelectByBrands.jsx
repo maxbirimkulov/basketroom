@@ -17,7 +17,7 @@ const SelectByBrands = () => {
 
 
     let options = filter.category ?
-        brandsData.filter(obj => obj.category === filter.category)[0]?.brands :
+        brandsData.filter(obj => obj.category === filter.subcategory)[0]?.brands :
         brandsData.map(category => category.brands).flat().reduce((acc, rec) => {
                 if (acc.map[rec.value]) return acc;
 

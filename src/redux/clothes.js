@@ -7,7 +7,7 @@ export const getProducts = createAsyncThunk(
     'clothes/getProducts',
     async (filter,{rejectWithValue}) => {
         try {
-            const res  = await axios(`/clothes?title=${filter.title}&category=${filter.category}&brand=${filter.brand}&from=${filter.from}&to=${filter.to}&desc=${filter.desc}&page=${filter.page}&limit=${filter.limit}`);
+            const res  = await axios(`/clothes?title=${filter.title}&category=${filter.category}&subcategory=${filter.subcategory}&brand=${filter.brand}&from=${filter.from}&to=${filter.to}&desc=${filter.desc}&page=${filter.page}&limit=${filter.limit}`);
             if (res.statusText !== 'OK') {
                 throw new Error('Server error !')
             }
